@@ -1,0 +1,348 @@
+﻿<Window x:Class="WpfProject.AdminPanel"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfProject"
+        mc:Ignorable="d"
+        Title="AdminPanel" Height="550" Width="1200" WindowStyle="None" WindowStartupLocation="CenterScreen">
+    <Grid Margin="0,0,0,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="9*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0" Background="#FF397F65">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Rectangle Grid.Row="0" Width="280" Height="80" Fill="#004D40" Margin="10" VerticalAlignment="Center" HorizontalAlignment="Center" RadiusX="20" RadiusY="20"></Rectangle>
+            <TextBlock Text="Admin Panel" FontSize="40" FontFamily="Showcard Gothic" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" Foreground="#FFC29696"/>
+            <Button Grid.Row="1" Content="Book" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="60,0,60,0" FontFamily="Rockwell Extra Bold" Background="#FF919595" Foreground="#FF004D40" FontSize="40" FontWeight="Bold" Height="70" Margin="4,0,0,10" />
+            <Button Grid.Row="2" Content="Bank" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="60,0,60,0" FontFamily="Rockwell Extra Bold" Background="#FF919595" Foreground="#FF004D40" FontSize="40" FontWeight="Bold" Height="70" Margin="4,0,0,10" />
+            <Button Grid.Row="3" Content="Employee" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="18,0,18,0" FontFamily="Rockwell Extra Bold" Background="#FF919595" Foreground="#FF004D40" FontSize="34" FontWeight="Bold" Height="70" Margin="0,16,0,0" Width="242" />
+        </Grid>
+        <TabControl Grid.Column="1" x:Name="tab">
+            <TabControl.ItemContainerStyle>
+                <Style TargetType="{x:Type TabItem}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </Style>
+            </TabControl.ItemContainerStyle>
+            <TabItem>
+                <Grid>
+                    <Grid>
+                        <Grid.Background>
+                            <ImageBrush ImageSource="C:\Users\saba\Desktop\saba folder\project\pictures\back11.jpg"></ImageBrush>
+                        </Grid.Background>
+                        <Grid Height="400" Width="540">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition Height="0.3*"/>
+                            </Grid.RowDefinitions>
+                            <Rectangle Width="540" Height="400" Fill="#FFABADB3"></Rectangle>
+                            <ScrollViewer>
+                                <ItemsControl Grid.Row="0">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Grid.Column="0" FontSize="55" FontFamily="Showcard Gothic" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" Foreground="#FFC29696"></TextBlock>
+                                                <Button Grid.Column="1" Content ="Delete" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="80,120" FontFamily="Montserrat Black" Background="#FF919595" Foreground="#FF004D40" FontSize="18"></Button>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                            <Grid Grid.Row="1">
+                                <Button Content="Add new book" HorizontalAlignment="Center" Padding="180,10,180,10" FontFamily="Montserrat Black" Background="#FFC29696" Foreground="#FF03100D" FontSize="25" FontWeight="Bold" Margin="0,29,0,0" Height="63"/>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem>
+                <Grid>
+                    <Grid>
+                        <Grid.Background>
+                            <ImageBrush ImageSource="C:\Users\saba\Desktop\saba folder\project\pictures\back4.jpg"></ImageBrush>
+                        </Grid.Background>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1.5*"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <Rectangle Width="400" Height="400" Fill="#FFABADB3" RadiusX="50" RadiusY="50"></Rectangle>
+                            <Grid Height="400" Width="400">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="2*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Credit :" FontSize="25" Foreground="#004D40" FontFamily="Segoe UI Black" Margin="30,45,5,1"></TextBlock>
+                                    <TextBox Grid.Column="1" Width="200" Height="60" Margin="10,0" Background="#FF2F7870" FontSize="20" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="2*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Charge :" FontSize="25" Foreground="#004D40" FontFamily="Segoe UI Black" Margin="30,45,5,1"></TextBlock>
+                                    <TextBox Grid.Column="1" Width="200" Height="60" Margin="10,0" Background="#FF2F7870" FontSize="20" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                                </Grid>
+                                <Grid Grid.Row="2">
+                                    <Button Content="Pay" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="100,10,100,10" FontFamily="Montserrat Black" Background="#FFC29696" Foreground="#004D40" FontSize="25" FontWeight="Bold" Margin="0,29,0,0" Height="63"/>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem>
+                <Grid>
+                    <Grid>
+                        <Grid.Background>
+                            <ImageBrush ImageSource="C:\Users\saba\Desktop\saba folder\project\pictures\back11.jpg"></ImageBrush>
+                        </Grid.Background>
+                        <Grid Height="400" Width="540">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition Height="0.3*"/>
+                            </Grid.RowDefinitions>
+                            <Rectangle Width="540" Height="400" Fill="#FFABADB3"></Rectangle>
+                            <ScrollViewer>
+                                <ItemsControl Grid.Row="0">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Grid.Column="0" FontSize="55" FontFamily="Showcard Gothic" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Row="0" Foreground="#FFC29696"></TextBlock>
+                                                <Button Grid.Column="1" Content ="Delete" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="80,120" FontFamily="Montserrat Black" Background="#FF919595" Foreground="#FF004D40" FontSize="18"></Button>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Button Content="Pay"  HorizontalAlignment="Center" Padding="100,10,100,10" FontFamily="Montserrat Black" Background="#FFC29696" Foreground="#FF111112" FontSize="28" FontWeight="Bold" Margin="-10,29,10,0" Height="63" />
+                                <Button Grid.Column="1"  Content="Add"  HorizontalAlignment="Center" Padding="95,10,95,10" FontFamily="Montserrat Black" Background="#FFC29696" Foreground="#FF03100D" FontSize="28" FontWeight="Bold" Margin="15,29,-10,0" Height="63"/>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem>
+                <Grid>
+                    <Grid Background="#004D40">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition Height="0.3*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.5*"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="0.5*"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="0.5*" />
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Text="Name :" FontSize="25" Foreground="#FFABADB3 " FontFamily="Segoe UI Black" Margin="30,60,5,1"></TextBlock>
+                                <TextBlock Grid.Row="1" Text="Writer :" FontSize="25" Foreground="#FFABADB3 " FontFamily="Segoe UI Black" Margin="30,115,5,1"></TextBlock>
+                            </Grid>
+                            <Grid Grid.Column="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="0.5*"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Text="Genre :" FontSize="25" Foreground="#FFABADB3 " FontFamily="Segoe UI Black" Margin="30,65,5,1"></TextBlock>
+                                <StackPanel Grid.Row="1">
+                                    <TextBlock Text="Release" FontSize="23" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black" Margin="30,105,5,1"></TextBlock>
+                                    <TextBlock Text="Number :" FontSize="23" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black" Margin="30,0,3,1"></TextBlock>
+                                </StackPanel>
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="0.5*"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBox Grid.Row="0" Width="200" Height="60" Margin="-100,35,10,10" Background="#FF2F7870" FontSize="20" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                                <TextBox Grid.Row="1" Width="200" Height="60" Margin="-100,0,10,10" Background="#FF2F7870" FontSize="20" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                            </Grid>
+                            <Grid Grid.Column="3">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="0.5*"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBox Grid.Row="0" Width="200" Height="60" Margin="-70,35,10,10" Background="#FF2F7870" FontSize="20" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                                <TextBox Grid.Row="1" Width="200" Height="60" Margin="-70,2,10,10" Background="#FF2F7870" FontSize="20" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                            </Grid>
+                        </Grid>
+                        <Grid Grid.Row="1">
+                            <Button Content="Submit" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="100,10,100,10" FontFamily="Montserrat Black" Background="#FFC29696" Foreground="#004D40" FontSize="30" FontWeight="Bold" Height="63"/>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem>
+                <Grid>
+                    <Grid>
+                        <Grid.Background>
+                            <ImageBrush ImageSource="C:\Users\saba\Desktop\saba folder\project\pictures\background2.jpg"></ImageBrush>
+                        </Grid.Background>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2.6*"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0" Margin="20,0,20,0">
+                            <Rectangle Width="570" Height="420" Fill="#004D40" RadiusX="50" RadiusY="50"></Rectangle>
+                            <Grid Height="400" Width="540">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1.5*"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="Account" FontSize="20" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black" Margin="30,8,5,1"></TextBlock>
+                                        <TextBlock Text="Number :" FontSize="20" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black" Margin="30,0,3,1"></TextBlock>
+                                    </StackPanel>
+                                    <TextBox Grid.Column="1" Width="80" Height="40" Background="#FF2F7870" FontSize="20" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                                    <TextBox Grid.Column="2" Width="80" Height="40" Background="#FF2F7870" FontSize="20" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                                    <TextBox Grid.Column="3" Width="80" Height="40" Background="#FF2F7870" FontSize="20" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                                    <TextBox Grid.Column="4" Width="80" Height="40" Background="#FF2F7870" FontSize="20" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="0.4*"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="CVV :" FontSize="25" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black" Margin="30,15,5,1"/>
+                                    <TextBox Grid.Column="1" Width="200" Height="40" Margin="-90,0,88,0" Background="#FF2F7870" FontSize="20" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                                </Grid>
+                                <Grid Grid.Row="2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="0.7*"/>
+                                        <ColumnDefinition Width="0.3*"/>
+                                        <ColumnDefinition Width="0.7*"/>
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="Expire" FontSize="20" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black" Margin="30,8,5,1"></TextBlock>
+                                        <TextBlock Text="Date :" FontSize="20" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black" Margin="30,0,3,1"></TextBlock>
+                                    </StackPanel>
+                                    <TextBox Grid.Column="1" Width="80" Height="40" Background="#FF2F7870" FontSize="20" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                                    <TextBox Grid.Column="3" Width="80" Height="40" Background="#FF2F7870" FontSize="20" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                                    <TextBlock Grid.Column="2" Text="/" FontSize="40" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                                </Grid>
+                                <Grid Grid.Row="3">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="0.4*"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="Paid" FontSize="20" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black" Margin="30,8,5,1"></TextBlock>
+                                        <TextBlock Text="Amount :" FontSize="20" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black" Margin="30,0,3,1"></TextBlock>
+                                    </StackPanel>
+                                    <TextBox Grid.Column="1" Width="200" Height="40" Margin="-90,0,88,0" Background="#FF2F7870" FontSize="20" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                                </Grid>
+                                <Button Grid.Row="4" Content="Pay" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="30,18" FontFamily="Montserrat Black" Background="#FFC29696" Foreground="#FF004D40" FontSize="18" FontWeight="Bold"/>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem>
+                <Grid Background="#004D40">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" VerticalAlignment="Center" Margin="30,0,30,10">
+                            <TextBlock Text="Name :" FontSize="25" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black"></TextBlock>
+                            <TextBlock Text=" "/>
+                            <TextBox Height="40" Background="#FF2F7870" FontSize="20" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1" VerticalAlignment="Center" Margin="30,0,30,10">
+                            <TextBlock Text="Email :" FontSize="25" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black"></TextBlock>
+                            <TextBlock Text=" "/>
+                            <TextBox Height="40" Background="#FF2F7870" FontSize="20" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="2" VerticalAlignment="Center" Margin="30,0,30,10">
+                            <TextBlock Text="Phone Number :" FontSize="25" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black"></TextBlock>
+                            <TextBlock Text=" "/>
+                            <TextBox Height="40" Background="#FF2F7870" FontSize="20" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="3" VerticalAlignment="Center" Margin="30,0,30,10">
+                            <TextBlock Text="Password :" FontSize="25" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black"></TextBlock>
+                            <TextBlock Text=" "/>
+                            <PasswordBox Height="40" Background="#FF2F7870" FontSize="20" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                        </StackPanel>
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="4*"/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Image Grid.Row="0" Margin="15,30,15,30" Source="C:\Users\saba\Desktop\saba folder\project\pictures\person_icon.png" Stretch="Fill"/>
+                        <Button Grid.Row="1" Content="choose" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="80,20" FontFamily="Montserrat Black" Background="#FFC29696" Foreground="#FF004D40" FontSize="24" FontWeight="Bold"/>
+                    </Grid>
+                    <Grid Grid.Column="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition Height="0.5*"/>
+                            <RowDefinition Height="1.5*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Margin="0,40" Text="Register" FontSize="55" FontFamily="Showcard Gothic" HorizontalAlignment="Center" Grid.Row="0" Foreground="#FFC29696"/>
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" Content="Back" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="30,18" FontFamily="Montserrat Black" Background="#FF919595" Foreground="#FF004D40" FontSize="24" FontWeight="Bold"/>
+                            <Button Grid.Column="1" Content="Payment" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="13,18" FontFamily="Montserrat Black" Background="#FF919595" Foreground="#FF004D40" FontSize="24" FontWeight="Bold" Margin="0,0,15,0"/>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
