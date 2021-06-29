@@ -5,20 +5,16 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Data;
 using Microsoft.Data.SqlClient;
 using System.Data.SqlClient;
-
+using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace WpfProject
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    ///    
     interface Methods
     {
-        public string ShowCredit();
+        string ShowCredit();
     }
     class Person
     {
@@ -29,22 +25,98 @@ namespace WpfProject
         public string PictureURL;
         public Person(string name, string email, string phone, string pass, string pic)
         {
-            Name = name;
-            Email = email;
-            PhoneNumber = phone;
-            Password = pass;
-            PictureURL = pic;
+            if (CheckName() && CheckEmail() && CheckPhoneNumber() && CheckPassword())
+            {
+                Name = name;
+                Email = email;
+                PhoneNumber = phone;
+                Password = pass;
+                PictureURL = pic;
+            }
+            else
+            {
+                //show wrong output
+            }
+
+        }
+        public bool CheckName()
+        {
+            //check name with regex
+
+            string regex = @"^[a-zA-Z]{3,32}$";
+            Regex re = new Regex(regex, RegexOptions.IgnoreCase);
+
+            if (re.IsMatch(Name))
+                return true;
+
+            else
+                return false;
+        }
+        public bool CheckEmail()
+        {
+            //check email with regex
+
+            string regex = @"^[a-zA-Z0-9_-]{1,32}+@[[a-zA-Z0-9]{1,8}+.[a-zA-Z]{1,3}$";
+            Regex re = new Regex(regex, RegexOptions.IgnoreCase);
+
+            if (re.IsMatch(Email))
+                return true;
+
+            else
+                return false;
+        }
+        public bool CheckPhoneNumber()
+        {
+            //check phone number with regex
+
+            string regex = @"^09+[0-9]{9}$";
+            Regex re = new Regex(regex, RegexOptions.IgnoreCase);
+
+            if (re.IsMatch(PhoneNumber))
+                return true;
+
+            else
+                return false;
+        }
+        public bool CheckPassword()
+        {
+            //check password with regex
+
+            string regex = @"^(?=.*[A-Z]).[a-zA-Z]{7,31}$";
+            Regex re = new Regex(regex, RegexOptions.IgnoreCase);
+
+            if (re.IsMatch(Password))
+                return true;
+
+            else
+                return false;
         }
         public List<string> ShowBooks()
         {
             // show all books
             List<string> AllBooks = new List<string>();
+
+            SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
+                                  C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+            connection.Open();
+
+            string command2 = "select * from Book";
+            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
+            DataTable data = new DataTable();
+            adapter.Fill(data);
+
+            for (int i = 0; i < data.Rows.Count; i++)
+            {
+                AllBooks.Add(data.Rows[0][i].ToString());
+            }
+
+            connection.Close();
+
             return AllBooks;
         }
     }
     class Admin : Person, Methods
     {
-        //baraye admin ke email nadarim !!!!!!!!!!!!!!!!!!!!!!!!!
         public Admin(string name, string email, string phone, string pass, string pic)
             : base(name, email, phone, pass, pic)
         {
@@ -52,9 +124,8 @@ namespace WpfProject
                                 C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
             connection.Open();
 
-            /*******************************      we only have one name and one pass / is difult in the bank ziro?    *****************************/
             // add in SQL
-            string command = "insert into Admin values('" + Name.Trim() + "' ,'" + pass.Trim() + "' , '" + "0" + "')";
+            string command = "insert into Admin values('" + name.Trim() + "' ,'" + pass.Trim() + "' , '" + "0" + "')";
 
             SqlCommand sqlCommand = new SqlCommand(command, connection);
             sqlCommand.BeginExecuteNonQuery();
@@ -66,41 +137,42 @@ namespace WpfProject
             //new object of class Employee
             Employee employee = new Employee(name, email, phone, pass, pic);
         }
-        public void DeleteEmployee(Employee emp)
+        public static void DeleteEmployee(string name)
         {
-            /********* show admin a message "are sure you want to delete? "********/
             // delete the employee
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
                                 C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
             connection.Open();
-            /*************     we use email because it's unique for each person      *************/
 
-            string command = "delete from Employee where name ='" + emp.Name + "' " +
-                ", email = '" + emp.Email + "' phoneNumber = '" + emp.PhoneNumber + "', pass = '" + emp.Password + "', PictureLoc ";
+            string command = "delete from Employee where name ='" + name + "' ";
             SqlCommand sqlCommand = new SqlCommand(command, connection);
             sqlCommand.BeginExecuteNonQuery();
 
             connection.Close();
         }
-        public void PayEmployee()
+        public void PayEmployee(string money)
         {
-            /************** how much money? ***********/
             //pay all employees a defined money
-
-            int money = 0;
+            /*******money * ****/
 
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
                                 C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
             connection.Open();
+
+            string command = "select * from Employee";
+            SqlDataAdapter adapter = new SqlDataAdapter(command, connection);
             DataTable data = new DataTable();
+            adapter.Fill(data);
+
+            long m = long.Parse(money);
 
             for (int i = 0; i < data.Rows.Count; i++)
             {
-                /*********************************  i don't know what to do ********************************/
+                /********************************i don't know what to do *******************************/
 
-                string command = "update Employee SET wallet = wallet + '" + money + "'";
-                SqlCommand sqlCommand = new SqlCommand(command, connection);
-                sqlCommand.BeginExecuteNonQuery();
+                string command2 = "update Employee SET wallet = wallet + '" + m + "'";
+                SqlCommand sqlCommand2 = new SqlCommand(command2, connection);
+                sqlCommand2.BeginExecuteNonQuery();
             }
             connection.Close();
         }
@@ -115,24 +187,33 @@ namespace WpfProject
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
                                 C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
             connection.Open();
+
+            string command2 = "select * from Admin";
+            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
             DataTable data = new DataTable();
+            adapter.Fill(data);
+
             string money = data.Rows[2][0].ToString();
             connection.Close();
 
             return money;
         }
-        public void IncreaseMoney()
+        public void IncreaseMoney(string money)
         {
-            /********* how much money ? ********/
             //increase money of bank  
-            string money = "";
+            long m = long.Parse(money);
 
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
                                 C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
             connection.Open();
 
+
+            string command2 = "select * from Admin";
+            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
             DataTable data = new DataTable();
-            string command = "update Admin SET Bank = '" + (int.Parse(data.Rows[2][0].ToString()) + int.Parse(money)).ToString() + "'" +
+            adapter.Fill(data);
+
+            string command = "update Admin SET Bank = '" + (long.Parse(data.Rows[2][0].ToString()) + m) + "'" +
                                 "where name = '" + "admin" + "'";
 
             SqlCommand sqlCommand = new SqlCommand(command, connection);
@@ -152,7 +233,12 @@ namespace WpfProject
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
                                 C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
             connection.Open();
+
+
+            string command2 = "select * from Employee";
+            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
             DataTable data = new DataTable();
+            adapter.Fill(data);
 
             for (int i = 0; i < data.Rows.Count; i++)
             {
@@ -164,10 +250,8 @@ namespace WpfProject
 
             if (repeated == false)
             {
-                /*******************************      we have name and lastname in SQL but there is only one field in the class      *****************************/
-
                 // add in SQL
-                string command = "insert into Employee values('" + Name.Trim() + "' , '" + phone.Trim() + "' ,'" + pass.Trim() + "' , '" +
+                string command = "insert into Employee values('" + name.Trim() + "' , '" + phone.Trim() + "' ,'" + pass.Trim() + "' , '" +
                                                              email.Trim() + "' , '" + pic + "' , '" + "0" + "')";
 
                 SqlCommand sqlCommand = new SqlCommand(command, connection);
@@ -189,18 +273,17 @@ namespace WpfProject
                                 C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
             connection.Open();
 
+
+            string command2 = "select * from Book";
+            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
             DataTable data = new DataTable();
+            adapter.Fill(data);
 
             for (int i = 0; i < data.Rows.Count; i++)
             {
-                /********** not sure ********/
                 if (data.Rows[i][5].ToString() == "0")
                 {
                     BorrowedBooks.Add(data.Rows[i][0].ToString());
-                    BorrowedBooks.Add(data.Rows[i][1].ToString());
-                    BorrowedBooks.Add(data.Rows[i][2].ToString());
-                    BorrowedBooks.Add(data.Rows[i][3].ToString());
-                    BorrowedBooks.Add(data.Rows[i][4].ToString());
                 }
             }
 
@@ -212,41 +295,260 @@ namespace WpfProject
         {
             //available books
             List<string> AvailableBooks = new List<string>();
+
+            SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
+                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+            connection.Open();
+
+
+            string command2 = "select * from Book";
+            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
+            DataTable data = new DataTable();
+            adapter.Fill(data);
+
+            for (int i = 0; i < data.Rows.Count; i++)
+            {
+                if (data.Rows[i][5].ToString() == "1")
+                {
+                    AvailableBooks.Add(data.Rows[i][0].ToString());
+                }
+            }
+
+            connection.Close();
+
             return AvailableBooks;
         }
         public List<string> ShowUser()
         {
             //all users
             List<string> AllUser = new List<string>();
+
+            SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
+                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+            connection.Open();
+
+
+            string command2 = "select * from Userr";
+            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
+            DataTable data = new DataTable();
+            adapter.Fill(data);
+
+            for (int i = 0; i < data.Rows.Count; i++)
+            {
+                AllUser.Add(data.Rows[0][i].ToString());
+            }
+
+            connection.Close();
+
             return AllUser;
         }
         public List<string> ShowLateReturnUser()
         {
             //late returning users
+
             List<string> LateReturnUser = new List<string>();
+            GregorianCalendar time = new GregorianCalendar();
+            DateTime dt = DateTime.Now;
+            int year = time.GetYear(dt);
+            int month = time.GetMonth(dt);
+            int day = time.GetDayOfMonth(dt);
+
+            SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
+                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+            connection.Open();
+            string command2 = "select * from Userr";
+            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
+            DataTable data = new DataTable();
+            adapter.Fill(data);
+
+            for (int i = 0; i < data.Rows.Count; i++)
+            {
+                for (int j = 11; j < 16; j++)
+                {
+                    string[] temp = data.Rows[i][j].ToString().Split('/');
+                    if (int.Parse(temp[0]) < year)
+                    {
+                        LateReturnUser.Add(data.Rows[i][0].ToString());
+                        break;
+                    }
+                    else if (int.Parse(temp[0]) == year && int.Parse(temp[1]) < month)
+                    {
+                        LateReturnUser.Add(data.Rows[i][0].ToString());
+                        break;
+                    }
+                    else if (int.Parse(temp[0]) == year && int.Parse(temp[1]) == month && int.Parse(temp[2]) < day)
+                    {
+                        LateReturnUser.Add(data.Rows[i][0].ToString());
+                        break;
+                    }
+                }
+            }
+            connection.Close();
+
             return LateReturnUser;
         }
         public List<string> ShowLatePayUser()
         {
             //late pay users
             List<string> LatePayUser = new List<string>();
+            GregorianCalendar time = new GregorianCalendar();
+            DateTime dt = DateTime.Now;
+            int year = time.GetYear(dt);
+            int month = time.GetMonth(dt);
+            int day = time.GetDayOfMonth(dt);
+
+            SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
+                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+            connection.Open();
+            string command2 = "select * from Userr";
+            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
+            DataTable data = new DataTable();
+            adapter.Fill(data);
+
+            for (int i = 0; i < data.Rows.Count; i++)
+            {
+                if (data.Rows[i][17] == null)
+                {
+                    string[] temp = data.Rows[i][16].ToString().Split('/');
+                    if ((int.Parse(temp[0]) + 1) < year)
+                    {
+                        LatePayUser.Add(data.Rows[i][0].ToString());
+                        break;
+                    }
+                    else if ((int.Parse(temp[0]) + 1) == year && int.Parse(temp[1]) < month)
+                    {
+                        LatePayUser.Add(data.Rows[i][0].ToString());
+                        break;
+                    }
+                    else if ((int.Parse(temp[0]) + 1) == year && int.Parse(temp[1]) == month && int.Parse(temp[2]) < day)
+                    {
+                        LatePayUser.Add(data.Rows[i][0].ToString());
+                        break;
+                    }
+                }
+                else
+                {
+                    string[] temp = data.Rows[i][17].ToString().Split('/');
+                    if ((int.Parse(temp[0]) + 1) < year)
+                    {
+                        LatePayUser.Add(data.Rows[i][0].ToString());
+                        break;
+                    }
+                    else if ((int.Parse(temp[0]) + 1) == year && int.Parse(temp[1]) < month)
+                    {
+                        LatePayUser.Add(data.Rows[i][0].ToString());
+                        break;
+                    }
+                    else if ((int.Parse(temp[0]) + 1) == year && int.Parse(temp[1]) == month && int.Parse(temp[2]) < day)
+                    {
+                        LatePayUser.Add(data.Rows[i][0].ToString());
+                        break;
+                    }
+                }
+            }
+            connection.Close();
             return LatePayUser;
         }
         public List<string> ShowUniqueUsers(string name)
         {
             //info : one of the users
             List<string> InfoUniqueUser = new List<string>();
+
+            SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
+                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+            connection.Open();
+
+            string command2 = "select * from Userr";
+            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
+            DataTable data = new DataTable();
+            adapter.Fill(data);
+
+            for (int i = 0; i < data.Rows.Count; i++)
+            {
+                if (data.Rows[i][0].ToString() == name)
+                {
+                    /*****************************not aure********************/
+                    InfoUniqueUser.Add(data.Rows[i][0].ToString());
+                    InfoUniqueUser.Add(data.Rows[i][1].ToString());
+                    InfoUniqueUser.Add(data.Rows[i][2].ToString());
+                    InfoUniqueUser.Add(data.Rows[i][3].ToString());
+                    InfoUniqueUser.Add(data.Rows[i][5].ToString());
+                    InfoUniqueUser.Add(data.Rows[i][6].ToString());
+                    InfoUniqueUser.Add(data.Rows[i][7].ToString());
+                    InfoUniqueUser.Add(data.Rows[i][8].ToString());
+                    InfoUniqueUser.Add(data.Rows[i][9].ToString());
+                    InfoUniqueUser.Add(data.Rows[i][11].ToString());
+                    InfoUniqueUser.Add(data.Rows[i][12].ToString());
+                    InfoUniqueUser.Add(data.Rows[i][13].ToString());
+                    InfoUniqueUser.Add(data.Rows[i][14].ToString());
+                    InfoUniqueUser.Add(data.Rows[i][15].ToString());
+                    InfoUniqueUser.Add(data.Rows[i][16].ToString());
+                    InfoUniqueUser.Add(data.Rows[i][17].ToString());
+                    break;
+                }
+            }
+
+            connection.Close();
+
             return InfoUniqueUser;
         }
         public string ShowCredit()
         {
             //money in bank of the employee
+            /*********which employe?*******/
+
+            SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
+                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+
             string money = "";
+
+            connection.Open();
+
+            string command2 = "select * from Employee";
+            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
+            DataTable data = new DataTable();
+            adapter.Fill(data);
+
+            for (int i = 0; i < data.Rows.Count; i++)
+            {
+                if (data.Rows[i][0].ToString() == this.Name)
+                {
+                    money = data.Rows[i][0].ToString();
+                }
+            }
+
+            connection.Close();
+
             return money;
         }
-        public void EditInfo()
+        public void EditInfo(string email, string phone, string path)
         {
             //Edit Info of employee
+            Email = email;
+            PhoneNumber = phone;
+            PictureURL = path;
+
+            SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
+                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+
+            connection.Open();
+
+            string command2 = "select * from Employee";
+            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
+            DataTable data = new DataTable();
+            adapter.Fill(data);
+
+            for (int i = 0; i < data.Rows.Count; i++)
+            {
+                if (data.Rows[i][0].ToString() == this.Name)
+                {
+                    string command = "update Employee SET email = '" + email + "' phoneNumber = '" + phone + "' PictureLoc = '" + path + "' ";
+                    SqlCommand sqlCommand = new SqlCommand(command, connection);
+                    sqlCommand.BeginExecuteNonQuery();
+                }
+            }
+
+            connection.Close();
         }
     }
 
@@ -260,22 +562,23 @@ namespace WpfProject
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
                                 C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
             connection.Open();
+            string command2 = "select * from Userr";
+            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
             DataTable data = new DataTable();
+            adapter.Fill(data);
 
             for (int i = 0; i < data.Rows.Count; i++)
             {
-                if ((string)data.Rows[i][0] == Name)
+                if ((string)data.Rows[i][0] == name)
                 {
                     repeated = true;
                 }
             }
 
-            /*******************************      we have name and lastname in SQL but there is only one field in the class      *****************************/
-
             if (repeated == false)
             {
                 // add in SQL
-                string command = "insert into Userr values('" + Name.Trim() + "' , '" + phone.Trim() + "' ,'" + pass.Trim() + "' , '" +
+                string command = "insert into Userr values('" + name.Trim() + "' , '" + phone.Trim() + "' ,'" + pass.Trim() + "' , '" +
                                                              email.Trim() + "' , '" + pic + "', '" + "0" + "')";
 
                 SqlCommand sqlCommand = new SqlCommand(command, connection);
@@ -286,28 +589,255 @@ namespace WpfProject
         public void BorrowBook(string name)
         {
             //the Book is borrowed
+
+            GregorianCalendar time = new GregorianCalendar();
+            DateTime dt = DateTime.Now;
+            int year = time.GetYear(dt);
+            int month = time.GetMonth(dt);
+            int day = time.GetDayOfMonth(dt);
+            string Time = year + "/" + month + "/" + day;
+
+            SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
+                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+            connection.Open();
+
+            string command2 = "select * from Userr";
+            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
+            DataTable data = new DataTable();
+            adapter.Fill(data);
+
+            for (int i = 0; i < data.Rows.Count; i++)
+            {
+                if (data.Rows[i][0].ToString() == Name)
+                {
+                    for (int j = 6; j < 11; j++)
+                    {
+                        if (data.Rows[i][j] == null)
+                        {
+                            if (j == 6)
+                            {
+                                string command3 = "update Userr SET book1 = '" + name + "' Date1 = '" + Time + "' where name = '" + Name + "' ";
+
+                                SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
+                                sqlCommand3.BeginExecuteNonQuery();
+                            }
+                            else if (j == 7)
+                            {
+                                string command3 = "update Userr SET book2 = '" + name + "' Date2 = '" + Time + "' where name = '" + Name + "' ";
+
+                                SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
+                                sqlCommand3.BeginExecuteNonQuery();
+                            }
+                            else if (j == 8)
+                            {
+                                string command3 = "update Userr SET book3 = '" + name + "' Date3 = '" + Time + "' where name = '" + Name + "' ";
+
+                                SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
+                                sqlCommand3.BeginExecuteNonQuery();
+                            }
+                            else if (j == 9)
+                            {
+                                string command3 = "update Userr SET book4 = '" + name + "' Date4 = '" + Time + "' where name = '" + Name + "' ";
+
+                                SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
+                                sqlCommand3.BeginExecuteNonQuery();
+                            }
+                            else if (j == 10)
+                            {
+                                string command3 = "update Userr SET book5 = '" + name + "' Date5 = '" + Time + "' where name = '" + Name + "' ";
+
+                                SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
+                                sqlCommand3.BeginExecuteNonQuery();
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+
+            string command = "update Book SET available = '" + false + "'" +
+                                "where name = '" + name + "'";
+
+            SqlCommand sqlCommand = new SqlCommand(command, connection);
+            sqlCommand.BeginExecuteNonQuery();
+
+            connection.Close();
+
         }
         public void ReturnBook(string name)
         {
             //the book is Returned
+
+            SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
+                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+            connection.Open();
+
+            string command2 = "select * from Userr";
+            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
+            DataTable data = new DataTable();
+            adapter.Fill(data);
+
+            for (int i = 0; i < data.Rows.Count; i++)
+            {
+                if (data.Rows[i][0].ToString() == Name)
+                {
+                    for (int j = 6; j < 11; j++)
+                    {
+                        if (data.Rows[i][j].ToString() == name)
+                        {
+                            if (j == 6)
+                            {
+                                string command3 = "update Userr SET book1 = '" + null + "' Date1 = '" + null + "' where name = '" + Name + "' ";
+
+                                SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
+                                sqlCommand3.BeginExecuteNonQuery();
+
+                            }
+                            else if (j == 7)
+                            {
+                                string command3 = "update Userr SET book2 = '" + null + "' Date2 = '" + null + "' where name = '" + Name + "' ";
+
+                                SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
+                                sqlCommand3.BeginExecuteNonQuery();
+                            }
+                            else if (j == 8)
+                            {
+                                string command3 = "update Userr SET book3 = '" + null + "' Date3 = '" + null + "' where name = '" + Name + "' ";
+
+                                SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
+                                sqlCommand3.BeginExecuteNonQuery();
+                            }
+                            else if (j == 9)
+                            {
+                                string command3 = "update Userr SET book4 = '" + null + "' Date4 = '" + null + "' where name = '" + Name + "' ";
+
+                                SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
+                                sqlCommand3.BeginExecuteNonQuery();
+                            }
+                            else if (j == 10)
+                            {
+                                string command3 = "update Userr SET book5 = '" + null + "' Date5 = '" + null + "' where name = '" + Name + "' ";
+
+                                SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
+                                sqlCommand3.BeginExecuteNonQuery();
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+
+            string command = "update Book SET available = '" + true + "'" +
+                                "where name = '" + name + "'";
+
+            SqlCommand sqlCommand = new SqlCommand(command, connection);
+            sqlCommand.BeginExecuteNonQuery();
+
+            connection.Close();
+
         }
-        public void PayFine()
+        public void PayFine(string money)
         {
             //fine for delay
+            /**********how much fine should be payed for each day****************/
+            long m = long.Parse(money);
+
+            SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
+                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+            connection.Open();
+
+            string command2 = "select * from Userr";
+            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
+            DataTable data = new DataTable();
+            adapter.Fill(data);
+
+            string command = "update Userr SET wallet = '" + (long.Parse(data.Columns[5].ToString()) - m) + "'" +
+                                "where name = '" + this.Name + "'";
+
+            SqlCommand sqlCommand = new SqlCommand(command, connection);
+            sqlCommand.BeginExecuteNonQuery();
+
+            connection.Close();
         }
-        public void PaySubscription()
+        public void PaySubscription(string money)
         {
             //pay for subscription
+            /**********how much money should be payed * ***************/
+            long m = long.Parse(money);
+            GregorianCalendar time = new GregorianCalendar();
+            DateTime dt = DateTime.Now;
+            int year = time.GetYear(dt);
+            int month = time.GetMonth(dt);
+            int day = time.GetDayOfMonth(dt);
+            string Time = year + "/" + month + "/" + day;
+
+            SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
+                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+            connection.Open();
+
+            string command2 = "select * from Userr";
+            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
+            DataTable data = new DataTable();
+            adapter.Fill(data);
+
+            string command = "update Userr SET wallet = '" + (long.Parse(data.Columns[5].ToString()) - m) + "' SubsRenew = '" + Time + "' " +
+                " where name = '" + Name + "' ";
+
+            SqlCommand sqlCommand = new SqlCommand(command, connection);
+            sqlCommand.BeginExecuteNonQuery();
+
+            connection.Close();
         }
         public string ShowCredit()
         {
             //show money
+            /*********which user?*******/
+
+            SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
+                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+
             string money = "";
+
+            connection.Open();
+
+            string command2 = "select * from Userr";
+            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
+            DataTable data = new DataTable();
+            adapter.Fill(data);
+
+            for (int i = 0; i < data.Rows.Count; i++)
+            {
+                if (data.Rows[i][0].ToString() == this.Name)
+                {
+                    money = data.Rows[i][5].ToString();
+                }
+            }
+
+            connection.Close();
+
             return money;
         }
-        public void IncreseCredit()
+        public void IncreseCredit(string money)
         {
             // increase money
+
+            long m = long.Parse(money);
+
+            SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
+                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+
+            string command2 = "select * from Userr";
+            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
+            DataTable data = new DataTable();
+            adapter.Fill(data);
+
+            string command3 = "update Userr SET wallet = '" + (long.Parse(data.Columns[5].ToString()) + m) + "'" +
+                        "where name = '" + Name + "'";
+
+            SqlCommand sqlCommand2 = new SqlCommand(command3, connection);
+            sqlCommand2.BeginExecuteNonQuery();
+
+            connection.Close();
         }
         public void EditInfo()
         {
@@ -322,26 +852,77 @@ namespace WpfProject
         int Month;
         public Pay(string CreditNumber, string CVV, int Year, int Month)
         {
-            this.CreditNumber = CreditNumber;
-            this.CVV = CVV;
-            this.Year = Year;
-            this.Month = Month;
+            if (CheckCreditNumber() && CheckCVV() && CheckExpireDate())
+            {
+                this.CreditNumber = CreditNumber;
+                this.CVV = CVV;
+                this.Year = Year;
+                this.Month = Month;
+            }
+            else
+            {
+                //show wrong input
+            }
         }
 
         public bool CheckCVV()
         {
             //check CVV with regex
-            return true;
+
+            string regex = @"^[0-9]{3,4}$";
+            Regex re = new Regex(regex, RegexOptions.IgnoreCase);
+
+            if (re.IsMatch(CVV))
+                return true;
+
+            else
+                return false;
         }
         public bool CheckCreditNumber()
         {
-            //check credit number with regex
-            return true;
+            //check credit number with Luhn algorithm
+
+            int sum = 0, a;
+            for (int i = 0; i < CreditNumber.Length; i++)
+            {
+                a = Convert.ToInt32(CreditNumber.Substring(i, 1));
+                if (i % 2 == 0)
+                {
+                    a *= 2;
+
+                    if (a > 9)
+                        a -= 9;
+                }
+                sum += a;
+            }
+
+            if (sum % 10 == 0)
+                return true;
+
+            else
+                return false;
+
         }
         public bool CheckExpireDate()
         {
             //check expire date
-            return true;
+
+            GregorianCalendar time = new GregorianCalendar();
+            DateTime dt = DateTime.Now;
+            int year = time.GetYear(dt);
+            int month = time.GetMonth(dt);
+
+            if (this.Year < year)
+                return false;
+
+            else if (this.Year > year)
+                return true;
+
+            else if (this.Month - 3 < month)
+                return false;
+
+            else
+                return true;
         }
     }
 
