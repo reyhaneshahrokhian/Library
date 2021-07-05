@@ -17,11 +17,6 @@ using System.Data.SqlClient;
 
 namespace WpfProject
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    /// 
-
     public partial class MainWindow : Window
     {
         public MainWindow()
@@ -35,7 +30,6 @@ namespace WpfProject
             r.Show();
             this.Close();
         }
-
         private void Login_Click(object sender, RoutedEventArgs e)
         {
             //check admin
@@ -51,7 +45,7 @@ namespace WpfProject
             else
             {
                 SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
-                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
                 connection.Open();
 
                 string command2 = "select * from Userr";
