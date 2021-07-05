@@ -5,16 +5,12 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using Microsoft.Data.SqlClient;
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace WpfProject
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    ///    
     interface Methods
     {
         string ShowCredit();
@@ -26,17 +22,79 @@ namespace WpfProject
         public string PhoneNumber;
         public string Password;
         public string PictureURL;
+        public long Money;
         public Person(string name, string email, string phone, string pass, string pic)
         {
-            //regex
-            Name = name;
-            //regex
-            Email = email;
-            //regex
-            PhoneNumber = phone;
-            //regex
-            Password = pass;
-            PictureURL = pic;
+            if (name == "admin")
+            {
+                Name = name;
+                Password = pass;
+            }
+            else if (CheckName(name) && CheckEmail(email) && CheckPhoneNumber(phone) && CheckPassword(pass))
+            {
+                Name = name;
+                Email = email;
+                PhoneNumber = phone;
+                Password = pass;
+                PictureURL = pic;
+            }
+            else
+            {
+                //show wrong output
+            }
+
+        }
+        public static bool CheckName(string name)
+        {
+            //check name with regex
+
+            string regex = @"^[a-zA-Z]{3,32}$";
+            Regex re = new Regex(regex, RegexOptions.IgnoreCase);
+
+            if (re.IsMatch(name))
+                return true;
+
+            else
+                return false;
+        }
+        public static bool CheckEmail(string email)
+        {
+            //check email with regex
+
+            string regex = @"^[a-zA-Z0-9_-]{1,32}+@[[a-zA-Z0-9]{1,8}+.[a-zA-Z]{1,3}$";
+            Regex re = new Regex(regex, RegexOptions.IgnoreCase);
+
+            if (re.IsMatch(email))
+                return true;
+
+            else
+                return false;
+        }
+        public static bool CheckPhoneNumber(string phone)
+        {
+            //check phone number with regex
+
+            string regex = @"^09+[0-9]{9}$";
+            Regex re = new Regex(regex, RegexOptions.IgnoreCase);
+
+            if (re.IsMatch(phone))
+                return true;
+
+            else
+                return false;
+        }
+        public  static bool CheckPassword(string pass)
+        {
+            //check password with regex
+
+            string regex = @"^(?=.*[A-Z]).[a-zA-Z]{7,31}$";
+            Regex re = new Regex(regex, RegexOptions.IgnoreCase);
+
+            if (re.IsMatch(pass))
+                return true;
+
+            else
+                return false;
         }
         public List<string> ShowBooks()
         {
@@ -44,7 +102,7 @@ namespace WpfProject
             List<string> AllBooks = new List<string>();
 
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
-                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+                                  G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
             connection.Open();
 
             string command2 = "select * from Book";
@@ -54,7 +112,7 @@ namespace WpfProject
 
             for (int i = 0; i < data.Rows.Count; i++)
             {
-                AllBooks.Add(data.Rows[0][i].ToString());
+                AllBooks.Add(data.Rows[i][0].ToString());
             }
 
             connection.Close();
@@ -67,17 +125,48 @@ namespace WpfProject
         public Admin(string name, string email, string phone, string pass, string pic)
             : base(name, email, phone, pass, pic)
         {
+            // add in SQL
+
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
-                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
             connection.Open();
 
-            // add in SQL
-            string command = "insert into Admin values('" + name.Trim() + "' ,'" + pass.Trim() + "' , '" + "0" + "')";
+            string command2 = "select * from adminn";
+            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
+            DataTable data = new DataTable();
+            adapter.Fill(data);
 
-            SqlCommand sqlCommand = new SqlCommand(command, connection);
-            sqlCommand.BeginExecuteNonQuery();
+            if (data.Rows.Count == 0)
+            {
+                string command = "insert into adminn values('" + name.Trim() + "' ,'" + pass.Trim() + "' , '" + "0" + "')";
+                SqlCommand sqlCommand = new SqlCommand(command, connection);
+                sqlCommand.ExecuteNonQuery();
+            }
+            
+            connection.Close();
+        }
+        public List<string> ShowEmployee()
+        {
+            // show all employee
+            List<string> AllEmployee = new List<string>();
+
+            SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
+                                  G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
+            connection.Open();
+
+            string command2 = "select * from Employee";
+            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
+            DataTable data = new DataTable();
+            adapter.Fill(data);
+
+            for (int i = 0; i < data.Rows.Count; i++)
+            {
+                AllEmployee.Add(data.Rows[i][0].ToString());
+            }
 
             connection.Close();
+
+            return AllEmployee;
         }
         public void AddEmployee(string name, string email, string phone, string pass, string pic)
         {
@@ -87,23 +176,23 @@ namespace WpfProject
         public static void DeleteEmployee(string name)
         {
             // delete the employee
+
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
-                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
             connection.Open();
 
             string command = "delete from Employee where name ='" + name + "' ";
             SqlCommand sqlCommand = new SqlCommand(command, connection);
-            sqlCommand.BeginExecuteNonQuery();
+            sqlCommand.ExecuteNonQuery();
 
             connection.Close();
         }
         public void PayEmployee(string money)
         {
-            //pay all employees a defined money
-            /******** money ******/
+            //pay all employees a defined money and reduce that amout from admin's wallet
 
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
-                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
             connection.Open();
 
             string command = "select * from Employee";
@@ -111,16 +200,32 @@ namespace WpfProject
             DataTable data = new DataTable();
             adapter.Fill(data);
 
+            string command2 = "select * from adminn";
+            SqlDataAdapter adapter2 = new SqlDataAdapter(command2, connection);
+            DataTable data2 = new DataTable();
+            adapter2.Fill(data2);
+
             long m = long.Parse(money);
 
-            for (int i = 0; i < data.Rows.Count; i++)
+            if (long.Parse(data2.Rows[0][2].ToString()) < (data.Rows.Count * m))
             {
-                /*********************************  i don't know what to do ********************************/
-
-                string command2 = "update Employee SET wallet = wallet + '" + m + "'";
-                SqlCommand sqlCommand2 = new SqlCommand(command2, connection);
-                sqlCommand2.BeginExecuteNonQuery();
+                //show that admin doesnt have that amount of money
             }
+            else
+            {
+                for (int i = 0; i < data.Rows.Count; i++)
+                {
+                    string command3 = "update Employee SET wallet = '" +(long.Parse(data.Rows[i][5].ToString()) + m) + "'";
+                    SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
+                    sqlCommand3.ExecuteNonQuery();
+                }
+
+                long bank = long.Parse(data2.Rows[0][2].ToString()) - (data.Rows.Count * m);
+                string command4 = "update adminn SET bank = '" + bank + "'";
+                SqlCommand sqlCommand4 = new SqlCommand(command4, connection);
+                sqlCommand4.ExecuteNonQuery();
+            }
+
             connection.Close();
         }
         public void AddBooks(string name, string writer, string genre, string realeseNumber)
@@ -128,19 +233,32 @@ namespace WpfProject
             //new book object
             Book book = new Book(name, writer, genre, realeseNumber);
         }
+        public static void DeleteBook(string name)
+        {
+            // delete the Book
+            SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
+                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
+            connection.Open();
+
+            string command = "delete from Book where name ='" + name + "' ";
+            SqlCommand sqlCommand = new SqlCommand(command, connection);
+            sqlCommand.ExecuteNonQuery();
+
+            connection.Close();
+        }
         public string ShowCredit()
         {
             //show all money
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
-                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
             connection.Open();
 
-            string command2 = "select * from Admin";
+            string command2 = "select * from adminn";
             SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
             DataTable data = new DataTable();
             adapter.Fill(data);
 
-            string money = data.Rows[2][0].ToString();
+            string money = data.Rows[0][2].ToString();
             connection.Close();
 
             return money;
@@ -151,20 +269,20 @@ namespace WpfProject
             long m = long.Parse(money);
 
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
-                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
             connection.Open();
 
 
-            string command2 = "select * from Admin";
+            string command2 = "select * from adminn";
             SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
             DataTable data = new DataTable();
             adapter.Fill(data);
 
-            string command = "update Admin SET Bank = '" + (long.Parse(data.Rows[2][0].ToString()) + m) + "'" +
+            string command = "update adminn SET Bank = '" + (long.Parse(data.Rows[2][0].ToString()) + m) + "'" +
                                 "where name = '" + "admin" + "'";
 
             SqlCommand sqlCommand = new SqlCommand(command, connection);
-            sqlCommand.BeginExecuteNonQuery();
+            sqlCommand.ExecuteNonQuery();
 
             connection.Close();
         }
@@ -178,7 +296,7 @@ namespace WpfProject
             bool repeated = false;
 
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
-                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
             connection.Open();
 
 
@@ -202,12 +320,24 @@ namespace WpfProject
                                                              email.Trim() + "' , '" + pic + "' , '" + "0" + "')";
 
                 SqlCommand sqlCommand = new SqlCommand(command, connection);
-                sqlCommand.BeginExecuteNonQuery();
+                sqlCommand.ExecuteNonQuery();
             }
             else
             {
                 //write "reapeted employee"
             }
+            connection.Close();
+        }
+        public void DeleteUser(string name)
+        {
+            SqlConnection connection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=
+                                    C:\Users\saba\Desktop\saba folder\project\sql.mdfIntegrated Security=True;Connect Timeout=30");
+            connection.Open();
+
+            string command = "Delete from Userr where name = '" + name + "'";
+
+            SqlCommand com = new SqlCommand(command, connection);
+            com.ExecuteNonQuery();
             connection.Close();
         }
         public List<string> ShowBorrowedBooks()
@@ -217,7 +347,7 @@ namespace WpfProject
             List<string> BorrowedBooks = new List<string>();
 
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
-                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
             connection.Open();
 
 
@@ -244,7 +374,7 @@ namespace WpfProject
             List<string> AvailableBooks = new List<string>();
 
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
-                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
             connection.Open();
 
 
@@ -271,7 +401,7 @@ namespace WpfProject
             List<string> AllUser = new List<string>();
 
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
-                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
             connection.Open();
 
 
@@ -292,7 +422,45 @@ namespace WpfProject
         public List<string> ShowLateReturnUser()
         {
             //late returning users
+
             List<string> LateReturnUser = new List<string>();
+            GregorianCalendar time = new GregorianCalendar();
+            DateTime dt = DateTime.Now;
+            int year = time.GetYear(dt);
+            int month = time.GetMonth(dt);
+            int day = time.GetDayOfMonth(dt);
+
+            SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
+                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
+            connection.Open();
+            string command2 = "select * from Userr";
+            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
+            DataTable data = new DataTable();
+            adapter.Fill(data);
+
+            for (int i = 0; i < data.Rows.Count; i++)
+            {
+                for (int j = 11; j < 16; j++)
+                {
+                    string[] temp = data.Rows[i][j].ToString().Split('/');
+                    if (int.Parse(temp[0]) < year)
+                    {
+                        LateReturnUser.Add(data.Rows[i][0].ToString());
+                        break;
+                    }
+                    else if (int.Parse(temp[0]) == year && int.Parse(temp[1]) < month)
+                    {
+                        LateReturnUser.Add(data.Rows[i][0].ToString());
+                        break;
+                    }
+                    else if (int.Parse(temp[0]) == year && int.Parse(temp[1]) == month && int.Parse(temp[2]) < day)
+                    {
+                        LateReturnUser.Add(data.Rows[i][0].ToString());
+                        break;
+                    }
+                }
+            }
+            connection.Close();
 
             return LateReturnUser;
         }
@@ -300,6 +468,62 @@ namespace WpfProject
         {
             //late pay users
             List<string> LatePayUser = new List<string>();
+            GregorianCalendar time = new GregorianCalendar();
+            DateTime dt = DateTime.Now;
+            int year = time.GetYear(dt);
+            int month = time.GetMonth(dt);
+            int day = time.GetDayOfMonth(dt);
+
+            SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
+                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
+            connection.Open();
+            string command2 = "select * from Userr";
+            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
+            DataTable data = new DataTable();
+            adapter.Fill(data);
+
+            for (int i = 0; i < data.Rows.Count; i++)
+            {
+                if (data.Rows[i][17] == null)
+                {
+                    string[] temp = data.Rows[i][16].ToString().Split('/');
+                    if ((int.Parse(temp[0]) + 1) < year)
+                    {
+                        LatePayUser.Add(data.Rows[i][0].ToString());
+                        break;
+                    }
+                    else if ((int.Parse(temp[0]) + 1) == year && int.Parse(temp[1]) < month)
+                    {
+                        LatePayUser.Add(data.Rows[i][0].ToString());
+                        break;
+                    }
+                    else if ((int.Parse(temp[0]) + 1) == year && int.Parse(temp[1]) == month && int.Parse(temp[2]) < day)
+                    {
+                        LatePayUser.Add(data.Rows[i][0].ToString());
+                        break;
+                    }
+                }
+                else
+                {
+                    string[] temp = data.Rows[i][17].ToString().Split('/');
+                    if ((int.Parse(temp[0]) + 1) < year)
+                    {
+                        LatePayUser.Add(data.Rows[i][0].ToString());
+                        break;
+                    }
+                    else if ((int.Parse(temp[0]) + 1) == year && int.Parse(temp[1]) < month)
+                    {
+                        LatePayUser.Add(data.Rows[i][0].ToString());
+                        break;
+                    }
+                    else if ((int.Parse(temp[0]) + 1) == year && int.Parse(temp[1]) == month && int.Parse(temp[2]) < day)
+                    {
+                        LatePayUser.Add(data.Rows[i][0].ToString());
+                        break;
+                    }
+                }
+            }
+            connection.Close();
             return LatePayUser;
         }
         public List<string> ShowUniqueUsers(string name)
@@ -308,7 +532,7 @@ namespace WpfProject
             List<string> InfoUniqueUser = new List<string>();
 
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
-                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
             connection.Open();
 
             string command2 = "select * from Userr";
@@ -320,7 +544,7 @@ namespace WpfProject
             {
                 if (data.Rows[i][0].ToString() == name)
                 {
-                    /****************************** not aure *********************/
+                    /*****************************not aure********************/
                     InfoUniqueUser.Add(data.Rows[i][0].ToString());
                     InfoUniqueUser.Add(data.Rows[i][1].ToString());
                     InfoUniqueUser.Add(data.Rows[i][2].ToString());
@@ -337,8 +561,6 @@ namespace WpfProject
                     InfoUniqueUser.Add(data.Rows[i][15].ToString());
                     InfoUniqueUser.Add(data.Rows[i][16].ToString());
                     InfoUniqueUser.Add(data.Rows[i][17].ToString());
-                    InfoUniqueUser.Add(data.Rows[i][18].ToString());
-                    InfoUniqueUser.Add(data.Rows[i][19].ToString());
                     break;
                 }
             }
@@ -350,10 +572,9 @@ namespace WpfProject
         public string ShowCredit()
         {
             //money in bank of the employee
-            /********** which employe? ********/
 
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
-                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
 
             string money = "";
 
@@ -376,7 +597,7 @@ namespace WpfProject
 
             return money;
         }
-        public void EditInfo(string email, string phone,/****/ string path)
+        public void EditInfo(string email, string phone, string path)
         {
             //Edit Info of employee
             Email = email;
@@ -384,7 +605,7 @@ namespace WpfProject
             PictureURL = path;
 
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
-                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
 
             connection.Open();
 
@@ -399,7 +620,7 @@ namespace WpfProject
                 {
                     string command = "update Employee SET email = '" + email + "' phoneNumber = '" + phone + "' PictureLoc = '" + path + "' ";
                     SqlCommand sqlCommand = new SqlCommand(command, connection);
-                    sqlCommand.BeginExecuteNonQuery();
+                    sqlCommand.ExecuteNonQuery();
                 }
             }
 
@@ -415,16 +636,16 @@ namespace WpfProject
             bool repeated = false;
 
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
-                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
             connection.Open();
-            string command2 = "select * from Employee";
+            string command2 = "select * from Userr";
             SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
             DataTable data = new DataTable();
             adapter.Fill(data);
 
             for (int i = 0; i < data.Rows.Count; i++)
             {
-                if ((string)data.Rows[i][0] == Name)
+                if ((string)data.Rows[i][0] == name)
                 {
                     repeated = true;
                 }
@@ -437,17 +658,24 @@ namespace WpfProject
                                                              email.Trim() + "' , '" + pic + "', '" + "0" + "')";
 
                 SqlCommand sqlCommand = new SqlCommand(command, connection);
-                sqlCommand.BeginExecuteNonQuery();
+                sqlCommand.ExecuteNonQuery();
             }
+
             connection.Close();
         }
         public void BorrowBook(string name)
         {
             //the Book is borrowed
-            /********** date of borrow **********/
+
+            GregorianCalendar time = new GregorianCalendar();
+            DateTime dt = DateTime.Now;
+            int year = time.GetYear(dt);
+            int month = time.GetMonth(dt);
+            int day = time.GetDayOfMonth(dt);
+            string Time = year + "/" + month + "/" + day;
 
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
-                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
             connection.Open();
 
             string command2 = "select * from Userr";
@@ -465,38 +693,38 @@ namespace WpfProject
                         {
                             if (j == 6)
                             {
-                                string command3 = "update Userr SET book1 = '" + name + "' ";
+                                string command3 = "update Userr SET book1 = '" + name + "' Date1 = '" + Time + "' where name = '" + Name + "' ";
 
                                 SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
-                                sqlCommand3.BeginExecuteNonQuery();
+                                sqlCommand3.ExecuteNonQuery();
                             }
                             else if (j == 7)
                             {
-                                string command3 = "update Userr SET book2 = '" + name + "' ";
+                                string command3 = "update Userr SET book2 = '" + name + "' Date2 = '" + Time + "' where name = '" + Name + "' ";
 
                                 SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
-                                sqlCommand3.BeginExecuteNonQuery();
+                                sqlCommand3.ExecuteNonQuery();
                             }
                             else if (j == 8)
                             {
-                                string command3 = "update Userr SET book3 = '" + name + "' ";
+                                string command3 = "update Userr SET book3 = '" + name + "' Date3 = '" + Time + "' where name = '" + Name + "' ";
 
                                 SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
-                                sqlCommand3.BeginExecuteNonQuery();
+                                sqlCommand3.ExecuteNonQuery();
                             }
                             else if (j == 9)
                             {
-                                string command3 = "update Userr SET book4 = '" + name + "' ";
+                                string command3 = "update Userr SET book4 = '" + name + "' Date4 = '" + Time + "' where name = '" + Name + "' ";
 
                                 SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
-                                sqlCommand3.BeginExecuteNonQuery();
+                                sqlCommand3.ExecuteNonQuery();
                             }
                             else if (j == 10)
                             {
-                                string command3 = "update Userr SET book5 = '" + name + "' ";
+                                string command3 = "update Userr SET book5 = '" + name + "' Date5 = '" + Time + "' where name = '" + Name + "' ";
 
                                 SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
-                                sqlCommand3.BeginExecuteNonQuery();
+                                sqlCommand3.ExecuteNonQuery();
                             }
                             break;
                         }
@@ -508,7 +736,7 @@ namespace WpfProject
                                 "where name = '" + name + "'";
 
             SqlCommand sqlCommand = new SqlCommand(command, connection);
-            sqlCommand.BeginExecuteNonQuery();
+            sqlCommand.ExecuteNonQuery();
 
             connection.Close();
 
@@ -518,7 +746,7 @@ namespace WpfProject
             //the book is Returned
 
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
-                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
             connection.Open();
 
             string command2 = "select * from Userr";
@@ -536,39 +764,39 @@ namespace WpfProject
                         {
                             if (j == 6)
                             {
-                                string command3 = "update Userr SET book1 = '" + null + "' remainDay1 = '" + null + "' ";
+                                string command3 = "update Userr SET book1 = '" + null + "' Date1 = '" + null + "' where name = '" + Name + "' ";
 
                                 SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
-                                sqlCommand3.BeginExecuteNonQuery();
+                                sqlCommand3.ExecuteNonQuery();
 
                             }
                             else if (j == 7)
                             {
-                                string command3 = "update Userr SET book2 = '" + null + "' remainDay2 = '" + null + "' ";
+                                string command3 = "update Userr SET book2 = '" + null + "' Date2 = '" + null + "' where name = '" + Name + "' ";
 
                                 SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
-                                sqlCommand3.BeginExecuteNonQuery();
+                                sqlCommand3.ExecuteNonQuery();
                             }
                             else if (j == 8)
                             {
-                                string command3 = "update Userr SET book3 = '" + null + "' remainDay3 = '" + null + "' ";
+                                string command3 = "update Userr SET book3 = '" + null + "' Date3 = '" + null + "' where name = '" + Name + "' ";
 
                                 SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
-                                sqlCommand3.BeginExecuteNonQuery();
+                                sqlCommand3.ExecuteNonQuery();
                             }
                             else if (j == 9)
                             {
-                                string command3 = "update Userr SET book4 = '" + null + "' remainDay4 = '" + null + "' ";
+                                string command3 = "update Userr SET book4 = '" + null + "' Date4 = '" + null + "' where name = '" + Name + "' ";
 
                                 SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
-                                sqlCommand3.BeginExecuteNonQuery();
+                                sqlCommand3.ExecuteNonQuery();
                             }
                             else if (j == 10)
                             {
-                                string command3 = "update Userr SET book5 = '" + null + "' remainDay5 = '" + null + "' ";
+                                string command3 = "update Userr SET book5 = '" + null + "' Date5 = '" + null + "' where name = '" + Name + "' ";
 
                                 SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
-                                sqlCommand3.BeginExecuteNonQuery();
+                                sqlCommand3.ExecuteNonQuery();
                             }
                             break;
                         }
@@ -580,7 +808,7 @@ namespace WpfProject
                                 "where name = '" + name + "'";
 
             SqlCommand sqlCommand = new SqlCommand(command, connection);
-            sqlCommand.BeginExecuteNonQuery();
+            sqlCommand.ExecuteNonQuery();
 
             connection.Close();
 
@@ -588,11 +816,11 @@ namespace WpfProject
         public void PayFine(string money)
         {
             //fine for delay
-
+            /**********how much fine should be payed for each day****************/
             long m = long.Parse(money);
 
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
-                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
             connection.Open();
 
             string command2 = "select * from Userr";
@@ -604,18 +832,24 @@ namespace WpfProject
                                 "where name = '" + this.Name + "'";
 
             SqlCommand sqlCommand = new SqlCommand(command, connection);
-            sqlCommand.BeginExecuteNonQuery();
+            sqlCommand.ExecuteNonQuery();
 
             connection.Close();
         }
         public void PaySubscription(string money)
         {
             //pay for subscription
-
+            /**********how much money should be payed * ***************/
             long m = long.Parse(money);
+            GregorianCalendar time = new GregorianCalendar();
+            DateTime dt = DateTime.Now;
+            int year = time.GetYear(dt);
+            int month = time.GetMonth(dt);
+            int day = time.GetDayOfMonth(dt);
+            string Time = year + "/" + month + "/" + day;
 
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
-                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
             connection.Open();
 
             string command2 = "select * from Userr";
@@ -623,21 +857,21 @@ namespace WpfProject
             DataTable data = new DataTable();
             adapter.Fill(data);
 
-            string command = "update Userr SET wallet = '" + (long.Parse(data.Columns[5].ToString()) - m) + "'" +
-                                "where name = '" + this.Name + "'";
+            string command = "update Userr SET wallet = '" + (long.Parse(data.Columns[5].ToString()) - m) + "' SubsRenew = '" + Time + "' " +
+                " where name = '" + Name + "' ";
 
             SqlCommand sqlCommand = new SqlCommand(command, connection);
-            sqlCommand.BeginExecuteNonQuery();
+            sqlCommand.ExecuteNonQuery();
 
             connection.Close();
         }
         public string ShowCredit()
         {
             //show money
-            /********** which user? ********/
+            /*********which user?*******/
 
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
-                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
 
             string money = "";
 
@@ -667,7 +901,8 @@ namespace WpfProject
             long m = long.Parse(money);
 
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
-                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
+            connection.Open();
 
             string command2 = "select * from Userr";
             SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
@@ -678,7 +913,7 @@ namespace WpfProject
                         "where name = '" + Name + "'";
 
             SqlCommand sqlCommand2 = new SqlCommand(command3, connection);
-            sqlCommand2.BeginExecuteNonQuery();
+            sqlCommand2.ExecuteNonQuery();
 
             connection.Close();
         }
@@ -686,32 +921,103 @@ namespace WpfProject
         {
             //edit info of use
         }
+
+        public List<string> ShowBorrowedBooks()
+        {
+            List<string> BorrowedBooks = new List<string>();
+
+            SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
+                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
+            connection.Open();
+
+            string command2 = "select * from Userr";
+            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
+            DataTable data = new DataTable();
+            adapter.Fill(data);
+
+            for (int i = 0; i < data.Rows.Count; i++)
+            {
+                if (data.Rows[i][0].ToString() == Name)
+                {
+                    for (int j = 6; j < 11; j++)
+                    {
+                        if (data.Rows[i][j] != null)
+                        {
+                            BorrowedBooks.Add(data.Rows[i][j].ToString());
+                        }
+                    }
+                    break;
+                }
+            }
+
+            connection.Close();
+
+            return BorrowedBooks;
+        }
+
+        public List<string> SearchBookByName(string info)
+        {
+            List<string> bookInfo = new List<string>();
+
+            SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
+                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
+            connection.Open();
+
+            string command2 = "select * from Book";
+            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
+            DataTable data = new DataTable();
+            adapter.Fill(data);
+
+            for (int i = 0; i < data.Rows.Count; i++)
+            {
+                if (data.Rows[i][0].ToString() == info)
+                {
+                    bookInfo.Add(data.Rows[i][0].ToString());
+                    bookInfo.Add(data.Rows[i][1].ToString());
+                    bookInfo.Add(data.Rows[i][2].ToString());
+                    bookInfo.Add(data.Rows[i][3].ToString());
+                    bookInfo.Add(data.Rows[i][4].ToString());
+                }
+            }
+            connection.Close();
+
+            return bookInfo;
+        }
+
+        public List<string> SearchBookByWriter(string info)
+        {
+            List<string> bookInfo = new List<string>();
+
+            SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
+                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
+            connection.Open();
+
+            string command2 = "select * from Book";
+            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
+            DataTable data = new DataTable();
+            adapter.Fill(data);
+
+            for (int i = 0; i < data.Rows.Count; i++)
+            {
+                if (data.Rows[i][1].ToString() == info)
+                {
+                    bookInfo.Add(data.Rows[i][0].ToString());
+                    bookInfo.Add(data.Rows[i][1].ToString());
+                    bookInfo.Add(data.Rows[i][2].ToString());
+                    bookInfo.Add(data.Rows[i][3].ToString());
+                    bookInfo.Add(data.Rows[i][4].ToString());
+                }
+            }
+            connection.Close();
+
+            return bookInfo;
+        }
     }
     class Pay
     {
-        string CreditNumber;
-        string CVV;
-        int Year;
-        int Month;
-        public Pay(string CreditNumber, string CVV, int Year, int Month)
-        {
-            if (CheckCreditNumber() && CheckCVV() && CheckExpireDate())
-            {
-                this.CreditNumber = CreditNumber;
-                this.CVV = CVV;
-                this.Year = Year;
-                this.Month = Month;
-            }
-            else
-            {
-                //show wrong input
-            }
-        }
-
-        public bool CheckCVV()
+        public static bool CheckCVV(string CVV)
         {
             //check CVV with regex
-            // 3 4 ragham
 
             string regex = @"^[0-9]{3,4}$";
             Regex re = new Regex(regex, RegexOptions.IgnoreCase);
@@ -722,15 +1028,51 @@ namespace WpfProject
             else
                 return false;
         }
-        public bool CheckCreditNumber()
+        public static bool CheckCreditNumber(string CreditNumber)
         {
-            //check credit number with regex
-            return true;
+            //check credit number with Luhn algorithm
+
+            int sum = 0, a;
+            for (int i = 0; i < CreditNumber.Length; i++)
+            {
+                a = Convert.ToInt32(CreditNumber.Substring(i, 1));
+                if (i % 2 == 0)
+                {
+                    a *= 2;
+
+                    if (a > 9)
+                        a -= 9;
+                }
+                sum += a;
+            }
+
+            if (sum % 10 == 0)
+                return true;
+
+            else
+                return false;
+
         }
-        public bool CheckExpireDate()
+        public static bool CheckExpireDate(int Year,int Month)
         {
             //check expire date
-            return true;
+
+            GregorianCalendar time = new GregorianCalendar();
+            DateTime dt = DateTime.Now;
+            int year = time.GetYear(dt);
+            int month = time.GetMonth(dt);
+
+            if (Year < year)
+                return false;
+
+            else if (Year > year)
+                return true;
+
+            else if (Month - 3 < month)
+                return false;
+
+            else
+                return true;
         }
     }
 
@@ -751,7 +1093,7 @@ namespace WpfProject
 
             //add the book to SQL
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
-                                C: \Users\saba\Desktop\saba folder\project\sql.mdf; Integrated Security = True; Connect Timeout = 30");
+                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
             connection.Open();
             DataTable data = new DataTable();
 
@@ -764,9 +1106,10 @@ namespace WpfProject
             }
             string command = "insert into Book values('" + Name.Trim() + "' , '" + Writer.Trim() + "' ,'" +
                                                     Genre.Trim() + "' , '" + RealeseNumber.Trim() + "' , '" + count + "','" + true + "'  )";
+            
 
             SqlCommand sqlCommand = new SqlCommand(command, connection);
-            sqlCommand.BeginExecuteNonQuery();
+            sqlCommand.ExecuteNonQuery();
 
             connection.Close();
         }
