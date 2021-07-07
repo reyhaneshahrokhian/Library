@@ -88,7 +88,7 @@
                                                         <ColumnDefinition/>
                                                     </Grid.ColumnDefinitions>
                                                     <TextBlock Grid.Column="0" Text="{Binding}" FontFamily="Rockwell Extra Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Background="#FF919595" Foreground="#FF004D40" FontSize="30" Padding="80,20"></TextBlock>
-                                                    <Button Grid.Column="1" Content ="Show" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="90,20" FontFamily="Montserrat Black" Background="#FF919595" Foreground="#FF004D40" FontSize="25" FontWeight="Bold"></Button>
+                                                    <Button Grid.Column="1" Name="ShowUser" Content ="Show" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="90,20" FontFamily="Montserrat Black" Background="#FF919595" Foreground="#FF004D40" FontSize="25" FontWeight="Bold" Click="SHOWuser_Click"></Button>
                                                 </Grid>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
@@ -130,7 +130,10 @@
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
                                 <TextBlock Grid.Row="0" Text="Enter your Password :" VerticalAlignment="Center" FontSize="22" Foreground="#004D40" FontFamily="Segoe UI Black" Margin="30,8,5,1"></TextBlock>
-                                <PasswordBox x:Name="passwordContinueBox" Grid.Row="1" Width="290" Height="60" Margin="30,0,30,73" Background="#FF2F7870" FontSize="20" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                                <StackPanel Grid.Row="1">
+                                    <TextBlock x:Name="passwordContinueBlock"  FontSize="17" Margin="30,-5,0,0" Foreground="Red"  />
+                                    <PasswordBox x:Name="passwordContinueBox"  Width="290" Height="60" Margin="30,0,30,73" Background="#FF2F7870" FontSize="20" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                                </StackPanel>
                                 <Button Grid.Row="2" Content="Continue" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="95,10,95,10" FontFamily="Montserrat Black" Background="#FFABADB3" Foreground="#004D40" FontSize="22" FontWeight="Bold" Height="60" Margin="30,10,34,63" Click="Continue_Click"/>
                             </Grid>
                         </Grid>
@@ -158,16 +161,13 @@
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="2*"/>
                                         <RowDefinition/>
-                                        <RowDefinition/>
+                                        <RowDefinition/> 
                                     </Grid.RowDefinitions>
-                                    <Image Grid.Row="0" Margin="15,30,15,30" Source="G:\c#\project\pictures\person_icon.jpg" Stretch="Fill"/>
+                                    <Image Grid.Row="0" x:Name="ImageUser" Margin="15,30,15,30" Source="G:\c#\project\pictures\person_icon.jpg" Stretch="Fill"/>
                                     <Rectangle Grid.Row="1" Width="180" Height="70" Fill="#FFABADB3"></Rectangle>
-                                    <StackPanel Grid.Row="1">
-                                        <TextBlock Text="Name" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Foreground="#004D40" FontFamily="Segoe UI Black" Margin="0,23,5,1"></TextBlock>
-                                        <TextBlock Text="family name" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Foreground="#004D40" FontFamily="Segoe UI Black" Margin="0,0,3,1"></TextBlock>
-                                    </StackPanel>
+                                    <TextBlock Grid.Row="1" x:Name="NameUserBlock" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Foreground="#004D40" FontFamily="Segoe UI Black" Margin="0,0,3,1"></TextBlock>
                                     <Rectangle Grid.Row="2" Width="180" Height="70" Fill="#FFABADB3"></Rectangle>
-                                    <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" Text="Email" FontSize="15" Foreground="#004D40" FontFamily="Segoe UI Black"></TextBlock>
+                                    <TextBlock Grid.Row="2" x:Name="EmailUserBlock" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15" Foreground="#004D40" FontFamily="Segoe UI Black"></TextBlock>
                                 </Grid>
                                 <Grid Grid.Column="1">
                                     <Grid.RowDefinitions>
@@ -177,13 +177,13 @@
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
                                     <Rectangle Grid.Row="0" Width="180" Height="70" Fill="#FFABADB3"></Rectangle>
-                                    <TextBlock Grid.Row="0" Text="Subscription" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Foreground="#004D40" FontFamily="Segoe UI Black" Margin="0,0,5,1"></TextBlock>
+                                    <TextBlock Grid.Row="0" x:Name="SubscriptionDaysBlock" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Foreground="#004D40" FontFamily="Segoe UI Black" Margin="0,0,5,1"></TextBlock>
                                     <Rectangle Grid.Row="1" Width="180" Height="70" Fill="#FFABADB3"></Rectangle>
-                                    <TextBlock Grid.Row="1" Text="sing in date" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Foreground="#004D40" FontFamily="Segoe UI Black" Margin="0,0,5,1"></TextBlock>
+                                    <TextBlock Grid.Row="1" x:Name="SignInDateBlock" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Foreground="#004D40" FontFamily="Segoe UI Black" Margin="0,0,5,1"></TextBlock>
                                     <Rectangle Grid.Row="2" Width="180" Height="70" Fill="#FFABADB3"></Rectangle>
-                                    <TextBlock Grid.Row="2" Text="renew" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Foreground="#004D40" FontFamily="Segoe UI Black" Margin="0,0,5,1"></TextBlock>
+                                    <TextBlock Grid.Row="2" x:Name="RenewDateBlock" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Foreground="#004D40" FontFamily="Segoe UI Black" Margin="0,0,5,1"></TextBlock>
                                     <Rectangle Grid.Row="3" Width="180" Height="70" Fill="#FFABADB3"></Rectangle>
-                                    <TextBlock Grid.Row="3" Text="phone" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Foreground="#004D40" FontFamily="Segoe UI Black" Margin="0,0,5,1"></TextBlock>
+                                    <TextBlock Grid.Row="3" x:Name="PhoneUserBlock" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Foreground="#004D40" FontFamily="Segoe UI Black" Margin="0,0,5,1"></TextBlock>
                                 </Grid>
                             </Grid>
                             <Grid Grid.Row="1">
@@ -196,7 +196,10 @@
                                     <TextBlock Text="Enter Password" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" Foreground="#FFC29696" FontFamily="Segoe UI Black" Margin="10,18,5,1"></TextBlock>
                                     <TextBlock Text="  to delete user :" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" Foreground="#FFC29696" FontFamily="Segoe UI Black" Margin="0,0,3,1"></TextBlock>
                                 </StackPanel>
-                                <PasswordBox x:Name="PassDeleteBox" Grid.Column="1" Width="120" Height="58" Margin="10,5,10,20" Background="#FFC29696" FontSize="30" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                                <StackPanel Grid.Column="1">
+                                    <PasswordBox x:Name="PassDeleteBox"  Width="120" Height="58" Margin="10,16,10,20" Background="#FFC29696" FontSize="30" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                                    <TextBlock x:Name="PassDeleteBlock" FontSize="17" Margin="15,-20,0,0" Foreground="Red"/>
+                                </StackPanel>
                                 <Button Grid.Column="2" Content="DELETE" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="30,10,30,10" FontFamily="Montserrat Black" Background="#FFC29696" Foreground="#004D40" FontSize="18" FontWeight="Bold" Height="60" Margin="0,5,10,20" Click="DELETE_Click"/>
                             </Grid>
                         </Grid>
@@ -211,18 +214,100 @@
                                         </Table.Columns>
                                         <TableRowGroup>
                                             <TableRow Background="#FFABADB3">
-                                                <TableCell>
+                                                <TableCell Padding="0,20">
                                                     <Paragraph FontSize="23" Foreground="#004D40" FontFamily="Montserrat Black">Name</Paragraph>
                                                 </TableCell>
-                                                <TableCell>
+                                                <TableCell Padding="0,20">
                                                     <Paragraph FontSize="23" Foreground="#004D40" FontFamily="Montserrat Black">ReturnDate</Paragraph>
                                                 </TableCell>
-                                                <TableCell>
+                                                <TableCell Padding="0,20">
                                                     <Paragraph FontSize="23" Foreground="#004D40" FontFamily="Montserrat Black">DelayDays</Paragraph>
                                                 </TableCell>
                                             </TableRow>
-                                            <TableRow>
-                                                <!--info-->
+                                            <TableRow Background="#FF397F65">
+                                                <TableCell Padding="0,20">
+                                                    <Paragraph FontSize="23" Foreground="#FFC29696" FontFamily="Montserrat Black">
+                                                        <TextBlock x:Name="BookName1Table"/>
+                                                    </Paragraph>
+                                                </TableCell>
+                                                <TableCell Padding="0,20">
+                                                    <Paragraph FontSize="23" Foreground="#FFC29696" FontFamily="Montserrat Black">
+                                                        <TextBlock x:Name="BookReturnDate1Table"/>
+                                                    </Paragraph>
+                                                </TableCell>
+                                                <TableCell Padding="0,20">
+                                                    <Paragraph FontSize="23" Foreground="#FFC29696" FontFamily="Montserrat Black">
+                                                        <TextBlock x:Name="BookDelay1Table"/>
+                                                    </Paragraph>
+                                                </TableCell>
+                                            </TableRow>
+                                            <TableRow Background="#FF397F65">
+                                                <TableCell Padding="0,20">
+                                                    <Paragraph FontSize="23" Foreground="#FFC29696" FontFamily="Montserrat Black">
+                                                        <TextBlock x:Name="BookName2Table"/>
+                                                    </Paragraph>
+                                                </TableCell>
+                                                <TableCell Padding="0,20">
+                                                    <Paragraph FontSize="23" Foreground="#FFC29696" FontFamily="Montserrat Black">
+                                                        <TextBlock x:Name="BookReturnDate2Table"/>
+                                                    </Paragraph>
+                                                </TableCell>
+                                                <TableCell Padding="0,20">
+                                                    <Paragraph FontSize="23" Foreground="#FFC29696" FontFamily="Montserrat Black">
+                                                        <TextBlock x:Name="BookDelay2Table"/>
+                                                    </Paragraph>
+                                                </TableCell>
+                                            </TableRow>
+                                            <TableRow Background="#FF397F65">
+                                                <TableCell Padding="0,20">
+                                                    <Paragraph FontSize="23" Foreground="#FFC29696" FontFamily="Montserrat Black">
+                                                        <TextBlock x:Name="BookName3Table"/>
+                                                    </Paragraph>
+                                                </TableCell>
+                                                <TableCell Padding="0,20">
+                                                    <Paragraph FontSize="23" Foreground="#FFC29696" FontFamily="Montserrat Black">
+                                                        <TextBlock x:Name="BookReturnDate3Table"/>
+                                                    </Paragraph>
+                                                </TableCell>
+                                                <TableCell Padding="0,20">
+                                                    <Paragraph FontSize="23" Foreground="#FFC29696" FontFamily="Montserrat Black">
+                                                        <TextBlock x:Name="BookDelay3Table"/>
+                                                    </Paragraph>
+                                                </TableCell>
+                                            </TableRow>
+                                            <TableRow Background="#FF397F65">
+                                                <TableCell Padding="0,20">
+                                                    <Paragraph FontSize="23" Foreground="#FFC29696" FontFamily="Montserrat Black">
+                                                        <TextBlock x:Name="BookName4Table"/>
+                                                    </Paragraph>
+                                                </TableCell>
+                                                <TableCell Padding="0,20">
+                                                    <Paragraph FontSize="23" Foreground="#FFC29696" FontFamily="Montserrat Black">
+                                                        <TextBlock x:Name="BookReturnDate4Table"/>
+                                                    </Paragraph>
+                                                </TableCell>
+                                                <TableCell Padding="0,20">
+                                                    <Paragraph FontSize="23" Foreground="#FFC29696" FontFamily="Montserrat Black">
+                                                        <TextBlock x:Name="BookDelay4Table"/>
+                                                    </Paragraph>
+                                                </TableCell>
+                                            </TableRow>
+                                            <TableRow Background="#FF397F65">
+                                                <TableCell Padding="0,20">
+                                                    <Paragraph FontSize="23" Foreground="#FFC29696" FontFamily="Montserrat Black">
+                                                        <TextBlock x:Name="BookName5Table"/>
+                                                    </Paragraph>
+                                                </TableCell>
+                                                <TableCell Padding="0,20">
+                                                    <Paragraph FontSize="23" Foreground="#FFC29696" FontFamily="Montserrat Black">
+                                                        <TextBlock x:Name="BookReturnDate5Table"/>
+                                                    </Paragraph>
+                                                </TableCell>
+                                                <TableCell Padding="0,20">
+                                                    <Paragraph FontSize="23" Foreground="#FFC29696" FontFamily="Montserrat Black">
+                                                        <TextBlock x:Name="BookDelay5Table"/>
+                                                    </Paragraph>
+                                                </TableCell>
                                             </TableRow>
                                         </TableRowGroup>
                                     </Table>
@@ -234,8 +319,13 @@
             </TabItem>
             <TabItem>
                 <Grid Background="#004D40">
-                    <Rectangle Width="450" Height="430" Fill="#FFC29696" RadiusX="50" RadiusY="50"></Rectangle>
-                    <Grid Width="450" Height="400">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="2.3*"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Rectangle Grid.Column="1" Width="450" Height="430" Fill="#FFC29696" RadiusX="50" RadiusY="50"></Rectangle>
+                    <Grid Grid.Column="1" Width="450" Height="400">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1.5*"/>
                             <RowDefinition/>
@@ -257,7 +347,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="Name :" VerticalAlignment="Center" FontSize="22" Foreground="#004D40" FontFamily="Segoe UI Black" Margin="40,34,10,25"/>
                             <Rectangle Grid.Column="1" Width="250" Height="70" Fill="#FFABADB3" Margin="10,10,40,9"/>
-                            <TextBlock Grid.Column="1" Text="Name" VerticalAlignment="Center" FontSize="22" Foreground="#004D40" FontFamily="Segoe UI Black" Margin="50,8,5,1"/>
+                            <TextBlock Grid.Column="1" x:Name="NameEditInfo" VerticalAlignment="Center" FontSize="22" Foreground="#004D40" FontFamily="Segoe UI Black" Margin="50,8,5,1"/>
                         </Grid>
                         <Grid Grid.Row="2">
                             <Grid.ColumnDefinitions>
@@ -265,7 +355,10 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="Email :" VerticalAlignment="Center" FontSize="22" Foreground="#004D40" FontFamily="Segoe UI Black" Margin="40,34,10,25"/>
-                            <TextBox Grid.Column="1" Width="250" Height="70" Background="#FF2F7870" FontSize="30" Foreground="#FFABADB3" FontFamily="Montserrat Black" Margin="10,9,40,10" />
+                            <StackPanel Grid.Column="1">
+                                <TextBox  x:Name="EmailEditInfoBox" Width="250" Height="60" Background="#FF2F7870" FontSize="30" Foreground="#FFABADB3" FontFamily="Montserrat Black" Margin="10,9,40,10" />
+                                <TextBlock x:Name="EmailEditBlock" Text="Characters or numbers or - or _" FontSize="17" Margin="13,-10,0,0" Foreground="#FF397F65" />
+                            </StackPanel>
                         </Grid>
                         <Grid Grid.Row="3">
                             <Grid.ColumnDefinitions>
@@ -276,8 +369,14 @@
                                 <TextBlock Text="Phone" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Foreground="#004D40" FontFamily="Segoe UI Black" Margin="0,13,5,1"></TextBlock>
                                 <TextBlock Text="Number :" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Foreground="#004D40" FontFamily="Segoe UI Black" Margin="0,0,3,1"></TextBlock>
                             </StackPanel>
-                            <TextBox Grid.Column="1" Width="250" Height="70" Background="#FF2F7870" FontSize="30" Foreground="#FFABADB3" FontFamily="Montserrat Black" Margin="10,10,40,9" />
+                            <StackPanel Grid.Column="1">
+                                <TextBox  x:Name="PhoneEditInfoBox" Width="250" Height="60" Background="#FF2F7870" FontSize="30" Foreground="#FFABADB3" FontFamily="Montserrat Black" Margin="10,10,40,9" />
+                                <TextBlock x:Name="PhoneEditBlock" Text="Contain 11number.start with 09" FontSize="17" Margin="13,-10,0,0" Foreground="#FF397F65" />
+                            </StackPanel>
                         </Grid>
+                    </Grid>
+                    <Grid Grid.Column="2">
+                        <Button Content="Done" FontFamily="Montserrat Black" Background="#FFABADB3" Foreground="#004D40" FontSize="30" FontWeight="Bold" Height="60" Width="160" Margin="0,350,0,0" Click="DoneChange_Click" />
                     </Grid>
                 </Grid>
             </TabItem>
