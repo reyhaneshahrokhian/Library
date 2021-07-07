@@ -24,11 +24,13 @@ Title="Log in" Height="550" Width="1200" WindowStyle="None" WindowStartupLocatio
                     <TextBlock Text="Name :" FontSize="25" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black"></TextBlock>
                     <TextBlock Text=" "/>
                     <TextBox   x:Name="NameBox"  Height="40" Background="#FF2F7870" FontSize="30" FontFamily="Montserrat Black"/>
+                    <TextBlock x:Name="NameBlock" FontSize="17" Margin="0,-3,0,0" Foreground="Red" />
                 </StackPanel>
                 <StackPanel Grid.Row="2" VerticalAlignment="Center" Margin="30,0,30,10">
                     <TextBlock Text="Password :" FontSize="25" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black"></TextBlock>
                     <TextBlock Text=" "/>
                     <PasswordBox  x:Name="passwordBox" Height="40" Background="#FF2F7870" FontSize="30" FontFamily="Montserrat Black"  PasswordChar="*"/>
+                    <TextBlock x:Name="passwordBlock" FontSize="17" Margin="0,-3,0,0" Foreground="Red" />
                 </StackPanel>
                 <Grid Grid.Row="3">
                     <Grid.ColumnDefinitions>
