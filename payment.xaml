@@ -25,47 +25,56 @@ Title="payment" Height="550" Width="1200" WindowStyle="None" WindowStartupLocati
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1.5*"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Column="0">
-                            <TextBlock Text="Account" FontSize="20" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black" Margin="30,8,5,1"></TextBlock>
-                            <TextBlock Text="Number :" FontSize="20" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black" Margin="30,0,3,1"></TextBlock>
-                        </StackPanel>
-                        <TextBox Grid.Column="1" Width="80" Height="40" Background="#FF2F7870" FontSize="20" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
-                        <TextBox Grid.Column="2" Width="80" Height="40" Background="#FF2F7870" FontSize="20" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
-                        <TextBox Grid.Column="3" Width="80" Height="40" Background="#FF2F7870" FontSize="20" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
-                        <TextBox Grid.Column="4" Width="80" Height="40" Background="#FF2F7870" FontSize="20" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
-                    </Grid>
-                    <Grid Grid.Row="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.4*"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="CVV :" FontSize="25" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black" Margin="30,15,5,1"/>
-                        <TextBox Grid.Column="1" Width="200" Height="40" Margin="-90,0,88,0" Background="#FF2F7870" FontSize="20" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
-                    </Grid>
-                    <Grid Grid.Row="2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="0.7*"/>
-                            <ColumnDefinition Width="0.3*"/>
-                            <ColumnDefinition Width="0.7*"/>
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Column="0">
-                            <TextBlock Text="Expire" FontSize="20" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black" Margin="30,8,5,1"></TextBlock>
-                            <TextBlock Text="Date :" FontSize="20" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black" Margin="30,0,3,1"></TextBlock>
-                        </StackPanel>
-                        <TextBox Grid.Column="1" Width="80" Height="40" Background="#FF2F7870" FontSize="20" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
-                        <TextBox Grid.Column="3" Width="80" Height="40" Background="#FF2F7870" FontSize="20" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
-                        <TextBlock Grid.Column="2" Text="/" FontSize="40" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
-                    </Grid>
+                    <StackPanel Grid.Row="0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1.5*"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Account" FontSize="20" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black" Margin="30,8,5,1"></TextBlock>
+                                <TextBlock Text="Number :" FontSize="20" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black" Margin="30,0,3,1"></TextBlock>
+                            </StackPanel>
+                            <TextBox x:Name="Account1" Grid.Column="1" Width="80" Height="40" Background="#FF2F7870" FontSize="30" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                            <TextBox x:Name="Account2" Grid.Column="2" Width="80" Height="40" Background="#FF2F7870" FontSize="30" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                            <TextBox x:Name="Account3" Grid.Column="3" Width="80" Height="40" Background="#FF2F7870" FontSize="30" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                            <TextBox x:Name="Account4" Grid.Column="4" Width="80" Height="40" Background="#FF2F7870" FontSize="30" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                        </Grid>
+                        <TextBlock x:Name="AccountNumberBlock" Text="" FontSize="17" Margin="155,-10,0,0" Foreground="Red" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="1">
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.4*"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="CVV :" FontSize="25" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black" Margin="30,15,5,1"/>
+                            <TextBox x:Name="CvvBox" Grid.Column="1" Width="200" Height="40" Margin="-90,0,88,0" Background="#FF2F7870" FontSize="30" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                        </Grid>
+                        <TextBlock x:Name="cvvBlock" Text="" FontSize="17" Margin="155,-2,0,0" Foreground="Red" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="2">
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="0.7*"/>
+                                <ColumnDefinition Width="0.3*"/>
+                                <ColumnDefinition Width="0.7*"/>
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Expire" FontSize="20" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black" Margin="30,8,5,1"></TextBlock>
+                                <TextBlock Text="Date :" FontSize="20" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black" Margin="30,0,3,1"></TextBlock>
+                            </StackPanel>
+                            <TextBox x:Name="YearBox" Grid.Column="1" Width="80" Height="40" Background="#FF2F7870" FontSize="30" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                            <TextBox x:Name="MonthBox" Grid.Column="3" Width="80" Height="40" Background="#FF2F7870" FontSize="30" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                            <TextBlock Grid.Column="2" Text="/" FontSize="40" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                        </Grid>
+                        <TextBlock x:Name="DateBlock" Text="" FontSize="17" Margin="155,-8,0,0" Foreground="Red" />
+                    </StackPanel>
                     <Grid Grid.Row="3">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="0.4*"/>
@@ -75,9 +84,9 @@ Title="payment" Height="550" Width="1200" WindowStyle="None" WindowStartupLocati
                             <TextBlock Text="Paid" FontSize="20" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black" Margin="30,8,5,1"></TextBlock>
                             <TextBlock Text="Amount :" FontSize="20" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black" Margin="30,0,3,1"></TextBlock>
                         </StackPanel>
-                        <TextBox Grid.Column="1" Width="200" Height="40" Margin="-90,0,88,0" Background="#FF2F7870" FontSize="20" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                        <TextBlock x:Name="PaidAmount" Grid.Column="1" Width="200" Height="40" Margin="-90,0,88,0" Background="#FF2F7870" FontSize="30" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
                     </Grid>
-                    <Button Grid.Row="4" Content="Pay" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="30,18" FontFamily="Montserrat Black" Background="#FFC29696" Foreground="#FF004D40" FontSize="18" FontWeight="Bold"/>
+                    <Button Grid.Row="4" Content="Pay" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="30,18" FontFamily="Montserrat Black" Background="#FFC29696" Foreground="#FF004D40" FontSize="18" FontWeight="Bold" Click="PayEnd_Click"/>
                 </Grid>
             </Grid>
         </Grid>
