@@ -32,6 +32,9 @@ namespace WpfProject
         }
         private void Login_Click(object sender, RoutedEventArgs e)
         {
+            NameBlock.Text = "";
+            passwordBlock.Text = "";
+
             //check admin
             if (NameBox.Text == "admin")
             {
@@ -40,6 +43,10 @@ namespace WpfProject
                     AdminPanel admin = new AdminPanel();
                     admin.Show();
                     this.Close();
+                }
+                else
+                {
+                    passwordBlock.Text = "InCorrect password!";
                 }
             }
             else
@@ -53,11 +60,14 @@ namespace WpfProject
                 DataTable data = new DataTable();
                 adapter.Fill(data);
 
+                bool checkName = false;
+
                 //check user
                 for (int i = 0; i < data.Rows.Count; i++)
                 {
                     if (data.Rows[i][0].ToString() == NameBox.Text)
-                    {
+                    {  
+                        checkName = true;
                         if (data.Rows[i][2].ToString() == passwordBox.Password)
                         {
                             UserPanel user = new UserPanel(data.Rows[i][0].ToString(), data.Rows[i][3].ToString(), data.Rows[i][1].ToString(), data.Rows[i][2].ToString(), data.Rows[i][4].ToString());
@@ -66,7 +76,7 @@ namespace WpfProject
                         }
                         else
                         {
-                            //show wrong password
+                            passwordBlock.Text = "InCorrect password!";
                             break;
                         }
                     }
@@ -81,6 +91,7 @@ namespace WpfProject
                 {
                     if (data1.Rows[i][0].ToString() == NameBox.Text)
                     {
+                        checkName = true;
                         if (data1.Rows[i][2].ToString() == passwordBox.Password)
                         {
                             EmployeePanel employee = new EmployeePanel(data.Rows[i][0].ToString(), data.Rows[i][3].ToString(), data.Rows[i][1].ToString(), data.Rows[i][2].ToString(), data.Rows[i][4].ToString());
@@ -89,12 +100,15 @@ namespace WpfProject
                         }
                         else
                         {
-                            //show wrong password
+                            passwordBlock.Text = "InCorrect password!";
                             break;
                         }
                     }
                 }
-                /**************show wrong name************/
+                if (!checkName)
+                {
+                    NameBlock.Text = "there is no member with this name";
+                }
 
                 connection.Close();
             }
