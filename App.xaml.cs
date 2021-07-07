@@ -38,11 +38,6 @@ namespace WpfProject
                 Password = pass;
                 PictureURL = pic;
             }
-            else
-            {
-                //show wrong output
-            }
-
         }
         public static bool CheckName(string name)
         {
@@ -61,7 +56,7 @@ namespace WpfProject
         {
             //check email with regex
 
-            string regex = @"^[a-zA-Z0-9_-]{1,32}+@[[a-zA-Z0-9]{1,8}+.[a-zA-Z]{1,3}$";
+            string regex = @"^[a-zA-Z0-9_-]{1,32}@[[a-zA-Z0-9]{1,8}.[a-zA-Z]{1,3}$";
             Regex re = new Regex(regex, RegexOptions.IgnoreCase);
 
             if (re.IsMatch(email))
@@ -228,7 +223,7 @@ namespace WpfProject
 
             connection.Close();
         }
-        public void AddBooks(string name, string writer, string genre, string realeseNumber)
+        public void AddBooks(string name, string writer, string genre, int realeseNumber)
         {
             //new book object
             Book book = new Book(name, writer, genre, realeseNumber);
@@ -312,7 +307,6 @@ namespace WpfProject
                     repeated = true;
                 }
             }
-
             if (repeated == false)
             {
                 // add in SQL
@@ -324,7 +318,7 @@ namespace WpfProject
             }
             else
             {
-                //write "reapeted employee"
+                /***********write reapeted employee****************/
             }
             connection.Close();
         }
@@ -526,7 +520,7 @@ namespace WpfProject
             connection.Close();
             return LatePayUser;
         }
-        public List<string> ShowUniqueUsers(string name)
+        public List<string> ShowUniqueUser(string name)
         {
             //info : one of the users
             List<string> InfoUniqueUser = new List<string>();
@@ -564,7 +558,6 @@ namespace WpfProject
                     break;
                 }
             }
-
             connection.Close();
 
             return InfoUniqueUser;
@@ -609,25 +602,14 @@ namespace WpfProject
 
             connection.Open();
 
-            string command2 = "select * from Employee";
-            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
-            DataTable data = new DataTable();
-            adapter.Fill(data);
-
-            for (int i = 0; i < data.Rows.Count; i++)
-            {
-                if (data.Rows[i][0].ToString() == this.Name)
-                {
-                    string command = "update Employee SET email = '" + email + "' phoneNumber = '" + phone + "' PictureLoc = '" + path + "' ";
-                    SqlCommand sqlCommand = new SqlCommand(command, connection);
-                    sqlCommand.ExecuteNonQuery();
-                }
-            }
+            string command = "update Employee SET email = '" + email + "' phoneNumber = '" + phone + "' PictureLoc = '" + path + "'" +
+                             " where name = '" + this.Name + "'";
+            SqlCommand sqlCommand = new SqlCommand(command, connection);
+            sqlCommand.ExecuteNonQuery();
 
             connection.Close();
         }
     }
-
     class User : Person, Methods
     {
         public User(string name, string email, string phone, string pass, string pic)
@@ -650,7 +632,6 @@ namespace WpfProject
                     repeated = true;
                 }
             }
-
             if (repeated == false)
             {
                 // add in SQL
@@ -660,7 +641,6 @@ namespace WpfProject
                 SqlCommand sqlCommand = new SqlCommand(command, connection);
                 sqlCommand.ExecuteNonQuery();
             }
-
             connection.Close();
         }
         public void BorrowBook(string name)
@@ -731,7 +711,6 @@ namespace WpfProject
                     }
                 }
             }
-
             string command = "update Book SET available = '" + false + "'" +
                                 "where name = '" + name + "'";
 
@@ -739,7 +718,6 @@ namespace WpfProject
             sqlCommand.ExecuteNonQuery();
 
             connection.Close();
-
         }
         public void ReturnBook(string name)
         {
@@ -803,7 +781,6 @@ namespace WpfProject
                     }
                 }
             }
-
             string command = "update Book SET available = '" + true + "'" +
                                 "where name = '" + name + "'";
 
@@ -921,7 +898,6 @@ namespace WpfProject
         {
             //edit info of use
         }
-
         public List<string> ShowBorrowedBooks()
         {
             List<string> BorrowedBooks = new List<string>();
@@ -949,12 +925,10 @@ namespace WpfProject
                     break;
                 }
             }
-
             connection.Close();
 
             return BorrowedBooks;
         }
-
         public List<string> SearchBookByName(string info)
         {
             List<string> bookInfo = new List<string>();
@@ -983,7 +957,6 @@ namespace WpfProject
 
             return bookInfo;
         }
-
         public List<string> SearchBookByWriter(string info)
         {
             List<string> bookInfo = new List<string>();
@@ -1051,7 +1024,6 @@ namespace WpfProject
 
             else
                 return false;
-
         }
         public static bool CheckExpireDate(int Year,int Month)
         {
@@ -1075,15 +1047,14 @@ namespace WpfProject
                 return true;
         }
     }
-
     class Book
     {
         string Name;
         string Writer;
         string Genre;
-        string RealeseNumber;
+        int RealeseNumber;
 
-        public Book(string name, string writer, string genre, string realeseNumber)
+        public Book(string name, string writer, string genre, int realeseNumber)
         {
             Name = name;
             Writer = writer;
@@ -1105,16 +1076,14 @@ namespace WpfProject
                 }
             }
             string command = "insert into Book values('" + Name.Trim() + "' , '" + Writer.Trim() + "' ,'" +
-                                                    Genre.Trim() + "' , '" + RealeseNumber.Trim() + "' , '" + count + "','" + true + "'  )";
-            
-
+                                                    Genre.Trim() + "' , '" + RealeseNumber + "' , '" + count + "','" + true + "'  )";
+           
             SqlCommand sqlCommand = new SqlCommand(command, connection);
             sqlCommand.ExecuteNonQuery();
 
             connection.Close();
         }
     }
-
     public partial class App : Application
     {
     }
