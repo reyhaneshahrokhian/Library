@@ -13,21 +13,20 @@ using System.Windows.Shapes;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.Collections.ObjectModel;
 
 namespace WpfProject
 {
     public partial class EmployeePanel : Window
     {
-
-        private string IndexOfTab;
         Employee employee;
-        public List<string> Books { get; set; }
-        public List<string> Users { get; set; }
+        public ObservableCollection<string> Books { get; set; }
+        public ObservableCollection<string> Users { get; set; }
         public EmployeePanel (string name, string email, string phone, string pass, string pic)
         {
             employee = new Employee(name, email, phone, pass, pic);
-            Books = employee.ShowBorrowedBooks();
-            Users = employee.ShowLateReturnUser();
+            Books = new ObservableCollection<string>();
+            Users = new ObservableCollection<string>();
 
             InitializeComponent();
 
@@ -35,82 +34,145 @@ namespace WpfProject
         }
         private void Book_Click(object sender, RoutedEventArgs e)
         {
+            if (Books != null && Books.Count > 0)
+            {
+                Books.Clear();
+            }
+
+            foreach (var item in employee.ShowBorrowedBooks())
+            {
+                Books.Add(item);
+            }
+
             tab.SelectedIndex = 1;
-            IndexOfTab = "Book";
         }
         private void User_Click(object sender, RoutedEventArgs e)
         {
+            if (Users != null && Users.Count > 0)
+            {
+                Users.Clear();
+            }
+
+            foreach (var item in employee.ShowLateReturnUser())
+            {
+                Users.Add(item);
+            }
             tab.SelectedIndex = 2;
-            IndexOfTab = "User";
         }
         private void Wallet_Click(object sender, RoutedEventArgs e)
         {
             //show how much money the employee have
-
             Show_Money.Text = employee.ShowCredit();
             tab.SelectedIndex = 3;
-            IndexOfTab = "Wallet";
         }
         private void EditInfo_Click(object sender, RoutedEventArgs e)
         {
             tab.SelectedIndex = 4;
-            IndexOfTab = "EditInfo";
         }
         private void AllBooks_Click(object sender, RoutedEventArgs e)
         {
             //show all books in list
-            Books = employee.ShowBooks();
+            if (Books != null && Books.Count > 0)
+            {
+                Books.Clear();
+            }
+
+            foreach (var item in employee.ShowBooks())
+            {
+                Books.Add(item);
+            }
         }
         private void BorrowedBooks_Click(object sender, RoutedEventArgs e)
         {
             //show borrowed books in list
-            Books = employee.ShowBorrowedBooks();
+            if (Books != null && Books.Count > 0)
+            {
+                Books.Clear();
+            }
+
+            foreach (var item in employee.ShowBorrowedBooks())
+            {
+                Books.Add(item);
+            }
         }
         private void AvailableBooks_Click(object sender, RoutedEventArgs e)
         {
             //show available books in list
-            Books = employee.ShowAvaiableBooks();
+            if (Books != null && Books.Count > 0)
+            {
+                Books.Clear();
+            }
+
+            foreach (var item in employee.ShowAvailableBooks())
+            {
+                Books.Add(item);
+            }
         }
         private void AllMembers_Click(object sender, RoutedEventArgs e)
         {
             //show all users in list
-            Users = employee.ShowUser();
+            if (Users != null && Users.Count > 0)
+            {
+                Users.Clear();
+            }
+
+            foreach (var item in employee.ShowUsers())
+            {
+                Users.Add(item);
+            }
+
         }
         private void LatePayment_Click(object sender, RoutedEventArgs e)
         {
             //show users which are late in payment in list
-            Users = employee.ShowLatePayUser();
+            if (Users != null && Users.Count > 0)
+            {
+                Users.Clear();
+            }
+
+            foreach (var item in employee.ShowLatePayUser())
+            {
+                Users.Add(item);
+            }
         }
         private void LateReturning_Click(object sender, RoutedEventArgs e)
         {
             //show users which are late in returning books in list
-            Users = employee.ShowLateReturnUser();
+            if (Users != null && Users.Count > 0)
+            {
+                Users.Clear();
+            }
+
+            foreach (var item in employee.ShowLateReturnUser())
+            {
+                Users.Add(item);
+            }
         }
         private void SHOWuser_Click(object sender, RoutedEventArgs e)
         {
             //info of special user
-            /**********which user?**************/
 
+            var button = sender as Button;
             List<string> infos = new List<string>();
-            infos = employee.ShowUniqueUser(" ");
+            infos = employee.ShowUniqueUser(button.Tag.ToString());
 
             NameUserBlock.Text = infos[0];
             PhoneUserBlock.Text = infos[1];
             EmailUserBlock.Text = infos[3];
-            ImageUser.Source = new BitmapImage(new Uri(infos[4]));
+            //  ImageUser.Source = new BitmapImage(new Uri(infos[4]));
             SignInDateBlock.Text = infos[16];
 
             GregorianCalendar time = new GregorianCalendar();
             DateTime Today = DateTime.Now;
             int days = 0;
 
-            if (infos[17] == null)
+            if (infos[17] == "")
             {
                 RenewDateBlock.Text = "No renew yet!";
 
                 string[] date = infos[16].Split('/');
                 DateTime dateValue = new DateTime(int.Parse(date[0]), int.Parse(date[1]), int.Parse(date[2]));
-                days = (Today.Date - dateValue.Date).Days;       
+                days = 365 - (Today.Date - dateValue.Date).Days;       
             }
             else
             {
@@ -118,7 +180,7 @@ namespace WpfProject
 
                 string[] date = infos[17].Split('/');
                 DateTime dateValue = new DateTime(int.Parse(date[0]), int.Parse(date[1]), int.Parse(date[2]));
-                days = (Today.Date - dateValue.Date).Days;
+                days = 365 - (Today.Date - dateValue.Date).Days;
             }
 
             if (days >= 0)
@@ -135,13 +197,13 @@ namespace WpfProject
             if (infos[6] != null)
             {
                 string[] date = infos[11].Split('/');
-                DateTime dateValue = new DateTime(int.Parse(date[0]), int.Parse(date[1]), int.Parse(date[2]) + 10);
+                DateTime dateValue = new DateTime(int.Parse(date[0]), int.Parse(date[1]), int.Parse(date[2]));
                 int year = time.GetYear(dateValue);
                 int month = time.GetMonth(dateValue);
                 int day = time.GetDayOfMonth(dateValue);
                 string Time = year + "/" + month + "/" + day;
 
-                int delays = (Today.Date - dateValue.Date).Days;
+                int delays = 7 - (Today.Date - dateValue.Date).Days;
                 BookName1Table.Text = infos[6];
                 BookReturnDate1Table.Text = Time;
 
@@ -159,13 +221,13 @@ namespace WpfProject
             if (infos[7] != null)
             {
                 string[] date = infos[12].Split('/');
-                DateTime dateValue = new DateTime(int.Parse(date[0]), int.Parse(date[1]), int.Parse(date[2]) + 10);
+                DateTime dateValue = new DateTime(int.Parse(date[0]), int.Parse(date[1]), int.Parse(date[2]));
                 int year = time.GetYear(dateValue);
                 int month = time.GetMonth(dateValue);
                 int day = time.GetDayOfMonth(dateValue);
                 string Time = year + "/" + month + "/" + day;
 
-                int delays = (Today.Date - dateValue.Date).Days;
+                int delays = 7 - (Today.Date - dateValue.Date).Days;
                 BookName2Table.Text = infos[7];
                 BookReturnDate2Table.Text = Time;
 
@@ -183,13 +245,13 @@ namespace WpfProject
             if (infos[8] != null)
             {
                 string[] date = infos[13].Split('/');
-                DateTime dateValue = new DateTime(int.Parse(date[0]), int.Parse(date[1]), int.Parse(date[2]) + 10);
+                DateTime dateValue = new DateTime(int.Parse(date[0]), int.Parse(date[1]), int.Parse(date[2]));
                 int year = time.GetYear(dateValue);
                 int month = time.GetMonth(dateValue);
                 int day = time.GetDayOfMonth(dateValue);
                 string Time = year + "/" + month + "/" + day;
 
-                int delays = (Today.Date - dateValue.Date).Days;
+                int delays = 7 - (Today.Date - dateValue.Date).Days;
                 BookName3Table.Text = infos[8];
                 BookReturnDate3Table.Text = Time;
 
@@ -208,13 +270,13 @@ namespace WpfProject
             if (infos[9] != null)
             {
                 string[] date = infos[11].Split('/');
-                DateTime dateValue = new DateTime(int.Parse(date[0]), int.Parse(date[1]), int.Parse(date[2]) + 10);
+                DateTime dateValue = new DateTime(int.Parse(date[0]), int.Parse(date[1]), int.Parse(date[2]));
                 int year = time.GetYear(dateValue);
                 int month = time.GetMonth(dateValue);
                 int day = time.GetDayOfMonth(dateValue);
                 string Time = year + "/" + month + "/" + day;
 
-                int delays = (Today.Date - dateValue.Date).Days;
+                int delays = 7 - (Today.Date - dateValue.Date).Days;
                 BookName4Table.Text = infos[9];
                 BookReturnDate4Table.Text = Time;
 
@@ -232,13 +294,13 @@ namespace WpfProject
             if (infos[10] != null)
             {
                 string[] date = infos[11].Split('/');
-                DateTime dateValue = new DateTime(int.Parse(date[0]), int.Parse(date[1]), int.Parse(date[2]) + 10);
+                DateTime dateValue = new DateTime(int.Parse(date[0]), int.Parse(date[1]), int.Parse(date[2]));
                 int year = time.GetYear(dateValue);
                 int month = time.GetMonth(dateValue);
                 int day = time.GetDayOfMonth(dateValue);
                 string Time = year + "/" + month + "/" + day;
 
-                int delays = (Today.Date - dateValue.Date).Days;
+                int delays = 7 - (Today.Date - dateValue.Date).Days;
                 BookName5Table.Text = infos[10];
                 BookReturnDate5Table.Text = Time;
 
@@ -279,7 +341,10 @@ namespace WpfProject
             {
                 passwordContinueBlock.Text = " ";
                 NameEditInfo.Text = employee.Name;
-                tab.SelectedIndex = 5;
+                EmailEditInfoBox.Text = employee.Email;
+                PhoneEditInfoBox.Text = employee.PhoneNumber;
+            //    personImage.Source = new BitmapImage(new Uri(employee.PictureURL));
+                tab.SelectedIndex = 6;
             }
             else
             {

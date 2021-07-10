@@ -21,10 +21,10 @@
             </Grid.RowDefinitions>
             <Rectangle Grid.Row="0" Width="280" Height="80" Fill="#004D40" Margin="10" VerticalAlignment="Center" HorizontalAlignment="Center" RadiusX="20" RadiusY="20"></Rectangle>
             <TextBlock Text="Employee Panel" FontSize="31" FontFamily="Showcard Gothic" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" Foreground="#FFC29696"/>
-            <Button Grid.Row="1" Content="Book" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="60,0,60,0" FontFamily="Rockwell Extra Bold" Background="#FF919595" Foreground="#FF004D40" FontSize="40" FontWeight="Bold" Height="70" Margin="4,0,0,10" Click="Book_Click"/>
-            <Button Grid.Row="2" Content="User" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="68,0,68,0" FontFamily="Rockwell Extra Bold" Background="#FF919595" Foreground="#FF004D40" FontSize="40" FontWeight="Bold" Height="70" Margin="0,15,0,0" Width="253" Click="User_Click"/>
-            <Button Grid.Row="3" Content="Wallet" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="23,0,23,0" FontFamily="Rockwell Extra Bold" Background="#FF919595" Foreground="#FF004D40" FontSize="38" FontWeight="Bold" Height="70" Margin="0,16,0,0" Width="256" Click="Wallet_Click"/>
-            <Button Grid.Row="4" Content="Edit Info" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="18,0,18,0" FontFamily="Rockwell Extra Bold" Background="#FF919595" Foreground="#FF004D40" FontSize="34" FontWeight="Bold" Height="70" Margin="0,16,0,0" Width="257" Click="EditInfo_Click"/>
+            <Button Style="{DynamicResource RoundCornerEmp}" Grid.Row="1" Content="Book" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="60,0,60,0" FontFamily="Rockwell Extra Bold" Background="#FF919595" Foreground="#FF004D40" FontSize="38" FontWeight="Bold" Height="70" Margin="4,0,0,10" Click="Book_Click"/>
+            <Button Style="{DynamicResource RoundCornerEmp}"  Grid.Row="2" Content="User" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="68,0,68,0" FontFamily="Rockwell Extra Bold" Background="#FF919595" Foreground="#FF004D40" FontSize="38" FontWeight="Bold" Height="70" Margin="0,15,0,0" Width="253" Click="User_Click"/>
+            <Button Style="{DynamicResource RoundCornerEmp}"  Grid.Row="3" Content="Wallet" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="23,0,23,0" FontFamily="Rockwell Extra Bold" Background="#FF919595" Foreground="#FF004D40" FontSize="32" FontWeight="Bold" Height="70" Margin="0,16,0,0" Width="256" Click="Wallet_Click"/>
+            <Button Style="{DynamicResource RoundCornerEmpEdit}"  Grid.Row="4" Content="Edit Info" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="0,0,0,0" FontFamily="Rockwell Extra Bold" Background="#FF919595" Foreground="#FF004D40" FontSize="30" FontWeight="Bold" Height="70" Margin="0,16,0,0" Width="257" Click="EditInfo_Click"/>
         </Grid>
         <TabControl x:Name="tab" Grid.Column="1">
             <TabControl.ItemContainerStyle>
@@ -49,7 +49,7 @@
                                 <ItemsControl ItemsSource="{Binding Books, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding}" FontFamily="Rockwell Extra Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Background="#FF919595" Foreground="#FF004D40" FontSize="30" Padding="80,20"></TextBlock>
+                                            <TextBlock Text="{Binding}" FontFamily="Rockwell Extra Bold" VerticalAlignment="Center" HorizontalAlignment="Left" Background="#FF919595" Foreground="#FF004D40" FontSize="30" Padding="0,20,300,20"></TextBlock>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
@@ -61,9 +61,9 @@
                                 <RowDefinition/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <Button Grid.Row="0" Content="All Books" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="110,10,110,10" FontFamily="Montserrat Black" Background="#FFC29696" Foreground="#004D40" FontSize="20" FontWeight="Bold" Margin="0,29,0,-10" Height="70" Click="AllBooks_Click"/>
-                            <Button Grid.Row="1" Content="Borrowd Books" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="85,10,85,10" FontFamily="Montserrat Black" Background="#FFC29696" Foreground="#004D40" FontSize="20" FontWeight="Bold" Margin="0,25,0,25" Height="70" Click="BorrowedBooks_Click"/>
-                            <Button Grid.Row="2" Content="Available Books" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="83,10,83,10" FontFamily="Montserrat Black" Background="#FFC29696" Foreground="#004D40" FontSize="20" FontWeight="Bold" Margin="0,29,0,0" Height="70" Click="AvailableBooks_Click"/>
+                            <Button Style="{DynamicResource RoundCornerEmpBook1}" Grid.Row="0" Content="All Books" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="110,10,110,10" FontFamily="Montserrat Black" Background="#FFC29696" Foreground="#004D40" FontSize="20" FontWeight="Bold" Margin="0,29,0,-10" Height="70" Click="AllBooks_Click"/>
+                            <Button Style="{DynamicResource RoundCornerEmpBook2}" Grid.Row="1" Content="Borrowd Books" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="85,10,85,10" FontFamily="Montserrat Black" Background="#FFC29696" Foreground="#004D40" FontSize="20" FontWeight="Bold" Margin="0,25,0,25" Height="70" Click="BorrowedBooks_Click"/>
+                            <Button Style="{DynamicResource RoundCornerEmpBook2}" Grid.Row="2" Content="Available Books" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="83,10,83,10" FontFamily="Montserrat Black" Background="#FFC29696" Foreground="#004D40" FontSize="20" FontWeight="Bold" Margin="0,29,0,0" Height="70" Click="AvailableBooks_Click"/>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -87,8 +87,8 @@
                                                         <ColumnDefinition/>
                                                         <ColumnDefinition/>
                                                     </Grid.ColumnDefinitions>
-                                                    <TextBlock Grid.Column="0" Text="{Binding}" FontFamily="Rockwell Extra Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Background="#FF919595" Foreground="#FF004D40" FontSize="30" Padding="80,20"></TextBlock>
-                                                    <Button Grid.Column="1" Name="ShowUser" Content ="Show" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="90,20" FontFamily="Montserrat Black" Background="#FF919595" Foreground="#FF004D40" FontSize="25" FontWeight="Bold" Click="SHOWuser_Click"></Button>
+                                                    <TextBlock Grid.Column="0" Text="{Binding}" FontFamily="Rockwell Extra Bold" VerticalAlignment="Center" HorizontalAlignment="Left" Background="#FF919595" Foreground="#FF004D40" FontSize="30" Padding="0,20,300,20"></TextBlock>
+                                                    <Button Grid.Column="1" Tag="{Binding}"  Name="ShowUser" Content ="Show" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="30,20" FontFamily="Montserrat Black" Background="#FF919595" Foreground="#FF004D40" FontSize="25" FontWeight="Bold" Click="SHOWuser_Click"></Button>
                                                 </Grid>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
@@ -102,9 +102,9 @@
                                 <RowDefinition/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <Button Grid.Row="0" Content="All Members" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="80,10,80,10" FontFamily="Montserrat Black" Background="#FFC29696" Foreground="#004D40" FontSize="20" FontWeight="Bold" Margin="0,31,0,-10" Height="70" Click="AllMembers_Click"/>
-                            <Button Grid.Row="1" Content="Late Payment" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="77,10,77,10" FontFamily="Montserrat Black" Background="#FFC29696" Foreground="#004D40" FontSize="20" FontWeight="Bold" Margin="0,25,0,25" Height="70" Click="LatePayment_Click"/>
-                            <Button Grid.Row="2" Content="Late Returning" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="75,10,75,10" FontFamily="Montserrat Black" Background="#FFC29696" Foreground="#004D40" FontSize="20" FontWeight="Bold" Margin="0,30,0,0" Height="70" Click="LateReturning_Click"/>
+                            <Button Style="{DynamicResource RoundCornerEmpBook2}" Grid.Row="0" Content="All Members" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="80,10,80,10" FontFamily="Montserrat Black" Background="#FFC29696" Foreground="#004D40" FontSize="20" FontWeight="Bold" Margin="0,31,0,-10" Height="70" Click="AllMembers_Click"/>
+                            <Button Style="{DynamicResource RoundCornerEmpBook2}" Grid.Row="1" Content="Late Payment" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="77,10,77,10" FontFamily="Montserrat Black" Background="#FFC29696" Foreground="#004D40" FontSize="20" FontWeight="Bold" Margin="0,25,0,25" Height="70" Click="LatePayment_Click"/>
+                            <Button Style="{DynamicResource RoundCornerEmpBook2}" Grid.Row="2" Content="Late Returning" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="75,10,75,10" FontFamily="Montserrat Black" Background="#FFC29696" Foreground="#004D40" FontSize="20" FontWeight="Bold" Margin="0,30,0,0" Height="70" Click="LateReturning_Click"/>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -132,9 +132,9 @@
                                 <TextBlock Grid.Row="0" Text="Enter your Password :" VerticalAlignment="Center" FontSize="22" Foreground="#004D40" FontFamily="Segoe UI Black" Margin="30,8,5,1"></TextBlock>
                                 <StackPanel Grid.Row="1">
                                     <TextBlock x:Name="passwordContinueBlock"  FontSize="17" Margin="30,-5,0,0" Foreground="Red"  />
-                                    <PasswordBox x:Name="passwordContinueBox"  Width="290" Height="60" Margin="30,0,30,73" Background="#FF2F7870" FontSize="20" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                                    <PasswordBox Style="{StaticResource roundcornerpassword}" x:Name="passwordContinueBox"  Width="290" Height="60" Margin="30,0,30,73" Background="#FF2F7870" FontSize="50" Foreground="#FFABADB3" FontFamily="Montserrat Black" PasswordChar="*"/>
                                 </StackPanel>
-                                <Button Grid.Row="2" Content="Continue" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="95,10,95,10" FontFamily="Montserrat Black" Background="#FFABADB3" Foreground="#004D40" FontSize="22" FontWeight="Bold" Height="60" Margin="30,10,34,63" Click="Continue_Click"/>
+                                <Button Style="{DynamicResource RoundCorner1}" Grid.Row="2" Content="Continue" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="95,10,95,10" FontFamily="Montserrat Black" Background="#FFABADB3" Foreground="#004D40" FontSize="22" FontWeight="Bold" Height="60" Margin="30,10,34,63" Click="Continue_Click"/>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -161,12 +161,12 @@
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="2*"/>
                                         <RowDefinition/>
-                                        <RowDefinition/> 
+                                        <RowDefinition/>
                                     </Grid.RowDefinitions>
                                     <Image Grid.Row="0" x:Name="ImageUser" Margin="15,30,15,30" Source="G:\c#\project\pictures\person_icon.jpg" Stretch="Fill"/>
-                                    <Rectangle Grid.Row="1" Width="180" Height="70" Fill="#FFABADB3"></Rectangle>
+                                    <Rectangle RadiusX="12" RadiusY="12" Grid.Row="1" Width="180" Height="70" Fill="#FFABADB3"></Rectangle>
                                     <TextBlock Grid.Row="1" x:Name="NameUserBlock" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Foreground="#004D40" FontFamily="Segoe UI Black" Margin="0,0,3,1"></TextBlock>
-                                    <Rectangle Grid.Row="2" Width="180" Height="70" Fill="#FFABADB3"></Rectangle>
+                                    <Rectangle RadiusX="12" RadiusY="12" Grid.Row="2" Width="180" Height="70" Fill="#FFABADB3"></Rectangle>
                                     <TextBlock Grid.Row="2" x:Name="EmailUserBlock" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15" Foreground="#004D40" FontFamily="Segoe UI Black"></TextBlock>
                                 </Grid>
                                 <Grid Grid.Column="1">
@@ -176,13 +176,13 @@
                                         <RowDefinition/>
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
-                                    <Rectangle Grid.Row="0" Width="180" Height="70" Fill="#FFABADB3"></Rectangle>
+                                    <Rectangle RadiusX="12" RadiusY="12" Grid.Row="0" Width="180" Height="70" Fill="#FFABADB3"></Rectangle>
                                     <TextBlock Grid.Row="0" x:Name="SubscriptionDaysBlock" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Foreground="#004D40" FontFamily="Segoe UI Black" Margin="0,0,5,1"></TextBlock>
-                                    <Rectangle Grid.Row="1" Width="180" Height="70" Fill="#FFABADB3"></Rectangle>
+                                    <Rectangle RadiusX="12" RadiusY="12" Grid.Row="1" Width="180" Height="70" Fill="#FFABADB3"></Rectangle>
                                     <TextBlock Grid.Row="1" x:Name="SignInDateBlock" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Foreground="#004D40" FontFamily="Segoe UI Black" Margin="0,0,5,1"></TextBlock>
-                                    <Rectangle Grid.Row="2" Width="180" Height="70" Fill="#FFABADB3"></Rectangle>
+                                    <Rectangle RadiusX="12" RadiusY="12" Grid.Row="2" Width="180" Height="70" Fill="#FFABADB3"></Rectangle>
                                     <TextBlock Grid.Row="2" x:Name="RenewDateBlock" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Foreground="#004D40" FontFamily="Segoe UI Black" Margin="0,0,5,1"></TextBlock>
-                                    <Rectangle Grid.Row="3" Width="180" Height="70" Fill="#FFABADB3"></Rectangle>
+                                    <Rectangle RadiusX="12" RadiusY="12" Grid.Row="3" Width="180" Height="70" Fill="#FFABADB3"></Rectangle>
                                     <TextBlock Grid.Row="3" x:Name="PhoneUserBlock" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Foreground="#004D40" FontFamily="Segoe UI Black" Margin="0,0,5,1"></TextBlock>
                                 </Grid>
                             </Grid>
@@ -197,10 +197,10 @@
                                     <TextBlock Text="  to delete user :" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" Foreground="#FFC29696" FontFamily="Segoe UI Black" Margin="0,0,3,1"></TextBlock>
                                 </StackPanel>
                                 <StackPanel Grid.Column="1">
-                                    <PasswordBox x:Name="PassDeleteBox"  Width="120" Height="58" Margin="10,16,10,20" Background="#FFC29696" FontSize="30" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                                    <PasswordBox Style="{StaticResource roundcornerpassword}"  x:Name="PassDeleteBox"  Width="120" Height="58" Margin="10,16,10,20" Background="#FFC29696" FontSize="30" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
                                     <TextBlock x:Name="PassDeleteBlock" FontSize="17" Margin="15,-20,0,0" Foreground="Red"/>
                                 </StackPanel>
-                                <Button Grid.Column="2" Content="DELETE" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="30,10,30,10" FontFamily="Montserrat Black" Background="#FFC29696" Foreground="#004D40" FontSize="18" FontWeight="Bold" Height="60" Margin="0,5,10,20" Click="DELETE_Click"/>
+                                <Button Style="{DynamicResource RoundCorner2}" Grid.Column="2" Content="DELETE" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="30,10,30,10" FontFamily="Montserrat Black" Background="#FFC29696" Foreground="#004D40" FontSize="18" FontWeight="Bold" Height="60" Margin="0,5,10,20" Click="DELETE_Click"/>
                             </Grid>
                         </Grid>
                         <Grid Grid.Column="1">
@@ -338,7 +338,7 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <Image Grid.Column="0" Name="personImage" Margin="30,20,30,0" Source="G:\c#\project\pictures\person_icon.jpg" Stretch="Fill"/>
-                            <Button Grid.Column="1" Content="Change picture" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="0,10,0,10" FontFamily="Montserrat Black" Background="#FFABADB3" Foreground="#004D40" FontSize="22" FontWeight="Bold" Height="60" Width="180" Margin="0,42,45,31" Click="ChangePicture_Click" />
+                            <Button Style="{DynamicResource RoundCorner3}" Grid.Column="1" Content="Change picture" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="0,10,0,10" FontFamily="Montserrat Black" Background="#FFABADB3" Foreground="#004D40" FontSize="22" FontWeight="Bold" Height="60" Width="180" Margin="0,42,45,31" Click="ChangePicture_Click" />
                         </Grid>
                         <Grid Grid.Row="1">
                             <Grid.ColumnDefinitions>
@@ -346,7 +346,7 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="Name :" VerticalAlignment="Center" FontSize="22" Foreground="#004D40" FontFamily="Segoe UI Black" Margin="40,34,10,25"/>
-                            <Rectangle Grid.Column="1" Width="250" Height="70" Fill="#FFABADB3" Margin="10,10,40,9"/>
+                            <Rectangle RadiusX="12" RadiusY="12" Grid.Column="1" Width="250" Height="70" Fill="#FFABADB3" Margin="10,10,40,9"/>
                             <TextBlock Grid.Column="1" x:Name="NameEditInfo" VerticalAlignment="Center" FontSize="22" Foreground="#004D40" FontFamily="Segoe UI Black" Margin="50,8,5,1"/>
                         </Grid>
                         <Grid Grid.Row="2">
@@ -356,7 +356,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="Email :" VerticalAlignment="Center" FontSize="22" Foreground="#004D40" FontFamily="Segoe UI Black" Margin="40,34,10,25"/>
                             <StackPanel Grid.Column="1">
-                                <TextBox  x:Name="EmailEditInfoBox" Width="250" Height="60" Background="#FF2F7870" FontSize="30" Foreground="#FFABADB3" FontFamily="Montserrat Black" Margin="10,9,40,10" />
+                                <TextBox Style="{StaticResource Textbox1}" x:Name="EmailEditInfoBox" Width="250" Height="60" Background="#FF2F7870" FontSize="30" Foreground="#FFABADB3" FontFamily="Montserrat Black" Margin="10,9,40,10" RenderTransformOrigin="0.5,0.5" />
                                 <TextBlock x:Name="EmailEditBlock" Text="Characters or numbers or - or _" FontSize="17" Margin="13,-10,0,0" Foreground="#FF397F65" />
                             </StackPanel>
                         </Grid>
@@ -370,13 +370,13 @@
                                 <TextBlock Text="Number :" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Foreground="#004D40" FontFamily="Segoe UI Black" Margin="0,0,3,1"></TextBlock>
                             </StackPanel>
                             <StackPanel Grid.Column="1">
-                                <TextBox  x:Name="PhoneEditInfoBox" Width="250" Height="60" Background="#FF2F7870" FontSize="30" Foreground="#FFABADB3" FontFamily="Montserrat Black" Margin="10,10,40,9" />
+                                <TextBox Style="{StaticResource Textbox1}" x:Name="PhoneEditInfoBox" Width="250" Height="60" Background="#FF2F7870" FontSize="30" Foreground="#FFABADB3" FontFamily="Montserrat Black" Margin="10,10,40,9" />
                                 <TextBlock x:Name="PhoneEditBlock" Text="Contain 11number.start with 09" FontSize="17" Margin="13,-10,0,0" Foreground="#FF397F65" />
                             </StackPanel>
                         </Grid>
                     </Grid>
                     <Grid Grid.Column="2">
-                        <Button Content="Done" FontFamily="Montserrat Black" Background="#FFABADB3" Foreground="#004D40" FontSize="30" FontWeight="Bold" Height="60" Width="160" Margin="0,350,0,0" Click="DoneChange_Click" />
+                        <Button Style="{DynamicResource RoundCorner3}" Content="Done" FontFamily="Montserrat Black" Background="#FFABADB3" Foreground="#004D40" FontSize="30" FontWeight="Bold" Height="60" Width="160" Margin="0,350,0,0" Click="DoneChange_Click" />
                     </Grid>
                 </Grid>
             </TabItem>
