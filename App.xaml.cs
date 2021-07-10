@@ -22,7 +22,7 @@ namespace WpfProject
         public string PhoneNumber;
         public string Password;
         public string PictureURL;
-        public long Money;
+        public long Money = 0;
         public Person(string name, string email, string phone, string pass, string pic)
         {
             if (name == "admin")
@@ -182,7 +182,7 @@ namespace WpfProject
 
             connection.Close();
         }
-        public void PayEmployee(string money)
+        public bool PayEmployee(string money)
         {
             //pay all employees a defined money and reduce that amout from admin's wallet
 
@@ -195,33 +195,30 @@ namespace WpfProject
             DataTable data = new DataTable();
             adapter.Fill(data);
 
-            string command2 = "select * from adminn";
-            SqlDataAdapter adapter2 = new SqlDataAdapter(command2, connection);
-            DataTable data2 = new DataTable();
-            adapter2.Fill(data2);
-
             long m = long.Parse(money);
 
-            if (long.Parse(data2.Rows[0][2].ToString()) < (data.Rows.Count * m))
-            {
-                //show that admin doesnt have that amount of money
-            }
-            else
+            if (Money >= (data.Rows.Count * m))
             {
                 for (int i = 0; i < data.Rows.Count; i++)
                 {
-                    string command3 = "update Employee SET wallet = '" +(long.Parse(data.Rows[i][5].ToString()) + m) + "'";
-                    SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
-                    sqlCommand3.ExecuteNonQuery();
+                    string command2 = "update Employee SET wallet = '" +(long.Parse(data.Rows[i][5].ToString()) + m) + "'";
+                    SqlCommand sqlCommand2 = new SqlCommand(command2, connection);
+                    sqlCommand2.ExecuteNonQuery();
                 }
 
-                long bank = long.Parse(data2.Rows[0][2].ToString()) - (data.Rows.Count * m);
-                string command4 = "update adminn SET bank = '" + bank + "'";
-                SqlCommand sqlCommand4 = new SqlCommand(command4, connection);
-                sqlCommand4.ExecuteNonQuery();
-            }
+                Money -= data.Rows.Count * m;
+                string command3 = "update adminn SET bank = '" + Money + "'";
+                SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
+                sqlCommand3.ExecuteNonQuery();
 
-            connection.Close();
+                connection.Close();
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         public void AddBooks(string name, string writer, string genre, int realeseNumber)
         {
@@ -235,7 +232,7 @@ namespace WpfProject
                                 G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
             connection.Open();
 
-            string command = "delete from Book where name ='" + name + "' ";
+            string command = "delete from Book where bookName ='" + name + "' ";
             SqlCommand sqlCommand = new SqlCommand(command, connection);
             sqlCommand.ExecuteNonQuery();
 
@@ -244,38 +241,18 @@ namespace WpfProject
         public string ShowCredit()
         {
             //show all money
-            SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
-                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
-            connection.Open();
-
-            string command2 = "select * from adminn";
-            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
-            DataTable data = new DataTable();
-            adapter.Fill(data);
-
-            string money = data.Rows[0][2].ToString();
-            connection.Close();
-
-            return money;
+            return Money.ToString();
         }
         public void IncreaseMoney(string money)
         {
-            //increase money of bank  
-            long m = long.Parse(money);
+            //increase money of bank   
+            Money += long.Parse(money);
 
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
                                 G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
             connection.Open();
 
-
-            string command2 = "select * from adminn";
-            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
-            DataTable data = new DataTable();
-            adapter.Fill(data);
-
-            string command = "update adminn SET Bank = '" + (long.Parse(data.Rows[2][0].ToString()) + m) + "'" +
-                                "where name = '" + "admin" + "'";
-
+            string command = "update adminn SET Bank = '" + Money + "'  where name = '" + "admin" + "'";
             SqlCommand sqlCommand = new SqlCommand(command, connection);
             sqlCommand.ExecuteNonQuery();
 
@@ -316,10 +293,7 @@ namespace WpfProject
                 SqlCommand sqlCommand = new SqlCommand(command, connection);
                 sqlCommand.ExecuteNonQuery();
             }
-            else
-            {
-                /***********write reapeted employee****************/
-            }
+
             connection.Close();
         }
         public void DeleteUser(string name)
@@ -345,14 +319,14 @@ namespace WpfProject
             connection.Open();
 
 
-            string command2 = "select * from Book";
-            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
+            string command = "select * from Book";
+            SqlDataAdapter adapter = new SqlDataAdapter(command, connection);
             DataTable data = new DataTable();
             adapter.Fill(data);
 
             for (int i = 0; i < data.Rows.Count; i++)
             {
-                if (data.Rows[i][5].ToString() == "0")
+                if (data.Rows[i][5].ToString() == "False")
                 {
                     BorrowedBooks.Add(data.Rows[i][0].ToString());
                 }
@@ -362,7 +336,7 @@ namespace WpfProject
 
             return BorrowedBooks;
         }
-        public List<string> ShowAvaiableBooks()
+        public List<string> ShowAvailableBooks()
         {
             //available books
             List<string> AvailableBooks = new List<string>();
@@ -372,14 +346,14 @@ namespace WpfProject
             connection.Open();
 
 
-            string command2 = "select * from Book";
-            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
+            string command = "select * from Book";
+            SqlDataAdapter adapter = new SqlDataAdapter(command, connection);
             DataTable data = new DataTable();
             adapter.Fill(data);
 
             for (int i = 0; i < data.Rows.Count; i++)
             {
-                if (data.Rows[i][5].ToString() == "1")
+                if (data.Rows[i][5].ToString() == "True")
                 {
                     AvailableBooks.Add(data.Rows[i][0].ToString());
                 }
@@ -389,7 +363,7 @@ namespace WpfProject
 
             return AvailableBooks;
         }
-        public List<string> ShowUser()
+        public List<string> ShowUsers()
         {
             //all users
             List<string> AllUser = new List<string>();
@@ -399,14 +373,14 @@ namespace WpfProject
             connection.Open();
 
 
-            string command2 = "select * from Userr";
-            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
+            string command = "select * from Userr";
+            SqlDataAdapter adapter = new SqlDataAdapter(command, connection);
             DataTable data = new DataTable();
             adapter.Fill(data);
 
             for (int i = 0; i < data.Rows.Count; i++)
             {
-                AllUser.Add(data.Rows[0][i].ToString());
+                AllUser.Add(data.Rows[i][0].ToString());
             }
 
             connection.Close();
@@ -419,10 +393,7 @@ namespace WpfProject
 
             List<string> LateReturnUser = new List<string>();
             GregorianCalendar time = new GregorianCalendar();
-            DateTime dt = DateTime.Now;
-            int year = time.GetYear(dt);
-            int month = time.GetMonth(dt);
-            int day = time.GetDayOfMonth(dt);
+            DateTime today = DateTime.Now;
 
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
                                 G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
@@ -436,21 +407,17 @@ namespace WpfProject
             {
                 for (int j = 11; j < 16; j++)
                 {
-                    string[] temp = data.Rows[i][j].ToString().Split('/');
-                    if (int.Parse(temp[0]) < year)
+                    if(data.Rows[i][j].ToString() != "")
                     {
-                        LateReturnUser.Add(data.Rows[i][0].ToString());
-                        break;
-                    }
-                    else if (int.Parse(temp[0]) == year && int.Parse(temp[1]) < month)
-                    {
-                        LateReturnUser.Add(data.Rows[i][0].ToString());
-                        break;
-                    }
-                    else if (int.Parse(temp[0]) == year && int.Parse(temp[1]) == month && int.Parse(temp[2]) < day)
-                    {
-                        LateReturnUser.Add(data.Rows[i][0].ToString());
-                        break;
+                        string[] temp = data.Rows[i][j].ToString().Split('/');
+                        DateTime dateValue = new DateTime(int.Parse(temp[0]), int.Parse(temp[1]), int.Parse(temp[2]));
+
+                        int delays = 7 - (today.Date - dateValue.Date).Days;
+                        if (delays < 0)
+                        {
+                            LateReturnUser.Add(data.Rows[i][0].ToString());
+                            break;
+                        }
                     }
                 }
             }
@@ -463,10 +430,7 @@ namespace WpfProject
             //late pay users
             List<string> LatePayUser = new List<string>();
             GregorianCalendar time = new GregorianCalendar();
-            DateTime dt = DateTime.Now;
-            int year = time.GetYear(dt);
-            int month = time.GetMonth(dt);
-            int day = time.GetDayOfMonth(dt);
+            DateTime today = DateTime.Now;
 
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
                                 G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
@@ -478,20 +442,13 @@ namespace WpfProject
 
             for (int i = 0; i < data.Rows.Count; i++)
             {
-                if (data.Rows[i][17] == null)
+                if (data.Rows[i][17].ToString() == "")
                 {
                     string[] temp = data.Rows[i][16].ToString().Split('/');
-                    if ((int.Parse(temp[0]) + 1) < year)
-                    {
-                        LatePayUser.Add(data.Rows[i][0].ToString());
-                        break;
-                    }
-                    else if ((int.Parse(temp[0]) + 1) == year && int.Parse(temp[1]) < month)
-                    {
-                        LatePayUser.Add(data.Rows[i][0].ToString());
-                        break;
-                    }
-                    else if ((int.Parse(temp[0]) + 1) == year && int.Parse(temp[1]) == month && int.Parse(temp[2]) < day)
+                    DateTime dateValue = new DateTime(int.Parse(temp[0]), int.Parse(temp[1]), int.Parse(temp[2]));
+
+                    int delays = 365 - (today.Date - dateValue.Date).Days;
+                    if (delays < 0)
                     {
                         LatePayUser.Add(data.Rows[i][0].ToString());
                         break;
@@ -500,17 +457,10 @@ namespace WpfProject
                 else
                 {
                     string[] temp = data.Rows[i][17].ToString().Split('/');
-                    if ((int.Parse(temp[0]) + 1) < year)
-                    {
-                        LatePayUser.Add(data.Rows[i][0].ToString());
-                        break;
-                    }
-                    else if ((int.Parse(temp[0]) + 1) == year && int.Parse(temp[1]) < month)
-                    {
-                        LatePayUser.Add(data.Rows[i][0].ToString());
-                        break;
-                    }
-                    else if ((int.Parse(temp[0]) + 1) == year && int.Parse(temp[1]) == month && int.Parse(temp[2]) < day)
+                    DateTime dateValue = new DateTime(int.Parse(temp[0]), int.Parse(temp[1]), int.Parse(temp[2]));
+
+                    int delays = 365 - (today.Date - dateValue.Date).Days;
+                    if (delays < 0)
                     {
                         LatePayUser.Add(data.Rows[i][0].ToString());
                         break;
@@ -518,6 +468,7 @@ namespace WpfProject
                 }
             }
             connection.Close();
+
             return LatePayUser;
         }
         public List<string> ShowUniqueUser(string name)
@@ -538,7 +489,6 @@ namespace WpfProject
             {
                 if (data.Rows[i][0].ToString() == name)
                 {
-                    /*****************************not aure********************/
                     InfoUniqueUser.Add(data.Rows[i][0].ToString());
                     InfoUniqueUser.Add(data.Rows[i][1].ToString());
                     InfoUniqueUser.Add(data.Rows[i][2].ToString());
@@ -569,7 +519,6 @@ namespace WpfProject
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
                                 G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
 
-            string money = "";
 
             connection.Open();
 
@@ -582,13 +531,13 @@ namespace WpfProject
             {
                 if (data.Rows[i][0].ToString() == this.Name)
                 {
-                    money = data.Rows[i][0].ToString();
+                    Money = long.Parse(data.Rows[i][5].ToString());
                 }
             }
 
             connection.Close();
 
-            return money;
+            return Money.ToString();
         }
         public void EditInfo(string email, string phone, string path)
         {
@@ -602,10 +551,17 @@ namespace WpfProject
 
             connection.Open();
 
-            string command = "update Employee SET email = '" + email + "' phoneNumber = '" + phone + "' PictureLoc = '" + path + "'" +
-                             " where name = '" + this.Name + "'";
+            string command = "update Employee SET email = '" + email + "'  where name = '" + this.Name + "'";
             SqlCommand sqlCommand = new SqlCommand(command, connection);
             sqlCommand.ExecuteNonQuery();
+
+            string command2 = "update Employee SET phoneNumber = '" + phone + "'  where name = '" + this.Name + "'";
+            SqlCommand sqlCommand2 = new SqlCommand(command2, connection);
+            sqlCommand2.ExecuteNonQuery();
+
+            string command3 = "update Employee SET PictureLoc = '" + path + "'  where name = '" + this.Name + "'";
+            SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
+            sqlCommand3.ExecuteNonQuery();
 
             connection.Close();
         }
@@ -635,18 +591,64 @@ namespace WpfProject
             if (repeated == false)
             {
                 // add in SQL
+                GregorianCalendar time = new GregorianCalendar();
+                DateTime dt = DateTime.Now;
+                string year = time.GetYear(dt).ToString();
+                string month = time.GetMonth(dt).ToString();
+                string day = time.GetDayOfMonth(dt).ToString();
+                string date = year + "/" + month + "/" + day;
+
                 string command = "insert into Userr values('" + name.Trim() + "' , '" + phone.Trim() + "' ,'" + pass.Trim() + "' , '" +
-                                                             email.Trim() + "' , '" + pic + "', '" + "0" + "')";
+                                                             email.Trim() + "' , '" + pic + "', '" + 0 + "' , '" + "" + "', '" + "" + "', '" + "" + "', '" + "" + "', '" + "" + "'" +
+                                                             ", '" + "" + "', '" + "" + "', '" + "" + "', '" + "" + "', '" + "" + "','" + date.Trim() + "', '" + "" + "')";
 
                 SqlCommand sqlCommand = new SqlCommand(command, connection);
                 sqlCommand.ExecuteNonQuery();
             }
             connection.Close();
         }
-        public void BorrowBook(string name)
+        public int LeftSubscriptionDays()
+        {
+            GregorianCalendar time = new GregorianCalendar();
+            DateTime dt = DateTime.Now;
+
+            SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
+                                        G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
+            connection.Open();
+            string command2 = "select * from Userr";
+            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
+            DataTable data = new DataTable();
+            adapter.Fill(data);
+
+            int days = 0;
+
+            for (int i = 0; i < data.Rows.Count; i++)
+            {
+                if (data.Rows[i][0].ToString() == Name)
+                {
+                    if (data.Rows[i][17].ToString() != "")
+                    {
+                        string[] date = data.Rows[i][17].ToString().Split('/');
+                        DateTime dateValue = new DateTime(int.Parse(date[0]), int.Parse(date[1]), int.Parse(date[2]));
+                        days = (dt.Date - dateValue.Date).Days - 365;
+                    }
+                    else
+                    {
+                        string[] date = data.Rows[i][16].ToString().Split('/');
+                        DateTime dateValue = new DateTime(int.Parse(date[0]), int.Parse(date[1]), int.Parse(date[2]));
+                        days = (dt.Date - dateValue.Date).Days - 365;
+                    }
+                }
+            }
+            connection.Close();
+
+            return days;
+        }
+
+        public string BorrowBook(string name)
         {
             //the Book is borrowed
-
+            string ans = "";
             GregorianCalendar time = new GregorianCalendar();
             DateTime dt = DateTime.Now;
             int year = time.GetYear(dt);
@@ -663,69 +665,114 @@ namespace WpfProject
             DataTable data = new DataTable();
             adapter.Fill(data);
 
-            for (int i = 0; i < data.Rows.Count; i++)
+            bool cant = false;
+
+            if (LeftSubscriptionDays() * -1 < 7)
             {
-                if (data.Rows[i][0].ToString() == Name)
+                cant = true;
+                ans = "Not Enough Subscription";
+            }
+
+            else
+            {
+                for (int i = 0; i < data.Rows.Count; i++)
                 {
-                    for (int j = 6; j < 11; j++)
+                    if (data.Rows[i][0].ToString() == Name)
                     {
-                        if (data.Rows[i][j] == null)
+                        for (int p = 11; p < 16; p++)
                         {
-                            if (j == 6)
+                            if(data.Rows[i][p].ToString() != "")
                             {
-                                string command3 = "update Userr SET book1 = '" + name + "' Date1 = '" + Time + "' where name = '" + Name + "' ";
-
-                                SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
-                                sqlCommand3.ExecuteNonQuery();
+                                if (IslateReturnBook(data.Rows[i][p].ToString()))
+                                {
+                                    cant = true;
+                                    ans = "You have late Return";
+                                    break;
+                                }
                             }
-                            else if (j == 7)
+
+                        }
+                        if (cant == false)
+                        {
+                            for (int j = 6; j < 11; j++)
                             {
-                                string command3 = "update Userr SET book2 = '" + name + "' Date2 = '" + Time + "' where name = '" + Name + "' ";
-
-                                SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
-                                sqlCommand3.ExecuteNonQuery();
+                                if (data.Rows[i][j].ToString() == "")
+                                {
+                                    if (j == 6)
+                                    {
+                                        string command3 = "update Userr SET book1 = '" + name + "'  where name = '" + Name + "' ";
+                                        SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
+                                        sqlCommand3.ExecuteNonQuery();
+                                        string command4 = "update Userr SET Date1 = '" + Time + "'  where name = '" + Name + "' ";
+                                        SqlCommand sqlCommand4 = new SqlCommand(command4, connection);
+                                        sqlCommand4.ExecuteNonQuery();
+                                    }
+                                    else if (j == 7)
+                                    {
+                                        string command3 = "update Userr SET book2 = '" + name + "'  where name = '" + Name + "' ";
+                                        SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
+                                        sqlCommand3.ExecuteNonQuery();
+                                        string command4 = "update Userr SET Date2 = '" + Time + "'  where name = '" + Name + "' ";
+                                        SqlCommand sqlCommand4 = new SqlCommand(command4, connection);
+                                        sqlCommand4.ExecuteNonQuery();
+                                    }
+                                    else if (j == 8)
+                                    {
+                                        string command3 = "update Userr SET book3 = '" + name + "'  where name = '" + Name + "' ";
+                                        SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
+                                        sqlCommand3.ExecuteNonQuery();
+                                        string command4 = "update Userr SET Date3 = '" + Time + "'  where name = '" + Name + "' ";
+                                        SqlCommand sqlCommand4 = new SqlCommand(command4, connection);
+                                        sqlCommand4.ExecuteNonQuery();
+                                    }
+                                    else if (j == 9)
+                                    {
+                                        string command3 = "update Userr SET book4 = '" + name + "'  where name = '" + Name + "' ";
+                                        SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
+                                        sqlCommand3.ExecuteNonQuery();
+                                        string command4 = "update Userr SET Date4 = '" + Time + "'  where name = '" + Name + "' ";
+                                        SqlCommand sqlCommand4 = new SqlCommand(command4, connection);
+                                        sqlCommand4.ExecuteNonQuery();
+                                    }
+                                    else if (j == 10)
+                                    {
+                                        string command3 = "update Userr SET book5 = '" + name + "'  where name = '" + Name + "' ";
+                                        SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
+                                        sqlCommand3.ExecuteNonQuery();
+                                        string command4 = "update Userr SET Date5 = '" + Time + "'  where name = '" + Name + "' ";
+                                        SqlCommand sqlCommand4 = new SqlCommand(command4, connection);
+                                        sqlCommand4.ExecuteNonQuery();
+                                    }
+                                    break;
+                                }
+                                else if (j == 10)
+                                {
+                                    ans = "full storage for book";
+                                }
                             }
-                            else if (j == 8)
-                            {
-                                string command3 = "update Userr SET book3 = '" + name + "' Date3 = '" + Time + "' where name = '" + Name + "' ";
-
-                                SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
-                                sqlCommand3.ExecuteNonQuery();
-                            }
-                            else if (j == 9)
-                            {
-                                string command3 = "update Userr SET book4 = '" + name + "' Date4 = '" + Time + "' where name = '" + Name + "' ";
-
-                                SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
-                                sqlCommand3.ExecuteNonQuery();
-                            }
-                            else if (j == 10)
-                            {
-                                string command3 = "update Userr SET book5 = '" + name + "' Date5 = '" + Time + "' where name = '" + Name + "' ";
-
-                                SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
-                                sqlCommand3.ExecuteNonQuery();
-                            }
-                            break;
                         }
                     }
                 }
             }
             string command = "update Book SET available = '" + false + "'" +
-                                "where name = '" + name + "'";
+                                "where bookName = '" + name + "'";
 
             SqlCommand sqlCommand = new SqlCommand(command, connection);
             sqlCommand.ExecuteNonQuery();
 
             connection.Close();
+
+            return ans;
         }
-        public void ReturnBook(string name)
+        public string ReturnBook(string name)
         {
             //the book is Returned
 
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
                                 G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
             connection.Open();
+
+            string ans = "";
 
             string command2 = "select * from Userr";
             SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
@@ -742,58 +789,158 @@ namespace WpfProject
                         {
                             if (j == 6)
                             {
-                                string command3 = "update Userr SET book1 = '" + null + "' Date1 = '" + null + "' where name = '" + Name + "' ";
+                                if ((IslateReturnBook(data.Rows[i][11].ToString()) && IsEnoughFine()) || !IslateReturnBook(data.Rows[i][11].ToString()))
+                                {
+                                    if (IslateReturnBook(data.Rows[i][11].ToString()))
+                                        PayFine("20");
 
-                                SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
-                                sqlCommand3.ExecuteNonQuery();
+                                    string command3 = "update Userr SET book1 = '" + null + "'  where name = '" + Name + "' ";
+                                    SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
+                                    sqlCommand3.ExecuteNonQuery();
+                                    string command4 = "update Userr SET Date1 = '" + null + "'  where name = '" + Name + "' ";
+                                    SqlCommand sqlCommand4 = new SqlCommand(command4, connection);
+                                    sqlCommand4.ExecuteNonQuery();
+
+                                    ans = "Book is returned";
+                                }
+                                else if (IslateReturnBook(data.Rows[i][11].ToString()) && !IsEnoughFine())
+                                {
+                                    ans = "deficit :" + ((long.Parse(ShowCredit()) - 20) * -1).ToString();
+                                }
 
                             }
                             else if (j == 7)
                             {
-                                string command3 = "update Userr SET book2 = '" + null + "' Date2 = '" + null + "' where name = '" + Name + "' ";
+                                if ((IslateReturnBook(data.Rows[i][12].ToString()) && IsEnoughFine()) || !IslateReturnBook(data.Rows[i][12].ToString()))
+                                {
+                                    if (IslateReturnBook(data.Rows[i][12].ToString()))
+                                        PayFine("20"); 
 
-                                SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
-                                sqlCommand3.ExecuteNonQuery();
+                                    string command3 = "update Userr SET book2 = '" + null + "'  where name = '" + Name + "' ";
+                                    SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
+                                    sqlCommand3.ExecuteNonQuery();
+                                    string command4 = "update Userr SET Date2 = '" + null + "'  where name = '" + Name + "' ";
+                                    SqlCommand sqlCommand4 = new SqlCommand(command4, connection);
+                                    sqlCommand4.ExecuteNonQuery();
+
+                                    ans = "Book is returned";
+                                }
+                                else if (IslateReturnBook(data.Rows[i][12].ToString()) && !IsEnoughFine())
+                                {
+                                    ans = "deficit :" + ((long.Parse(ShowCredit()) - 20) * -1).ToString();
+                                }
                             }
                             else if (j == 8)
                             {
-                                string command3 = "update Userr SET book3 = '" + null + "' Date3 = '" + null + "' where name = '" + Name + "' ";
+                                if ((IslateReturnBook(data.Rows[i][13].ToString()) && IsEnoughFine()) || !IslateReturnBook(data.Rows[i][13].ToString()))
+                                {
+                                    if (IslateReturnBook(data.Rows[i][13].ToString()))
+                                        PayFine("20");
 
-                                SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
-                                sqlCommand3.ExecuteNonQuery();
+                                    string command3 = "update Userr SET book3 = '" + null + "'  where name = '" + Name + "' ";
+                                    SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
+                                    sqlCommand3.ExecuteNonQuery();
+                                    string command4 = "update Userr SET Date3 = '" + null + "'  where name = '" + Name + "' ";
+                                    SqlCommand sqlCommand4 = new SqlCommand(command4, connection);
+                                    sqlCommand4.ExecuteNonQuery();
+
+                                    ans = "Book is returned";
+                                }
+                                else if (IslateReturnBook(data.Rows[i][13].ToString()) && !IsEnoughFine())
+                                {
+                                    ans = "deficit :" + ((long.Parse(ShowCredit()) - 20) * -1).ToString();
+                                }
                             }
                             else if (j == 9)
                             {
-                                string command3 = "update Userr SET book4 = '" + null + "' Date4 = '" + null + "' where name = '" + Name + "' ";
+                                if ((IslateReturnBook(data.Rows[i][14].ToString()) && IsEnoughFine()) || !IslateReturnBook(data.Rows[i][14].ToString()))
+                                {
+                                    if (IslateReturnBook(data.Rows[i][14].ToString()))
+                                        PayFine("20");
 
-                                SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
-                                sqlCommand3.ExecuteNonQuery();
+                                    string command3 = "update Userr SET book4 = '" + null + "'  where name = '" + Name + "' ";
+                                    SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
+                                    sqlCommand3.ExecuteNonQuery();
+                                    string command4 = "update Userr SET Date4 = '" + null + "'  where name = '" + Name + "' ";
+                                    SqlCommand sqlCommand4 = new SqlCommand(command4, connection);
+                                    sqlCommand4.ExecuteNonQuery();
+
+                                    ans = "Book is returned";
+                                }
+                                else if (IslateReturnBook(data.Rows[i][14].ToString()) && !IsEnoughFine())
+                                {
+                                    ans = "deficit :" + ((long.Parse(ShowCredit()) - 20) * -1).ToString();
+                                }
                             }
                             else if (j == 10)
                             {
-                                string command3 = "update Userr SET book5 = '" + null + "' Date5 = '" + null + "' where name = '" + Name + "' ";
+                                if ((IslateReturnBook(data.Rows[i][15].ToString()) && IsEnoughFine()) || !IslateReturnBook(data.Rows[i][15].ToString()))
+                                {
+                                    if (IslateReturnBook(data.Rows[i][15].ToString()))
+                                        PayFine("20");
 
-                                SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
-                                sqlCommand3.ExecuteNonQuery();
+                                    string command3 = "update Userr SET book5 = '" + null + "'  where name = '" + Name + "' ";
+                                    SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
+                                    sqlCommand3.ExecuteNonQuery();
+                                    string command4 = "update Userr SET Date5 = '" + null + "'  where name = '" + Name + "' ";
+                                    SqlCommand sqlCommand4 = new SqlCommand(command4, connection);
+                                    sqlCommand4.ExecuteNonQuery();
+
+                                    ans = "Book is returned";
+                                }
+                                else if (IslateReturnBook(data.Rows[i][15].ToString()) && !IsEnoughFine())
+                                {
+                                    ans = "deficit :" + ((long.Parse(ShowCredit()) - 20) * -1).ToString();
+                                }
                             }
                             break;
                         }
                     }
                 }
             }
+
             string command = "update Book SET available = '" + true + "'" +
-                                "where name = '" + name + "'";
+                                "where bookName = '" + name + "'";
 
             SqlCommand sqlCommand = new SqlCommand(command, connection);
             sqlCommand.ExecuteNonQuery();
 
             connection.Close();
 
+            return ans;
+
+        }
+        private bool IslateReturnBook(string date)
+        {
+            GregorianCalendar time = new GregorianCalendar();
+            DateTime today = DateTime.Now;
+            string[] temp = date.Split('/');
+            DateTime dateValue = new DateTime(int.Parse(temp[0]), int.Parse(temp[1]), int.Parse(temp[2]));
+
+            int delays = 7 - (today.Date - dateValue.Date).Days;
+            if (delays < 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        private bool IsEnoughFine()
+        {
+            if (long.Parse(ShowCredit()) >= 20)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         public void PayFine(string money)
         {
             //fine for delay
-            /**********how much fine should be payed for each day****************/
             long m = long.Parse(money);
 
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
@@ -805,18 +952,26 @@ namespace WpfProject
             DataTable data = new DataTable();
             adapter.Fill(data);
 
-            string command = "update Userr SET wallet = '" + (long.Parse(data.Columns[5].ToString()) - m) + "'" +
-                                "where name = '" + this.Name + "'";
+            for (int i = 0; i < data.Rows.Count; i++)
+            {
+                if(data.Rows[i][0].ToString() == Name)
+                {
+                    string command = "update Userr SET wallet = '" + (long.Parse(data.Rows[i][5].ToString()) - m) + "'" +
+                    "where name = '" + this.Name + "'";
 
-            SqlCommand sqlCommand = new SqlCommand(command, connection);
-            sqlCommand.ExecuteNonQuery();
+                    SqlCommand sqlCommand = new SqlCommand(command, connection);
+                    sqlCommand.ExecuteNonQuery();
+
+                    break;
+                }
+            }
 
             connection.Close();
         }
         public void PaySubscription(string money)
         {
             //pay for subscription
-            /**********how much money should be payed * ***************/
+
             long m = long.Parse(money);
             GregorianCalendar time = new GregorianCalendar();
             DateTime dt = DateTime.Now;
@@ -829,23 +984,33 @@ namespace WpfProject
                                 G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
             connection.Open();
 
-            string command2 = "select * from Userr";
-            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
+            string command = "select * from Userr";
+            SqlDataAdapter adapter = new SqlDataAdapter(command, connection);
             DataTable data = new DataTable();
             adapter.Fill(data);
 
-            string command = "update Userr SET wallet = '" + (long.Parse(data.Columns[5].ToString()) - m) + "' SubsRenew = '" + Time + "' " +
-                " where name = '" + Name + "' ";
+            for (int i = 0; i < data.Rows.Count; i++)
+            {
+                if (data.Rows[i][0].ToString() == Name)
+                {
 
-            SqlCommand sqlCommand = new SqlCommand(command, connection);
-            sqlCommand.ExecuteNonQuery();
+                    string command2 = "update Userr SET wallet = '" + (long.Parse(data.Rows[i][5].ToString()) - m) + "'  where name = '" + Name + "' ";
+                    SqlCommand sqlCommand = new SqlCommand(command2, connection);
+                    sqlCommand.ExecuteNonQuery();
+
+                    string command3 = "update Userr SET SubsRenew = '" + Time + "'   where name = '" + Name + "' ";
+                    SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
+                    sqlCommand3.ExecuteNonQuery();
+
+                    break;
+                }
+            }
 
             connection.Close();
         }
         public string ShowCredit()
         {
             //show money
-            /*********which user?*******/
 
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
                                 G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
@@ -871,6 +1036,29 @@ namespace WpfProject
 
             return money;
         }
+        public void ReduceCredit(string money)
+        {
+            //reduce money
+            long m = long.Parse(money);
+
+            SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
+                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
+            connection.Open();
+
+            string command2 = "select * from Userr";
+            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
+            DataTable data = new DataTable();
+            adapter.Fill(data);
+
+            string command3 = "update Userr SET wallet = '" + (long.Parse(data.Columns[5].ToString()) - m) + "'" +
+                        "where name = '" + Name + "'";
+
+            SqlCommand sqlCommand2 = new SqlCommand(command3, connection);
+            sqlCommand2.ExecuteNonQuery();
+
+            connection.Close();
+
+        }
         public void IncreseCredit(string money)
         {
             // increase money
@@ -894,9 +1082,59 @@ namespace WpfProject
 
             connection.Close();
         }
-        public void EditInfo()
+        public void EditInfo(string email, string phone, string path)
         {
-            //edit info of use
+            //Edit Info of user
+
+            Email = email;
+            PhoneNumber = phone;
+            PictureURL = path;
+
+            SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
+                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
+
+            connection.Open();
+
+            string command = "update Userr SET email = '" + email + "'  where name = '" + this.Name + "'";
+            SqlCommand sqlCommand = new SqlCommand(command, connection);
+            sqlCommand.ExecuteNonQuery();
+
+            string command2 = "update Userr SET phoneNumber = '" + phone + "'  where name = '" + this.Name + "'";
+            SqlCommand sqlCommand2 = new SqlCommand(command2, connection);
+            sqlCommand2.ExecuteNonQuery();
+
+            string command3 = "update Userr SET PictureLoc = '" + path + "' where name = '" + this.Name + "'";
+            SqlCommand sqlCommand3 = new SqlCommand(command3, connection);
+            sqlCommand3.ExecuteNonQuery();
+
+            connection.Close();
+        }
+        public List<string> ShowAvailableBooks()
+        {
+            //available books
+            List<string> AvailableBooks = new List<string>();
+
+            SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
+                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
+            connection.Open();
+
+
+            string command = "select * from Book";
+            SqlDataAdapter adapter = new SqlDataAdapter(command, connection);
+            DataTable data = new DataTable();
+            adapter.Fill(data);
+
+            for (int i = 0; i < data.Rows.Count; i++)
+            {
+                if (data.Rows[i][5].ToString() == "True")
+                {
+                    AvailableBooks.Add(data.Rows[i][0].ToString());
+                }
+            }
+
+            connection.Close();
+
+            return AvailableBooks;
         }
         public List<string> ShowBorrowedBooks()
         {
@@ -906,8 +1144,8 @@ namespace WpfProject
                                 G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
             connection.Open();
 
-            string command2 = "select * from Userr";
-            SqlDataAdapter adapter = new SqlDataAdapter(command2, connection);
+            string command = "select * from Userr";
+            SqlDataAdapter adapter = new SqlDataAdapter(command, connection);
             DataTable data = new DataTable();
             adapter.Fill(data);
 
@@ -917,7 +1155,7 @@ namespace WpfProject
                 {
                     for (int j = 6; j < 11; j++)
                     {
-                        if (data.Rows[i][j] != null)
+                        if (data.Rows[i][j].ToString() != "")
                         {
                             BorrowedBooks.Add(data.Rows[i][j].ToString());
                         }
@@ -929,9 +1167,9 @@ namespace WpfProject
 
             return BorrowedBooks;
         }
-        public List<string> SearchBookByName(string info)
+        public string SearchBookByName(string info)
         {
-            List<string> bookInfo = new List<string>();
+            string bookInfo = null;
 
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
                                 G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
@@ -946,20 +1184,16 @@ namespace WpfProject
             {
                 if (data.Rows[i][0].ToString() == info)
                 {
-                    bookInfo.Add(data.Rows[i][0].ToString());
-                    bookInfo.Add(data.Rows[i][1].ToString());
-                    bookInfo.Add(data.Rows[i][2].ToString());
-                    bookInfo.Add(data.Rows[i][3].ToString());
-                    bookInfo.Add(data.Rows[i][4].ToString());
+                    bookInfo = data.Rows[i][0].ToString();
                 }
             }
             connection.Close();
 
             return bookInfo;
         }
-        public List<string> SearchBookByWriter(string info)
+        public string SearchBookByWriter(string info)
         {
-            List<string> bookInfo = new List<string>();
+            string bookInfo = null;
 
             SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
                                 G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
@@ -974,11 +1208,7 @@ namespace WpfProject
             {
                 if (data.Rows[i][1].ToString() == info)
                 {
-                    bookInfo.Add(data.Rows[i][0].ToString());
-                    bookInfo.Add(data.Rows[i][1].ToString());
-                    bookInfo.Add(data.Rows[i][2].ToString());
-                    bookInfo.Add(data.Rows[i][3].ToString());
-                    bookInfo.Add(data.Rows[i][4].ToString());
+                    bookInfo = data.Rows[i][0].ToString();
                 }
             }
             connection.Close();
