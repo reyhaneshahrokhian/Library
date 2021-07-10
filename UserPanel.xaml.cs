@@ -12,100 +12,100 @@ using System.Windows.Shapes;
 using Microsoft.Win32;
 using System.Data;
 using System.Data.SqlClient;
+using System.Collections.ObjectModel;
 
 namespace WpfProject
 {
-    /// <summary>
-    /// Interaction logic for UserPanel.xaml
-    /// </summary>
-    /// 
 
     public partial class UserPanel : Window
     {
-        private string IndexOfTab;
         User user;
+        public ObservableCollection<string> Books { get; set; }
+
         public UserPanel(string name, string email, string phone, string pass, string pic)
         {
+            //make new user object with (the user that log in)
             user = new User(name, email, phone, pass, pic);
+
+            Books = new ObservableCollection<string>();
+
             InitializeComponent();
-        }
-        private void Sub_Click(object sender, RoutedEventArgs e)
-        {
-            tab.SelectedIndex = 3;
-            IndexOfTab = "Sub";
-        }
-        private void Wallet_Click(object sender, RoutedEventArgs e)
-        {
-            tab.SelectedIndex = 4;
-            IndexOfTab = "Wallet";
-        }
-        private void EditInfo_Click(object sender, RoutedEventArgs e)
-        {
-            tab.SelectedIndex = 5;
-            IndexOfTab = "EditInfo";
-        }
-        private void Pay_Click(object sender, RoutedEventArgs e)
-        {
-            //go to pay tab
-            tab.SelectedIndex = 6;
+
+            DataContext = this;
         }
         private void MyBook_Click(object sender, RoutedEventArgs e)
         {
             //show all the borrowed books
-            tab.SelectedIndex = 1;
-            IndexOfTab = "MyBook";
+            if (Books != null && Books.Count > 0)
+            {
+                Books.Clear();
+            }
+            foreach (var item in user.ShowBorrowedBooks())
+            {
+                Books.Add(item);
+            }
+            if (Books != null && Books.Count > 0)
+            {
+                ComboBox.ItemsSource = Books;
+            }
 
-            /*********** method nadare ke :||||| ***************/
-            /******** show in table ***********/
-            user.ShowBorrowedBooks();
+            tab.SelectedIndex = 1;
         }
         private void AllBook_Click(object sender, RoutedEventArgs e)
         {
-            //show all the books available in the library
-            tab.SelectedIndex = 2;
-            IndexOfTab = "AllBook";
-
-            /******** show in table ***********/
-            user.ShowBooks();
-        }
-        private void Return_Click(object sender, RoutedEventArgs e)
-        {
-            //dar sql dorost she
-            /********** choose in combo box then save the name and send it to method ***********/
-            string info = "";
-            user.ReturnBook(info);
-        }
-        private void SearchByname_Click(object sender, RoutedEventArgs e)
-        {
-            //show info of book 
-            /***dar jadval dorost she***/
-            /******** method nadare *********/
-            user.SearchBookByName(serachbynameBox.Text);
-        }
-        private void SearchByWriter_Click(object sender, RoutedEventArgs e)
-        {
-            //show info of book 
-            user.SearchBookByWriter(serachbywriterBox.Text);
-        }
-        private void ExtendSub_Click(object sender, RoutedEventArgs e)
-        {
-            //check she agar pool kafi be sub ezafe she age nabood khataneshoon bede ke pool kafi nist
-            /****** ba che algorythmi??? ***********/
-            /***** chera field baraye pool nadarim? :) ********/
-            int defiedMoneyForExtendSub = 100;
-
-            if (user.Money >= defiedMoneyForExtendSub)
+            //show all the books in the library
+            if (Books != null && Books.Count > 0)
             {
-                //bere too safhe pay ?
+                Books.Clear();
+            }
 
+            foreach (var item in user.ShowAvailableBooks())
+            {
+                Books.Add(item);
+            }
+            tab.SelectedIndex = 2;
+        }
+        private void Sub_Click(object sender, RoutedEventArgs e)
+        {
+            // go to subcription page
+            tab.SelectedIndex = 3;
+
+            money.Text = user.ShowCredit();
+
+            if (user.LeftSubscriptionDays() < 0)
+            {
+                Days.Text = (-1 * user.LeftSubscriptionDays()).ToString();
+                Days.Foreground = Brushes.Green;
             }
             else
             {
-                //show not enough money
+                Days.Text =  user.LeftSubscriptionDays().ToString();
+                Days.Foreground = Brushes.Red;
             }
+        }
+        private void Wallet_Click(object sender, RoutedEventArgs e)
+        {
+            //go to wallet page
+            tab.SelectedIndex = 4;
+
+            Money.Text = user.ShowCredit();
+        }
+        private void EditInfo_Click(object sender, RoutedEventArgs e)
+        {
+            //go to edit information page
+            tab.SelectedIndex = 5;
+            NameEditInfo.Text = user.Name;
+        }
+        private void Pay_Click(object sender, RoutedEventArgs e)
+        {
+            //go to pay tab
+
+            PaidAmount.Text = amountMoney.Text;
+            tab.SelectedIndex = 6;
         }
         private void ChangePicture_Click(object sender, RoutedEventArgs e)
         {
+            //change the picture in info tab
             OpenFileDialog op = new OpenFileDialog();
             op.Title = "Select a picture";
             op.Filter = "All supported graphics|*.jpg;*.jpeg;*.png|" +
@@ -116,28 +116,167 @@ namespace WpfProject
                 personImage.Source = new BitmapImage(new Uri(op.FileName));
             }
         }
+        /****************************************************************************************************************************/
+        private void Return_Click(object sender, RoutedEventArgs e)
+        {
+            // choose in combo box then save the name and send it to method 
+            string selected = ComboBox.SelectedItem.ToString();
+            string ans = user.ReturnBook(selected);
+            returnM.Text = ans;
+
+            if (Books != null && Books.Count > 0)
+            {
+                Books.Clear();
+            }
+            foreach (var item in user.ShowBorrowedBooks())
+            {
+                Books.Add(item);
+            }
+            if (Books != null && Books.Count > 0)
+            {
+                ComboBox.ItemsSource = Books;
+            }
+        }
+        private void Search_Click(object sender, RoutedEventArgs e)
+        {
+            //show the book info by using the writer or name of the book
+
+            if (SearchByNameCheck.IsChecked == true)
+            {
+                if (Books != null && Books.Count > 0)
+                {
+                    Books.Clear();
+                }
+                Books.Add(user.SearchBookByName(searchbookBox.Text));             
+            }
+            else if (SearchByWriterCheck.IsChecked == true)
+            {
+                if (Books != null && Books.Count > 0)
+                {
+                    Books.Clear();
+                }
+                Books.Add(user.SearchBookByWriter(searchbookBox.Text));    
+            }
+        }
+        private void SearchByname_Check(object sender, RoutedEventArgs e)
+        {
+            SearchByNameCheck.IsChecked = true;
+        }
+        private void SearchBywriter_Check(object sender, RoutedEventArgs e)
+        {
+            SearchByWriterCheck.IsChecked = true;
+        }
+        private void Borrow_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            user.BorrowBook(button.Tag.ToString());
+
+            if (Books != null && Books.Count > 0)
+            {
+                Books.Clear();
+            }
+
+            foreach (var item in user.ShowAvailableBooks())
+            {
+                Books.Add(item);
+            }
+        }
+        private void ExtendSub_Click(object sender, RoutedEventArgs e)
+        {
+            int defiedMoneyForExtendSub = 100;
+
+            if (long.Parse(user.ShowCredit()) >= defiedMoneyForExtendSub)
+            {
+                user.PaySubscription("100");
+            }
+            else
+            {
+                //show not enough money(write money needed)
+                ExtendsubM.Text = "deficit : " + (long.Parse(user.ShowCredit()) - defiedMoneyForExtendSub).ToString();
+            }
+        }
         private void Continue_Click(object sender, RoutedEventArgs e)
         {
             // unlock the other half of tab
-            /****** if the info is correct *********/
+            //if the info is correct
             if (passwordBox.Password == user.Password)
             {
+                passwordContinueBlock.Text = " ";
+                NameEditInfo.Text = user.Name;
+                EmailEditInfoBox.Text = user.Email;
+                PhoneEditInfoBox.Text = user.PhoneNumber;
+                personImage.Source = new BitmapImage(new Uri(user.PictureURL));
                 tab.SelectedIndex = 7;
             }
             else
             {
                 //show wrong password
+                passwordContinueBlock.Text = "InCorrect password !";
             }
         }
         private void PayEnd_Click(object sender, RoutedEventArgs e)
         {
-            //dar sql pool kam va ezafe she
-            /****** pay  money *****/
+            //increse money in the wallet 
 
-            if (IndexOfTab == "Wallet")
+            string CreditNum = Account1.Text + Account2.Text + Account3.Text + Account4.Text;
+            if (!Pay.CheckCreditNumber(CreditNum))
+                AccountNumberBlock.Text = "The account number is invalid";
+
+            else
+                AccountNumberBlock.Text = " ";
+
+            if (!Pay.CheckCVV(CvvBox.Text))
+                cvvBlock.Text = "The CVV is invalid";
+
+            else
+                cvvBlock.Text = " ";
+
+            if (!Pay.CheckExpireDate(int.Parse(YearBox.Text), int.Parse(MonthBox.Text)))
+                DateBlock.Text = "The expire date has pass over";
+
+            else
+                DateBlock.Text = " ";
+
+
+            if (Pay.CheckCreditNumber(CreditNum) && Pay.CheckCVV(CvvBox.Text) && Pay.CheckExpireDate(int.Parse(YearBox.Text), int.Parse(MonthBox.Text)))
             {
-                tab.SelectedIndex = 4;
+                user.IncreseCredit(amountMoney.Text);
+            }
+
+            tab.SelectedIndex = 4;
+        }
+        private void DoneChange_Click(object sender, RoutedEventArgs e)
+        {
+            //checking correction of email and phone number and change info of user
+
+            if (!Person.CheckEmail(EmailEditInfoBox.Text))
+            {
+                EmailEditBlock.Text = "The email is invalid";
+                EmailEditBlock.Foreground = Brushes.Red;
+            }
+            else
+            {
+                EmailEditBlock.Text = "Characters or numbers or - or _";
+                EmailEditBlock.Foreground = new System.Windows.Media.SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF397F65"));
+            }
+
+            if (!Person.CheckPhoneNumber(PhoneEditInfoBox.Text))
+            {
+                PhoneEditBlock.Text = "The phone number is invalid";
+                PhoneEditBlock.Foreground = Brushes.Red;
+            }
+            else
+            {
+                PhoneEditBlock.Text = "Contain 11number.start with 09";
+                PhoneEditBlock.Foreground = new System.Windows.Media.SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF397F65"));
+            }
+
+            if (Person.CheckEmail(EmailEditInfoBox.Text) && Person.CheckPhoneNumber(PhoneEditInfoBox.Text))
+            {
+                user.EditInfo(EmailEditInfoBox.Text, PhoneEditInfoBox.Text, personImage.Source.ToString());
+                tab.SelectedIndex = 0;
             }
         }
     }
 }
+
