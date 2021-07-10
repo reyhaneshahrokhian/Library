@@ -84,7 +84,7 @@ namespace WpfProject
                 string command3 = "select * from Employee";
                 SqlDataAdapter adapter1 = new SqlDataAdapter(command3, connection);
                 DataTable data1 = new DataTable();
-                adapter.Fill(data1);
+                adapter1.Fill(data1);
 
                 //check employee
                 for (int i = 0; i < data1.Rows.Count; i++)
@@ -94,7 +94,7 @@ namespace WpfProject
                         checkName = true;
                         if (data1.Rows[i][2].ToString() == passwordBox.Password)
                         {
-                            EmployeePanel employee = new EmployeePanel(data.Rows[i][0].ToString(), data.Rows[i][3].ToString(), data.Rows[i][1].ToString(), data.Rows[i][2].ToString(), data.Rows[i][4].ToString());
+                            EmployeePanel employee = new EmployeePanel(data1.Rows[i][0].ToString(), data1.Rows[i][3].ToString(), data1.Rows[i][1].ToString(), data1.Rows[i][2].ToString(), data1.Rows[i][4].ToString());
                             employee.Show();
                             this.Close();
                         }
@@ -109,7 +109,6 @@ namespace WpfProject
                 {
                     NameBlock.Text = "there is no member with this name";
                 }
-
                 connection.Close();
             }
         }
