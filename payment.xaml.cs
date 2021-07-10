@@ -28,7 +28,6 @@ namespace WpfProject
             this.phone = phone;
             this.password = password;
             this.picture = picture;
-            PaidAmount.Text = "10000";
             InitializeComponent();
         }
         private void PayEnd_Click(object sender, RoutedEventArgs e)

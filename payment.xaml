@@ -84,7 +84,7 @@ Title="payment" Height="550" Width="1200" WindowStyle="None" WindowStartupLocati
                             <TextBlock Text="Paid" FontSize="20" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black" Margin="30,8,5,1"></TextBlock>
                             <TextBlock Text="Amount :" FontSize="20" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black" Margin="30,0,3,1"></TextBlock>
                         </StackPanel>
-                        <TextBlock x:Name="PaidAmount" Grid.Column="1" Width="200" Height="40" Margin="-90,0,88,0" Background="#FF2F7870" FontSize="30" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                        <TextBlock x:Name="PaidAmount" Text="10000" Grid.Column="1" Width="200" Height="40" Margin="-90,0,88,0" Background="#FF2F7870" FontSize="30" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
                     </Grid>
                     <Button Grid.Row="4" Content="Pay" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="30,18" FontFamily="Montserrat Black" Background="#FFC29696" Foreground="#FF004D40" FontSize="18" FontWeight="Bold" Click="PayEnd_Click"/>
                 </Grid>
