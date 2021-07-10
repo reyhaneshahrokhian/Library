@@ -75,10 +75,37 @@ namespace WpfProject
 
             if (Person.CheckName(NameBox.Text) && Person.CheckEmail(EmailBox.Text) && Person.CheckPhoneNumber(PhoneNumberBox.Text) && Person.CheckPassword(PasswordBox.Password))
             {
+                //cheking if the user is repeated or no then added
 
-                payment P = new payment(NameBox.Text, EmailBox.Text, PhoneNumberBox.Text, PasswordBox.Password, personImage.Source.ToString());
-                P.Show();
-                this.Close();
+                bool repeated = false;
+                SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
+                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
+                connection.Open();
+
+                string command = "select * from Userr";
+                SqlDataAdapter adapter = new SqlDataAdapter(command, connection);
+                DataTable data = new DataTable();
+                adapter.Fill(data);
+
+                for (int i = 0; i < data.Rows.Count; i++)
+                {
+                    if ((string)data.Rows[i][0] == NameBox.Text)
+                    {
+                        repeated = true;
+                    }
+                }
+
+                if (repeated == false)
+                {
+                    payment P = new payment(NameBox.Text, EmailBox.Text, PhoneNumberBox.Text, PasswordBox.Password, personImage.Source.ToString());
+                    P.Show();
+                    this.Close();
+                }
+                else
+                {
+                    RepeatBlock.Text = "There is already an employee with";
+                    Repeat2Block.Text = "this name!!";
+                }
             }
         }
         private void Back_Click(object sender, RoutedEventArgs e)
