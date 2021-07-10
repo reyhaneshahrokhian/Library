@@ -23,13 +23,13 @@ Title="Log in" Height="550" Width="1200" WindowStyle="None" WindowStartupLocatio
                 <StackPanel Grid.Row="1" VerticalAlignment="Center" Margin="30,0,30,10">
                     <TextBlock Text="Name :" FontSize="25" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black"></TextBlock>
                     <TextBlock Text=" "/>
-                    <TextBox   x:Name="NameBox"  Height="40" Background="#FF2F7870" FontSize="30" FontFamily="Montserrat Black"/>
+                    <TextBox Style="{StaticResource Textbox1}"  x:Name="NameBox"  Height="40" Background="#FF2F7870" FontSize="30" FontFamily="Montserrat Black"/>
                     <TextBlock x:Name="NameBlock" FontSize="17" Margin="0,-3,0,0" Foreground="Red" />
                 </StackPanel>
                 <StackPanel Grid.Row="2" VerticalAlignment="Center" Margin="30,0,30,10">
                     <TextBlock Text="Password :" FontSize="25" Foreground="#FFBBBBBB" FontFamily="Segoe UI Black"></TextBlock>
                     <TextBlock Text=" "/>
-                    <PasswordBox  x:Name="passwordBox" Height="40" Background="#FF2F7870" FontSize="30" FontFamily="Montserrat Black"  PasswordChar="*"/>
+                    <PasswordBox Style="{StaticResource roundcornerpassword1}" x:Name="passwordBox" Height="40" Background="#FF2F7870" FontSize="40" FontFamily="Montserrat Black"  PasswordChar="*"/>
                     <TextBlock x:Name="passwordBlock" FontSize="17" Margin="0,-3,0,0" Foreground="Red" />
                 </StackPanel>
                 <Grid Grid.Row="3">
@@ -37,8 +37,8 @@ Title="Log in" Height="550" Width="1200" WindowStyle="None" WindowStartupLocatio
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="Login" Grid.Column="0" Content="Login" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="30,18" FontFamily="Montserrat Black" Background="#FF919595" Foreground="#FF004D40" FontSize="18" FontWeight="Bold" Click="Login_Click"/>
-                    <Button x:Name="Register" Grid.Column="1" Content="Register" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="18,18" FontFamily="Montserrat Black" Background="#FF919595" Foreground="#FF004D40" FontSize="18" FontWeight="Bold" Click="Register_Click"/>
+                    <Button Style="{DynamicResource RoundCorner9}"  x:Name="Login" Grid.Column="0" Content="Login" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="30,18" FontFamily="Montserrat Black" Background="#FF919595" Foreground="#FF004D40" FontSize="18" FontWeight="Bold" Click="Login_Click"/>
+                    <Button Style="{DynamicResource RoundCorner8}"  x:Name="Register" Grid.Column="1" Content="Register" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="18,18" FontFamily="Montserrat Black" Background="#FF919595" Foreground="#FF004D40" FontSize="18" FontWeight="Bold" Click="Register_Click"/>
                 </Grid>
             </Grid>
         </Grid>
