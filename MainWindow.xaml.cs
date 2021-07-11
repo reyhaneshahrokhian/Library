@@ -26,6 +26,9 @@ namespace WpfProject
         private void Register_Click(object sender, RoutedEventArgs e)
         {
             //register butten click she bere too safheye Register 
+            NameBlock.Text = "";
+            passwordBlock.Text = "";
+
             Register r = new Register();
             r.Show();
             this.Close();
@@ -111,6 +114,11 @@ namespace WpfProject
                 }
                 connection.Close();
             }
+        }
+
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }
