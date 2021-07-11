@@ -67,6 +67,7 @@ namespace WpfProject
         }
         private void EditInfo_Click(object sender, RoutedEventArgs e)
         {
+            passwordContinueBox.Password = "";
             tab.SelectedIndex = 4;
         }
         private void AllBooks_Click(object sender, RoutedEventArgs e)
@@ -77,7 +78,7 @@ namespace WpfProject
                 Books.Clear();
             }
 
-            foreach (var item in employee.ShowBooks())
+            foreach (var item in Employee.ShowBooks())
             {
                 Books.Add(item);
             }
@@ -152,171 +153,175 @@ namespace WpfProject
         {
             //info of special user
 
-            var button = sender as Button;
-            List<string> infos = new List<string>();
-            infos = employee.ShowUniqueUser(button.Tag.ToString());
-
-            NameUserBlock.Text = infos[0];
-            PhoneUserBlock.Text = infos[1];
-            EmailUserBlock.Text = infos[3];
-            //  ImageUser.Source = new BitmapImage(new Uri(infos[4]));
-            SignInDateBlock.Text = infos[16];
-
-            GregorianCalendar time = new GregorianCalendar();
-            DateTime Today = DateTime.Now;
-            int days = 0;
-
-            if (infos[17] == "")
+            try
             {
-                RenewDateBlock.Text = "No renew yet!";
+                var button = sender as Button;
+                List<string> infos = new List<string>();
+                infos = employee.ShowUniqueUser(button.Tag.ToString());
 
-                string[] date = infos[16].Split('/');
-                DateTime dateValue = new DateTime(int.Parse(date[0]), int.Parse(date[1]), int.Parse(date[2]));
-                days = 365 - (Today.Date - dateValue.Date).Days;       
-            }
-            else
-            {
-                RenewDateBlock.Text = infos[17];
+                NameUserBlock.Text = infos[0];
+                PhoneUserBlock.Text = infos[1];
+                EmailUserBlock.Text = infos[3];
+                ImageUser.Source = new BitmapImage(new Uri(infos[4]));
+                SignInDateBlock.Text = infos[16];
 
-                string[] date = infos[17].Split('/');
-                DateTime dateValue = new DateTime(int.Parse(date[0]), int.Parse(date[1]), int.Parse(date[2]));
-                days = 365 - (Today.Date - dateValue.Date).Days;
-            }
+                GregorianCalendar time = new GregorianCalendar();
+                DateTime Today = DateTime.Now;
+                int days = 0;
 
-            if (days >= 0)
-            {
-                SubscriptionDaysBlock.Text = days.ToString();
-                SubscriptionDaysBlock.Foreground = Brushes.Green;
-            }
-            else
-            {
-                SubscriptionDaysBlock.Text = (-1 * days).ToString();
-                SubscriptionDaysBlock.Foreground = Brushes.Red;
-            }
-
-            if (infos[6] != null)
-            {
-                string[] date = infos[11].Split('/');
-                DateTime dateValue = new DateTime(int.Parse(date[0]), int.Parse(date[1]), int.Parse(date[2]));
-                int year = time.GetYear(dateValue);
-                int month = time.GetMonth(dateValue);
-                int day = time.GetDayOfMonth(dateValue);
-                string Time = year + "/" + month + "/" + day;
-
-                int delays = 7 - (Today.Date - dateValue.Date).Days;
-                BookName1Table.Text = infos[6];
-                BookReturnDate1Table.Text = Time;
-
-                if (delays >= 0)
+                if (infos[17] == "")
                 {
-                    BookDelay1Table.Text = delays.ToString();
-                    BookDelay1Table.Foreground = Brushes.Green;
+                    RenewDateBlock.Text = "No renew yet!";
+
+                    string[] date = infos[16].Split('/');
+                    DateTime dateValue = new DateTime(int.Parse(date[0]), int.Parse(date[1]), int.Parse(date[2]));
+                    days = 365 - (Today.Date - dateValue.Date).Days;
                 }
                 else
                 {
-                    BookDelay1Table.Text = (-1 * days).ToString();
-                    BookDelay1Table.Foreground = Brushes.Red;
+                    RenewDateBlock.Text = infos[17];
+
+                    string[] date = infos[17].Split('/');
+                    DateTime dateValue = new DateTime(int.Parse(date[0]), int.Parse(date[1]), int.Parse(date[2]));
+                    days = 365 - (Today.Date - dateValue.Date).Days;
                 }
-            }
-            if (infos[7] != null)
-            {
-                string[] date = infos[12].Split('/');
-                DateTime dateValue = new DateTime(int.Parse(date[0]), int.Parse(date[1]), int.Parse(date[2]));
-                int year = time.GetYear(dateValue);
-                int month = time.GetMonth(dateValue);
-                int day = time.GetDayOfMonth(dateValue);
-                string Time = year + "/" + month + "/" + day;
 
-                int delays = 7 - (Today.Date - dateValue.Date).Days;
-                BookName2Table.Text = infos[7];
-                BookReturnDate2Table.Text = Time;
-
-                if (delays >= 0)
+                if (days >= 0)
                 {
-                    BookDelay2Table.Text = delays.ToString();
-                    BookDelay2Table.Foreground = Brushes.Green;
+                    SubscriptionDaysBlock.Text = days.ToString();
+                    SubscriptionDaysBlock.Foreground = Brushes.Green;
                 }
                 else
                 {
-                    BookDelay2Table.Text = (-1 * days).ToString();
-                    BookDelay2Table.Foreground = Brushes.Red;
+                    SubscriptionDaysBlock.Text = (-1 * days).ToString();
+                    SubscriptionDaysBlock.Foreground = Brushes.Red;
+                }
+
+                if (infos[6] != "")
+                {
+                    string[] date = infos[11].Split('/');
+                    DateTime dateValue = new DateTime(int.Parse(date[0]), int.Parse(date[1]), int.Parse(date[2]));
+                    int year = time.GetYear(dateValue);
+                    int month = time.GetMonth(dateValue);
+                    int day = time.GetDayOfMonth(dateValue);
+                    string Time = year + "/" + month + "/" + day;
+
+                    int delays = 7 - (Today.Date - dateValue.Date).Days;
+                    BookName1Table.Text = infos[6];
+                    BookReturnDate1Table.Text = Time;
+
+                    if (delays >= 0)
+                    {
+                        BookDelay1Table.Text = delays.ToString();
+                        BookDelay1Table.Foreground = Brushes.DarkGreen;
+                    }
+                    else
+                    {
+                        BookDelay1Table.Text = (-1 * days).ToString();
+                        BookDelay1Table.Foreground = Brushes.Red;
+                    }
+                }
+                if (infos[7] != "")
+                {
+                    string[] date = infos[12].Split('/');
+                    DateTime dateValue = new DateTime(int.Parse(date[0]), int.Parse(date[1]), int.Parse(date[2]));
+                    int year = time.GetYear(dateValue);
+                    int month = time.GetMonth(dateValue);
+                    int day = time.GetDayOfMonth(dateValue);
+                    string Time = year + "/" + month + "/" + day;
+
+                    int delays = 7 - (Today.Date - dateValue.Date).Days;
+                    BookName2Table.Text = infos[7];
+                    BookReturnDate2Table.Text = Time;
+
+                    if (delays >= 0)
+                    {
+                        BookDelay2Table.Text = delays.ToString();
+                        BookDelay2Table.Foreground = Brushes.DarkGreen;
+                    }
+                    else
+                    {
+                        BookDelay2Table.Text = (-1 * days).ToString();
+                        BookDelay2Table.Foreground = Brushes.Red;
+                    }
+                }
+                if (infos[8] != "")
+                {
+                    string[] date = infos[13].Split('/');
+                    DateTime dateValue = new DateTime(int.Parse(date[0]), int.Parse(date[1]), int.Parse(date[2]));
+                    int year = time.GetYear(dateValue);
+                    int month = time.GetMonth(dateValue);
+                    int day = time.GetDayOfMonth(dateValue);
+                    string Time = year + "/" + month + "/" + day;
+
+                    int delays = 7 - (Today.Date - dateValue.Date).Days;
+                    BookName3Table.Text = infos[8];
+                    BookReturnDate3Table.Text = Time;
+
+                    if (delays >= 0)
+                    {
+                        BookDelay3Table.Text = delays.ToString();
+                        BookDelay3Table.Foreground = Brushes.DarkGreen;
+                    }
+                    else
+                    {
+                        BookDelay3Table.Text = (-1 * days).ToString();
+                        BookDelay3Table.Foreground = Brushes.Red;
+                    }
+
+                }
+                if (infos[9] != "")
+                {
+                    string[] date = infos[11].Split('/');
+                    DateTime dateValue = new DateTime(int.Parse(date[0]), int.Parse(date[1]), int.Parse(date[2]));
+                    int year = time.GetYear(dateValue);
+                    int month = time.GetMonth(dateValue);
+                    int day = time.GetDayOfMonth(dateValue);
+                    string Time = year + "/" + month + "/" + day;
+
+                    int delays = 7 - (Today.Date - dateValue.Date).Days;
+                    BookName4Table.Text = infos[9];
+                    BookReturnDate4Table.Text = Time;
+
+                    if (delays >= 0)
+                    {
+                        BookDelay4Table.Text = delays.ToString();
+                        BookDelay4Table.Foreground = Brushes.DarkGreen;
+                    }
+                    else
+                    {
+                        BookDelay4Table.Text = (-1 * days).ToString();
+                        BookDelay4Table.Foreground = Brushes.Red;
+                    }
+                }
+                if (infos[10] != "")
+                {
+                    string[] date = infos[11].Split('/');
+                    DateTime dateValue = new DateTime(int.Parse(date[0]), int.Parse(date[1]), int.Parse(date[2]));
+                    int year = time.GetYear(dateValue);
+                    int month = time.GetMonth(dateValue);
+                    int day = time.GetDayOfMonth(dateValue);
+                    string Time = year + "/" + month + "/" + day;
+
+                    int delays = 7 - (Today.Date - dateValue.Date).Days;
+                    BookName5Table.Text = infos[10];
+                    BookReturnDate5Table.Text = Time;
+
+                    if (delays >= 0)
+                    {
+                        BookDelay5Table.Text = delays.ToString();
+                        BookDelay5Table.Foreground = Brushes.DarkGreen;
+                    }
+                    else
+                    {
+                        BookDelay5Table.Text = (-1 * days).ToString();
+                        BookDelay5Table.Foreground = Brushes.Red;
+                    }
                 }
             }
-            if (infos[8] != null)
-            {
-                string[] date = infos[13].Split('/');
-                DateTime dateValue = new DateTime(int.Parse(date[0]), int.Parse(date[1]), int.Parse(date[2]));
-                int year = time.GetYear(dateValue);
-                int month = time.GetMonth(dateValue);
-                int day = time.GetDayOfMonth(dateValue);
-                string Time = year + "/" + month + "/" + day;
+            catch { }
 
-                int delays = 7 - (Today.Date - dateValue.Date).Days;
-                BookName3Table.Text = infos[8];
-                BookReturnDate3Table.Text = Time;
-
-                if (delays >= 0)
-                {
-                    BookDelay3Table.Text = delays.ToString();
-                    BookDelay3Table.Foreground = Brushes.Green;
-                }
-                else
-                {
-                    BookDelay3Table.Text = (-1 * days).ToString();
-                    BookDelay3Table.Foreground = Brushes.Red;
-                }
-
-            }
-            if (infos[9] != null)
-            {
-                string[] date = infos[11].Split('/');
-                DateTime dateValue = new DateTime(int.Parse(date[0]), int.Parse(date[1]), int.Parse(date[2]));
-                int year = time.GetYear(dateValue);
-                int month = time.GetMonth(dateValue);
-                int day = time.GetDayOfMonth(dateValue);
-                string Time = year + "/" + month + "/" + day;
-
-                int delays = 7 - (Today.Date - dateValue.Date).Days;
-                BookName4Table.Text = infos[9];
-                BookReturnDate4Table.Text = Time;
-
-                if (delays >= 0)
-                {
-                    BookDelay4Table.Text = delays.ToString();
-                    BookDelay4Table.Foreground = Brushes.Green;
-                }
-                else
-                {
-                    BookDelay4Table.Text = (-1 * days).ToString();
-                    BookDelay4Table.Foreground = Brushes.Red;
-                }
-            }
-            if (infos[10] != null)
-            {
-                string[] date = infos[11].Split('/');
-                DateTime dateValue = new DateTime(int.Parse(date[0]), int.Parse(date[1]), int.Parse(date[2]));
-                int year = time.GetYear(dateValue);
-                int month = time.GetMonth(dateValue);
-                int day = time.GetDayOfMonth(dateValue);
-                string Time = year + "/" + month + "/" + day;
-
-                int delays = 7 - (Today.Date - dateValue.Date).Days;
-                BookName5Table.Text = infos[10];
-                BookReturnDate5Table.Text = Time;
-
-                if (delays >= 0)
-                {
-                    BookDelay5Table.Text = delays.ToString();
-                    BookDelay5Table.Foreground = Brushes.Green;
-                }
-                else
-                {
-                    BookDelay5Table.Text = (-1 * days).ToString();
-                    BookDelay5Table.Foreground = Brushes.Red;
-                }
-            }
-
-            tab.SelectedIndex = 4;
+            tab.SelectedIndex = 5;
         }
         private void DELETE_Click(object sender, RoutedEventArgs e)
         {
@@ -343,7 +348,7 @@ namespace WpfProject
                 NameEditInfo.Text = employee.Name;
                 EmailEditInfoBox.Text = employee.Email;
                 PhoneEditInfoBox.Text = employee.PhoneNumber;
-            //    personImage.Source = new BitmapImage(new Uri(employee.PictureURL));
+                personImage.Source = new BitmapImage(new Uri(employee.PictureURL));
                 tab.SelectedIndex = 6;
             }
             else
@@ -355,47 +360,59 @@ namespace WpfProject
         {
             //picture choosen from their labtop and added to sql
 
-            OpenFileDialog op = new OpenFileDialog();
-            op.Title = "Select a picture";
-            op.Filter = "All supported graphics|*.jpg;*.jpeg;*.png|" +
-              "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
-              "Portable Network Graphic (*.png)|*.png";
-            if (op.ShowDialog() == true)
+            try
             {
-                personImage.Source = new BitmapImage(new Uri(op.FileName));
+                OpenFileDialog op = new OpenFileDialog();
+                op.Title = "Select a picture";
+                op.Filter = "All supported graphics|*.jpg;*.jpeg;*.png|" +
+                  "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
+                  "Portable Network Graphic (*.png)|*.png";
+                if (op.ShowDialog() == true)
+                {
+                    personImage.Source = new BitmapImage(new Uri(op.FileName));
+                }
             }
+            catch { }
         }
         private void DoneChange_Click(object sender, RoutedEventArgs e)
         {
             //checking correction of email and phone number and change info of employee
 
-            if (!Person.CheckEmail(EmailEditInfoBox.Text))
+            try
             {
-                EmailEditBlock.Text = "The email is invalid";
-                EmailEditBlock.Foreground = Brushes.Red;
-            }
-            else
-            {
-                EmailEditBlock.Text = "Characters or numbers or - or _";
-                EmailEditBlock.Foreground = new System.Windows.Media.SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF397F65"));
-            }
+                if (!Person.CheckEmail(EmailEditInfoBox.Text))
+                {
+                    EmailEditBlock.Text = "The email is invalid";
+                    EmailEditBlock.Foreground = Brushes.Red;
+                }
+                else
+                {
+                    EmailEditBlock.Text = "Characters or numbers or - or _";
+                    EmailEditBlock.Foreground = new System.Windows.Media.SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF397F65"));
+                }
 
-            if (!Person.CheckPhoneNumber(PhoneEditInfoBox.Text))
-            {
-                PhoneEditBlock.Text = "The phone number is invalid";
-                PhoneEditBlock.Foreground = Brushes.Red;
-            }
-            else
-            {
-                PhoneEditBlock.Text = "Contain 11number.start with 09";
-                PhoneEditBlock.Foreground = new System.Windows.Media.SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF397F65"));
-            }
+                if (!Person.CheckPhoneNumber(PhoneEditInfoBox.Text))
+                {
+                    PhoneEditBlock.Text = "The phone number is invalid";
+                    PhoneEditBlock.Foreground = Brushes.Red;
+                }
+                else
+                {
+                    PhoneEditBlock.Text = "Contain 11number.start with 09";
+                    PhoneEditBlock.Foreground = new System.Windows.Media.SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF397F65"));
+                }
 
-            if(Person.CheckEmail(EmailEditInfoBox.Text) && Person.CheckPhoneNumber(PhoneEditInfoBox.Text))
-            {
-                employee.EditInfo(EmailEditInfoBox.Text, PhoneEditInfoBox.Text, personImage.Source.ToString());
-                tab.SelectedIndex = 0;
+                if (Person.CheckEmail(EmailEditInfoBox.Text) && Person.CheckPhoneNumber(PhoneEditInfoBox.Text))
+                {
+                    employee.EditInfo(EmailEditInfoBox.Text, PhoneEditInfoBox.Text, personImage.Source.ToString());
+                    tab.SelectedIndex = 0;
+                }
             }
+            catch { }
+        }
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

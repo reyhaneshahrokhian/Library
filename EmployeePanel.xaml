@@ -34,6 +34,7 @@
             </TabControl.ItemContainerStyle>
             <TabItem>
                 <Grid Background="#FF397F65">
+                    <Button Content="Exit" FontSize="20" FontFamily="Showcard Gothic" Background="#FF6C0303" HorizontalAlignment="Left" Margin="813,10,0,0" VerticalAlignment="Top" Width="65" Height="30" RenderTransformOrigin="0.807,0.625" Click="Exit_Click"/>
                 </Grid>
             </TabItem>
             <TabItem>
@@ -49,7 +50,7 @@
                                 <ItemsControl ItemsSource="{Binding Books, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding}" FontFamily="Rockwell Extra Bold" VerticalAlignment="Center" HorizontalAlignment="Left" Background="#FF919595" Foreground="#FF004D40" FontSize="30" Padding="0,20,300,20"></TextBlock>
+                                            <TextBlock Text="{Binding}" FontFamily="Rockwell Extra Bold" VerticalAlignment="Center" HorizontalAlignment="Left" Background="#FF919595" Foreground="#FF004D40" FontSize="25" Padding="0,20,500,20"></TextBlock>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
@@ -66,6 +67,7 @@
                             <Button Style="{DynamicResource RoundCornerEmpBook2}" Grid.Row="2" Content="Available Books" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="83,10,83,10" FontFamily="Montserrat Black" Background="#FFC29696" Foreground="#004D40" FontSize="20" FontWeight="Bold" Margin="0,29,0,0" Height="70" Click="AvailableBooks_Click"/>
                         </Grid>
                     </Grid>
+                    <Button Content="Exit" FontSize="20" FontFamily="Showcard Gothic" Background="#FF6C0303" HorizontalAlignment="Left" Margin="813,10,0,0" VerticalAlignment="Top" Width="65" Height="30" RenderTransformOrigin="0.807,0.625" Click="Exit_Click"/>
                 </Grid>
             </TabItem>
             <TabItem>
@@ -87,7 +89,7 @@
                                                         <ColumnDefinition/>
                                                         <ColumnDefinition/>
                                                     </Grid.ColumnDefinitions>
-                                                    <TextBlock Grid.Column="0" Text="{Binding}" FontFamily="Rockwell Extra Bold" VerticalAlignment="Center" HorizontalAlignment="Left" Background="#FF919595" Foreground="#FF004D40" FontSize="30" Padding="0,20,300,20"></TextBlock>
+                                                    <TextBlock Grid.Column="0" Text="{Binding}" FontFamily="Rockwell Extra Bold" VerticalAlignment="Center" HorizontalAlignment="Left" Background="#FF919595" Foreground="#FF004D40" FontSize="25" Padding="0,20,500,20"></TextBlock>
                                                     <Button Grid.Column="1" Tag="{Binding}"  Name="ShowUser" Content ="Show" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="30,20" FontFamily="Montserrat Black" Background="#FF919595" Foreground="#FF004D40" FontSize="25" FontWeight="Bold" Click="SHOWuser_Click"></Button>
                                                 </Grid>
                                             </DataTemplate>
@@ -107,6 +109,7 @@
                             <Button Style="{DynamicResource RoundCornerEmpBook2}" Grid.Row="2" Content="Late Returning" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="75,10,75,10" FontFamily="Montserrat Black" Background="#FFC29696" Foreground="#004D40" FontSize="20" FontWeight="Bold" Margin="0,30,0,0" Height="70" Click="LateReturning_Click"/>
                         </Grid>
                     </Grid>
+                    <Button Content="Exit" FontSize="20" FontFamily="Showcard Gothic" Background="#FF6C0303" HorizontalAlignment="Left" Margin="813,10,0,0" VerticalAlignment="Top" Width="65" Height="30" RenderTransformOrigin="0.807,0.625" Click="Exit_Click"/>
                 </Grid>
             </TabItem>
             <TabItem>
@@ -116,6 +119,7 @@
                     </Grid.Background>
                     <Rectangle VerticalAlignment="Top" Margin="0,130" Width="350" Height="100" Fill="#FFC29696" RadiusX="20" RadiusY="20"></Rectangle>
                     <TextBlock Margin="0,160" Name="Show_Money" FontSize="25" Foreground="#004D40" HorizontalAlignment="Center" FontFamily="Segoe UI Black"></TextBlock>
+                    <Button Content="Exit" FontSize="20" FontFamily="Showcard Gothic" Background="#FF6C0303" HorizontalAlignment="Left" Margin="813,10,0,0" VerticalAlignment="Top" Width="65" Height="30" RenderTransformOrigin="0.807,0.625" Click="Exit_Click"/>
                 </Grid>
             </TabItem>
             <TabItem>
@@ -132,12 +136,13 @@
                                 <TextBlock Grid.Row="0" Text="Enter your Password :" VerticalAlignment="Center" FontSize="22" Foreground="#004D40" FontFamily="Segoe UI Black" Margin="30,8,5,1"></TextBlock>
                                 <StackPanel Grid.Row="1">
                                     <TextBlock x:Name="passwordContinueBlock"  FontSize="17" Margin="30,-5,0,0" Foreground="Red"  />
-                                    <PasswordBox Style="{StaticResource roundcornerpassword}" x:Name="passwordContinueBox"  Width="290" Height="60" Margin="30,0,30,73" Background="#FF2F7870" FontSize="50" Foreground="#FFABADB3" FontFamily="Montserrat Black" PasswordChar="*"/>
+                                    <PasswordBox Style="{StaticResource roundcornerpassword1}" x:Name="passwordContinueBox"  Width="290" Height="60" Margin="30,0,30,73" Background="#FF2F7870" FontSize="50" Foreground="#FFABADB3" FontFamily="Montserrat Black" PasswordChar="*"/>
                                 </StackPanel>
                                 <Button Style="{DynamicResource RoundCorner1}" Grid.Row="2" Content="Continue" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="95,10,95,10" FontFamily="Montserrat Black" Background="#FFABADB3" Foreground="#004D40" FontSize="22" FontWeight="Bold" Height="60" Margin="30,10,34,63" Click="Continue_Click"/>
                             </Grid>
                         </Grid>
                     </Grid>
+                    <Button Content="Exit" FontSize="20" FontFamily="Showcard Gothic" Background="#FF6C0303" HorizontalAlignment="Left" Margin="813,10,0,0" VerticalAlignment="Top" Width="65" Height="30" RenderTransformOrigin="0.807,0.625" Click="Exit_Click"/>
                 </Grid>
             </TabItem>
             <TabItem>
@@ -197,7 +202,7 @@
                                     <TextBlock Text="  to delete user :" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" Foreground="#FFC29696" FontFamily="Segoe UI Black" Margin="0,0,3,1"></TextBlock>
                                 </StackPanel>
                                 <StackPanel Grid.Column="1">
-                                    <PasswordBox Style="{StaticResource roundcornerpassword}"  x:Name="PassDeleteBox"  Width="120" Height="58" Margin="10,16,10,20" Background="#FFC29696" FontSize="30" Foreground="#FFABADB3" FontFamily="Montserrat Black" />
+                                    <PasswordBox Style="{StaticResource roundcornerpassword}"  Padding="1,9,0,0"  x:Name="PassDeleteBox"  Width="120" Height="58" Margin="10,16,10,20" Background="#FFC29696" FontSize="25" Foreground="#004D40" FontFamily="Montserrat Black" />
                                     <TextBlock x:Name="PassDeleteBlock" FontSize="17" Margin="15,-20,0,0" Foreground="Red"/>
                                 </StackPanel>
                                 <Button Style="{DynamicResource RoundCorner2}" Grid.Column="2" Content="DELETE" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="30,10,30,10" FontFamily="Montserrat Black" Background="#FFC29696" Foreground="#004D40" FontSize="18" FontWeight="Bold" Height="60" Margin="0,5,10,20" Click="DELETE_Click"/>
@@ -378,7 +383,9 @@
                     <Grid Grid.Column="2">
                         <Button Style="{DynamicResource RoundCorner3}" Content="Done" FontFamily="Montserrat Black" Background="#FFABADB3" Foreground="#004D40" FontSize="30" FontWeight="Bold" Height="60" Width="160" Margin="0,350,0,0" Click="DoneChange_Click" />
                     </Grid>
+                    <Button Grid.Column="2" Content="Exit" FontSize="20" FontFamily="Showcard Gothic" Background="#FF6C0303" HorizontalAlignment="Left" Margin="133,10,0,0" VerticalAlignment="Top" Width="65" Height="30" RenderTransformOrigin="140,0.625" Click="Exit_Click"/>
                 </Grid>
+
             </TabItem>
         </TabControl>
     </Grid>
