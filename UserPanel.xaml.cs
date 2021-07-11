@@ -36,63 +36,79 @@ namespace WpfProject
         private void MyBook_Click(object sender, RoutedEventArgs e)
         {
             //show all the borrowed books
-            if (Books != null && Books.Count > 0)
+
+            try
             {
-                Books.Clear();
+                returnM.Text = "";
+                if (Books != null && Books.Count > 0)
+                {
+                    Books.Clear();
+                }
+                foreach (var item in user.ShowBorrowedBooks())
+                {
+                    Books.Add(item);
+                }
+                if (Books != null && Books.Count > 0)
+                {
+                    ComboBox.ItemsSource = Books;
+                }
             }
-            foreach (var item in user.ShowBorrowedBooks())
-            {
-                Books.Add(item);
-            }
-            if (Books != null && Books.Count > 0)
-            {
-                ComboBox.ItemsSource = Books;
-            }
+            catch { }
 
             tab.SelectedIndex = 1;
         }
         private void AllBook_Click(object sender, RoutedEventArgs e)
         {
             //show all the books in the library
-            if (Books != null && Books.Count > 0)
+            try
             {
-                Books.Clear();
-            }
+                searchbookBox.Text = "";
+                if (Books != null && Books.Count > 0)
+                {
+                    Books.Clear();
+                }
 
-            foreach (var item in user.ShowAvailableBooks())
-            {
-                Books.Add(item);
+                foreach (var item in user.ShowAvailableBooks())
+                {
+                    Books.Add(item);
+                }
             }
+            catch { }
             tab.SelectedIndex = 2;
         }
         private void Sub_Click(object sender, RoutedEventArgs e)
         {
             // go to subcription page
+
+            try
+            {
+                money.Text = user.ShowCredit();
+
+                if (user.LeftSubscriptionDays() < 0)
+                {
+                    Days.Text = (-1 * user.LeftSubscriptionDays()).ToString();
+                    Days.Foreground = Brushes.Green;
+                }
+                else
+                {
+                    Days.Text = user.LeftSubscriptionDays().ToString();
+                    Days.Foreground = Brushes.Red;
+                }
+            }
+            catch { }
             tab.SelectedIndex = 3;
-
-            money.Text = user.ShowCredit();
-
-            if (user.LeftSubscriptionDays() < 0)
-            {
-                Days.Text = (-1 * user.LeftSubscriptionDays()).ToString();
-                Days.Foreground = Brushes.Green;
-            }
-            else
-            {
-                Days.Text =  user.LeftSubscriptionDays().ToString();
-                Days.Foreground = Brushes.Red;
-            }
         }
         private void Wallet_Click(object sender, RoutedEventArgs e)
         {
             //go to wallet page
-            tab.SelectedIndex = 4;
-
+            PaidAmount.Text = "";
             Money.Text = user.ShowCredit();
+            tab.SelectedIndex = 4;
         }
         private void EditInfo_Click(object sender, RoutedEventArgs e)
         {
             //go to edit information page
+            passwordContinueBox.Password = "";
             tab.SelectedIndex = 5;
             NameEditInfo.Text = user.Name;
         }
@@ -101,20 +117,31 @@ namespace WpfProject
             //go to pay tab
 
             PaidAmount.Text = amountMoney.Text;
+            Account1.Text = "";
+            Account2.Text = "";
+            Account3.Text = "";
+            Account4.Text = "";
+            CvvBox.Text = "";
+            YearBox.Text = "";
+            MonthBox.Text = "";
             tab.SelectedIndex = 6;
         }
         private void ChangePicture_Click(object sender, RoutedEventArgs e)
         {
             //change the picture in info tab
-            OpenFileDialog op = new OpenFileDialog();
-            op.Title = "Select a picture";
-            op.Filter = "All supported graphics|*.jpg;*.jpeg;*.png|" +
-              "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
-              "Portable Network Graphic (*.png)|*.png";
-            if (op.ShowDialog() == true)
+            try
             {
-                personImage.Source = new BitmapImage(new Uri(op.FileName));
+                OpenFileDialog op = new OpenFileDialog();
+                op.Title = "Select a picture";
+                op.Filter = "All supported graphics|*.jpg;*.jpeg;*.png|" +
+                  "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
+                  "Portable Network Graphic (*.png)|*.png";
+                if (op.ShowDialog() == true)
+                {
+                    personImage.Source = new BitmapImage(new Uri(op.FileName));
+                }
             }
+            catch { }
         }
         /****************************************************************************************************************************/
         private void Return_Click(object sender, RoutedEventArgs e)
@@ -157,6 +184,8 @@ namespace WpfProject
                 }
                 Books.Add(user.SearchBookByWriter(searchbookBox.Text));    
             }
+
+            searchbookBox.Text = "";
         }
         private void SearchByname_Check(object sender, RoutedEventArgs e)
         {
@@ -185,97 +214,118 @@ namespace WpfProject
         {
             int defiedMoneyForExtendSub = 100;
 
-            if (long.Parse(user.ShowCredit()) >= defiedMoneyForExtendSub)
+            try
             {
-                user.PaySubscription("100");
+                if (long.Parse(user.ShowCredit()) >= defiedMoneyForExtendSub)
+                {
+                    user.PaySubscription("100");
+                }
+                else
+                {
+                    //show not enough money(write money needed)
+                    ExtendsubM.Text = "deficit : " + (long.Parse(user.ShowCredit()) - defiedMoneyForExtendSub).ToString();
+                }
             }
-            else
-            {
-                //show not enough money(write money needed)
-                ExtendsubM.Text = "deficit : " + (long.Parse(user.ShowCredit()) - defiedMoneyForExtendSub).ToString();
-            }
+            catch { }
         }
         private void Continue_Click(object sender, RoutedEventArgs e)
         {
             // unlock the other half of tab
             //if the info is correct
-            if (passwordBox.Password == user.Password)
+            try
             {
-                passwordContinueBlock.Text = " ";
-                NameEditInfo.Text = user.Name;
-                EmailEditInfoBox.Text = user.Email;
-                PhoneEditInfoBox.Text = user.PhoneNumber;
-                personImage.Source = new BitmapImage(new Uri(user.PictureURL));
-                tab.SelectedIndex = 7;
+                if (passwordContinueBox.Password == user.Password)
+                {
+                    passwordContinueBlock.Text = " ";
+                    NameEditInfo.Text = user.Name;
+                    EmailEditInfoBox.Text = user.Email;
+                    PhoneEditInfoBox.Text = user.PhoneNumber;
+                    personImage.Source = new BitmapImage(new Uri(user.PictureURL));
+                    tab.SelectedIndex = 7;
+                }
+                else
+                {
+                    //show wrong password
+                    passwordContinueBlock.Text = "InCorrect password !";
+                }
             }
-            else
-            {
-                //show wrong password
-                passwordContinueBlock.Text = "InCorrect password !";
-            }
+            catch { }
         }
         private void PayEnd_Click(object sender, RoutedEventArgs e)
         {
             //increse money in the wallet 
 
             string CreditNum = Account1.Text + Account2.Text + Account3.Text + Account4.Text;
-            if (!Pay.CheckCreditNumber(CreditNum))
-                AccountNumberBlock.Text = "The account number is invalid";
-
-            else
-                AccountNumberBlock.Text = " ";
-
-            if (!Pay.CheckCVV(CvvBox.Text))
-                cvvBlock.Text = "The CVV is invalid";
-
-            else
-                cvvBlock.Text = " ";
-
-            if (!Pay.CheckExpireDate(int.Parse(YearBox.Text), int.Parse(MonthBox.Text)))
-                DateBlock.Text = "The expire date has pass over";
-
-            else
-                DateBlock.Text = " ";
-
-
-            if (Pay.CheckCreditNumber(CreditNum) && Pay.CheckCVV(CvvBox.Text) && Pay.CheckExpireDate(int.Parse(YearBox.Text), int.Parse(MonthBox.Text)))
+            try
             {
-                user.IncreseCredit(amountMoney.Text);
-            }
+                if (!Pay.CheckCreditNumber(CreditNum))
+                    AccountNumberBlock.Text = "The account number is invalid";
 
+                else
+                    AccountNumberBlock.Text = " ";
+
+                if (!Pay.CheckCVV(CvvBox.Text))
+                    cvvBlock.Text = "The CVV is invalid";
+
+                else
+                    cvvBlock.Text = " ";
+
+                if (!Pay.CheckExpireDate(int.Parse(YearBox.Text), int.Parse(MonthBox.Text)))
+                    DateBlock.Text = "The expire date has pass over";
+
+                else
+                    DateBlock.Text = " ";
+
+
+                if (Pay.CheckCreditNumber(CreditNum) && Pay.CheckCVV(CvvBox.Text) && Pay.CheckExpireDate(int.Parse(YearBox.Text), int.Parse(MonthBox.Text)))
+                {
+                    user.IncreseCredit(amountMoney.Text);
+                }
+            }
+            catch  { }
+
+            PaidAmount.Text = "";
+            Money.Text = user.ShowCredit();
             tab.SelectedIndex = 4;
         }
         private void DoneChange_Click(object sender, RoutedEventArgs e)
         {
             //checking correction of email and phone number and change info of user
+            try
+            {
+                if (!Person.CheckEmail(EmailEditInfoBox.Text))
+                {
+                    EmailEditBlock.Text = "The email is invalid";
+                    EmailEditBlock.Foreground = Brushes.Red;
+                }
+                else
+                {
+                    EmailEditBlock.Text = "Characters or numbers or - or _";
+                    EmailEditBlock.Foreground = new System.Windows.Media.SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF397F65"));
+                }
 
-            if (!Person.CheckEmail(EmailEditInfoBox.Text))
-            {
-                EmailEditBlock.Text = "The email is invalid";
-                EmailEditBlock.Foreground = Brushes.Red;
-            }
-            else
-            {
-                EmailEditBlock.Text = "Characters or numbers or - or _";
-                EmailEditBlock.Foreground = new System.Windows.Media.SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF397F65"));
-            }
+                if (!Person.CheckPhoneNumber(PhoneEditInfoBox.Text))
+                {
+                    PhoneEditBlock.Text = "The phone number is invalid";
+                    PhoneEditBlock.Foreground = Brushes.Red;
+                }
+                else
+                {
+                    PhoneEditBlock.Text = "Contain 11number.start with 09";
+                    PhoneEditBlock.Foreground = new System.Windows.Media.SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF397F65"));
+                }
 
-            if (!Person.CheckPhoneNumber(PhoneEditInfoBox.Text))
-            {
-                PhoneEditBlock.Text = "The phone number is invalid";
-                PhoneEditBlock.Foreground = Brushes.Red;
+                if (Person.CheckEmail(EmailEditInfoBox.Text) && Person.CheckPhoneNumber(PhoneEditInfoBox.Text))
+                {
+                    user.EditInfo(EmailEditInfoBox.Text, PhoneEditInfoBox.Text, personImage.Source.ToString());
+                    tab.SelectedIndex = 0;
+                }
             }
-            else
-            {
-                PhoneEditBlock.Text = "Contain 11number.start with 09";
-                PhoneEditBlock.Foreground = new System.Windows.Media.SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF397F65"));
-            }
-
-            if (Person.CheckEmail(EmailEditInfoBox.Text) && Person.CheckPhoneNumber(PhoneEditInfoBox.Text))
-            {
-                user.EditInfo(EmailEditInfoBox.Text, PhoneEditInfoBox.Text, personImage.Source.ToString());
-                tab.SelectedIndex = 0;
-            }
+            catch { }
+        }
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }
