@@ -22,7 +22,6 @@ namespace WpfProject
             this.who = who;
             InitializeComponent();
         }
-
         private void Sure_Click(object sender, RoutedEventArgs e)
         {
             if (who == "employee")
@@ -57,7 +56,6 @@ namespace WpfProject
             }
             this.Close();
         }
-
         private void Cancle_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
