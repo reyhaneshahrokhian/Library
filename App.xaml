@@ -59,6 +59,7 @@ StartupUri="MainWindow.xaml">
                 </Setter.Value>
             </Setter>
         </Style>
+
         <Style x:Key="RoundCornerEmp" TargetType="{x:Type Button}">
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -290,7 +291,7 @@ StartupUri="MainWindow.xaml">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
                         <Grid x:Name="grid">
-                            <Border x:Name="border" CornerRadius="8" BorderBrush="#FF397F65" BorderThickness="2" Padding="95,10,95,10">
+                            <Border x:Name="border" CornerRadius="8" BorderBrush="#FF919595" BorderThickness="2" Padding="95,10,95,10">
                                 <Border.Background>
                                     <RadialGradientBrush GradientOrigin="0.496,1.052">
                                         <RadialGradientBrush.RelativeTransform>
@@ -392,30 +393,62 @@ StartupUri="MainWindow.xaml">
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style TargetType="PasswordBox" x:Key="roundcornerpassword">
-            <Setter Property="PasswordChar" Value="●"/>
-            <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Style x:Key="RoundCornerAd" TargetType="{x:Type Button}">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Padding" Value="1"/>
-            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-            <Setter Property="AllowDrop" Value="true"/>
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate TargetType="PasswordBox">
-                        <Border CornerRadius="5" x:Name="Bd" Background="#FF2F7870" BorderBrush="Gray" BorderThickness="1" OpacityMask="{x:Null}">
-                            <ScrollViewer SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" x:Name="PART_ContentHost" />
-                        </Border>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid x:Name="grid">
+                            <Border x:Name="border" CornerRadius="8" BorderBrush="#FF397F65" BorderThickness="2" Padding="18,0,18,0">
+                                <Border.Background>
+                                    <RadialGradientBrush GradientOrigin="0.496,1.052">
+                                        <RadialGradientBrush.RelativeTransform>
+                                            <TransformGroup>
+                                                <ScaleTransform CenterX="0.5" CenterY="0.5" 
+                                                        ScaleX="1.5" ScaleY="1.5"/>
+                                                <TranslateTransform X="0.02" Y="0.3"/>
+                                            </TransformGroup>
+                                        </RadialGradientBrush.RelativeTransform>
+                                        <GradientStop Offset="0.3" Color="#FF919595"/>
+                                    </RadialGradientBrush>
+                                </Border.Background>
+                                <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          TextElement.FontWeight="Bold">
+                                </ContentPresenter>
+                            </Border>
+                        </Grid>
                         <ControlTemplate.Triggers>
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
-                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" TargetName="border">
+                                    <Setter.Value>
+                                        <RadialGradientBrush GradientOrigin="0.496,1.052">
+                                            <RadialGradientBrush.RelativeTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="1.5" ScaleY="1.5"/>
+                                                    <TranslateTransform X="0.02" Y="0.3"/>
+                                                </TransformGroup>
+                                            </RadialGradientBrush.RelativeTransform>
+                                            <GradientStop Color="#00000000" Offset="1"/>
+                                            <GradientStop Color="#FF303030" Offset="0.3"/>
+                                        </RadialGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="BorderBrush" TargetName="border" Value="#FF33962B"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" TargetName="grid" Value="0.25"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
+
         <Style TargetType="PasswordBox" x:Key="roundcornerpassword1">
             <Setter Property="PasswordChar" Value="●"/>
             <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
@@ -427,7 +460,7 @@ StartupUri="MainWindow.xaml">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="PasswordBox">
-                        <Border CornerRadius="8" x:Name="Bd" Background="#FF2F7870" BorderBrush="Gray" BorderThickness="1" OpacityMask="{x:Null}">
+                        <Border CornerRadius="8" x:Name="Bd" Background="#FF2F7870" BorderBrush="#FFC29696" BorderThickness="1" OpacityMask="{x:Null}">
                             <ScrollViewer SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" x:Name="PART_ContentHost" />
                         </Border>
                         <ControlTemplate.Triggers>
@@ -440,6 +473,7 @@ StartupUri="MainWindow.xaml">
                 </Setter.Value>
             </Setter>
         </Style>
+        
         <Style x:Key="RoundCornerAdBook" TargetType="{x:Type Button}">
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -491,61 +525,6 @@ StartupUri="MainWindow.xaml">
                                 <Setter Property="Opacity" TargetName="grid" Value="0.25"/>
                             </Trigger>
 
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="RoundCornerAd" TargetType="{x:Type Button}">
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="1"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Grid x:Name="grid">
-                            <Border x:Name="border" CornerRadius="8" BorderBrush="#FF397F65" BorderThickness="2" Padding="18,0,18,0">
-                                <Border.Background>
-                                    <RadialGradientBrush GradientOrigin="0.496,1.052">
-                                        <RadialGradientBrush.RelativeTransform>
-                                            <TransformGroup>
-                                                <ScaleTransform CenterX="0.5" CenterY="0.5" 
-                                                        ScaleX="1.5" ScaleY="1.5"/>
-                                                <TranslateTransform X="0.02" Y="0.3"/>
-                                            </TransformGroup>
-                                        </RadialGradientBrush.RelativeTransform>
-                                        <GradientStop Offset="0.3" Color="#FF919595"/>
-                                    </RadialGradientBrush>
-                                </Border.Background>
-                                <ContentPresenter HorizontalAlignment="Center"
-                                          VerticalAlignment="Center"
-                                          TextElement.FontWeight="Bold">
-                                </ContentPresenter>
-                            </Border>
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Background" TargetName="border">
-                                    <Setter.Value>
-                                        <RadialGradientBrush GradientOrigin="0.496,1.052">
-                                            <RadialGradientBrush.RelativeTransform>
-                                                <TransformGroup>
-                                                    <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="1.5" ScaleY="1.5"/>
-                                                    <TranslateTransform X="0.02" Y="0.3"/>
-                                                </TransformGroup>
-                                            </RadialGradientBrush.RelativeTransform>
-                                            <GradientStop Color="#00000000" Offset="1"/>
-                                            <GradientStop Color="#FF303030" Offset="0.3"/>
-                                        </RadialGradientBrush>
-                                    </Setter.Value>
-                                </Setter>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="BorderBrush" TargetName="border" Value="#FF33962B"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Opacity" TargetName="grid" Value="0.25"/>
-                            </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
@@ -720,48 +699,37 @@ StartupUri="MainWindow.xaml">
                 </Setter.Value>
             </Setter>
         </Style>
-
         <Style TargetType="TextBox" x:Key="Textbox1">
             <Setter Property="Padding" Value="7"/>
             <Setter Property="Margin" Value="5"/>
-            <Setter Property="Foreground" Value="#FF2F7870"/>
+            <Setter Property="Foreground" Value="Black"/>
             <Setter Property="FontSize" Value="20"/>
-            <Setter Property="MinHeight" Value="20"/>
+            <Setter Property="MinHeight" Value="50"/>
             <Setter Property="MinWidth" Value="250"/>
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type TextBox}">
                         <Border x:Name="border"
-CornerRadius="10"
-BorderBrush="#FF2F7870"
-BorderThickness="2"
-Background="#FF2F7870"
->
+                            CornerRadius="10"
+                            BorderBrush="#FFC29696"
+                            BorderThickness="2"
+                            Background="#FF2F7870"
+                            >               
                             <ScrollViewer x:Name="PART_ContentHost"
-Focusable="false"
-HorizontalScrollBarVisibility="Hidden"
-VerticalScrollBarVisibility="Hidden"/>
+                                Focusable="false"
+                                HorizontalScrollBarVisibility="Hidden"
+                                VerticalScrollBarVisibility="Hidden"/>
                         </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="true">
-                                <Setter Property="BorderBrush" TargetName="border" Value="Red"/>
-                                <Setter Property="Foreground" Value="Red" />
-
-                            </Trigger>
-                            <Trigger Property="IsFocused" Value="true">
-                                <Setter Property="Foreground" Value="Blue" />
-                                <Setter Property="BorderBrush" TargetName="border" Value="Blue"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
+
         <Style TargetType="TextBox" x:Key="Textbox2">
             <Setter Property="Padding" Value="2"/>
             <Setter Property="Margin" Value="5"/>
-            <Setter Property="Foreground" Value="#FF2F7870"/>
+            <Setter Property="Foreground" Value="#FFBBBBBB"/>
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="MinHeight" Value="20"/>
             <Setter Property="MinWidth" Value="200"/>
@@ -770,15 +738,15 @@ VerticalScrollBarVisibility="Hidden"/>
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type TextBox}">
                         <Border x:Name="border"
-CornerRadius="16"
-BorderBrush="#FF2F7870"
-BorderThickness="2"
-Background="#FF2F7870"
->
+                                CornerRadius="16"
+                                BorderBrush="#FFC29696"
+                                BorderThickness="2"
+                                Background="#FF2F7870"
+                                >           
                             <ScrollViewer x:Name="PART_ContentHost"
-Focusable="false"
-HorizontalScrollBarVisibility="Hidden"
-VerticalScrollBarVisibility="Hidden"/>
+                                Focusable="false"
+                                HorizontalScrollBarVisibility="Hidden"
+                                VerticalScrollBarVisibility="Hidden"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="true">
@@ -787,14 +755,15 @@ VerticalScrollBarVisibility="Hidden"/>
 
                             </Trigger>
                             <Trigger Property="IsFocused" Value="true">
-                                <Setter Property="Foreground" Value="Blue" />
-                                <Setter Property="BorderBrush" TargetName="border" Value="Blue"/>
+                                <Setter Property="Foreground" Value="#FFC29696" />
+                                <Setter Property="BorderBrush" TargetName="border" Value="#FFC29696"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
-            </Setter>
+                </Setter>
         </Style>
+
         <Style TargetType="TextBox" x:Key="Textbox3">
             <Setter Property="Padding" Value="2"/>
             <Setter Property="Margin" Value="3"/>
@@ -807,15 +776,15 @@ VerticalScrollBarVisibility="Hidden"/>
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type TextBox}">
                         <Border x:Name="border"
-CornerRadius="10"
-BorderBrush="#FF2F7870"
-BorderThickness="2"
-Background="#FF2F7870"
->
+                                CornerRadius="10"
+                                BorderBrush="#FF2F7870"
+                                BorderThickness="2"
+                                Background="#FF2F7870"
+                                >
                             <ScrollViewer x:Name="PART_ContentHost"
-Focusable="false"
-HorizontalScrollBarVisibility="Hidden"
-VerticalScrollBarVisibility="Hidden"/>
+                                Focusable="false"
+                                HorizontalScrollBarVisibility="Hidden"
+                                VerticalScrollBarVisibility="Hidden"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="true">
@@ -824,19 +793,20 @@ VerticalScrollBarVisibility="Hidden"/>
 
                             </Trigger>
                             <Trigger Property="IsFocused" Value="true">
-                                <Setter Property="Foreground" Value="Blue" />
-                                <Setter Property="BorderBrush" TargetName="border" Value="Blue"/>
+                                <Setter Property="Foreground" Value="#FFC29696" />
+                                <Setter Property="BorderBrush" TargetName="border" Value="#FFC29696"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
+            
         <Style TargetType="TextBox" x:Key="Textbox4">
             <Setter Property="Padding" Value="2"/>
             <Setter Property="Margin" Value="3"/>
             <Setter Property="Foreground" Value="#FF2F7870"/>
-            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontSize" Value="30"/>
             <Setter Property="MinHeight" Value="20"/>
             <Setter Property="MinWidth" Value="150"/>
             <Setter Property="FontWeight" Value="Bold" />
@@ -844,15 +814,15 @@ VerticalScrollBarVisibility="Hidden"/>
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type TextBox}">
                         <Border x:Name="border"
-CornerRadius="10"
-BorderBrush="#FF2F7870"
-BorderThickness="2"
-Background="#FF2F7870"
->
+                                CornerRadius="10"
+                                BorderBrush="#FF2F7870"
+                                BorderThickness="2"
+                                Background="#FF2F7870"
+                                >
                             <ScrollViewer x:Name="PART_ContentHost"
-Focusable="false"
-HorizontalScrollBarVisibility="Hidden"
-VerticalScrollBarVisibility="Hidden"/>
+                                Focusable="false"
+                                HorizontalScrollBarVisibility="Hidden"
+                                VerticalScrollBarVisibility="Hidden"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="true">
@@ -861,8 +831,32 @@ VerticalScrollBarVisibility="Hidden"/>
 
                             </Trigger>
                             <Trigger Property="IsFocused" Value="true">
-                                <Setter Property="Foreground" Value="Blue" />
-                                <Setter Property="BorderBrush" TargetName="border" Value="Blue"/>
+                                <Setter Property="Foreground" Value="#FFC29696" />
+                                <Setter Property="BorderBrush" TargetName="border" Value="#FFC29696"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="PasswordBox" x:Key="roundcornerpassword">
+            <Setter Property="PasswordChar" Value="●"/>
+            <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="AllowDrop" Value="true"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="PasswordBox">
+                        <Border CornerRadius="8" x:Name="Bd" Background="#FFC29696" BorderBrush="#FFC29696" BorderThickness="1" OpacityMask="{x:Null}">
+                            <ScrollViewer SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" x:Name="PART_ContentHost" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>

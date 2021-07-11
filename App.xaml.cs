@@ -91,7 +91,7 @@ namespace WpfProject
             else
                 return false;
         }
-        public List<string> ShowBooks()
+        public static List<string> ShowBooks()
         {
             // show all books
             List<string> AllBooks = new List<string>();
@@ -140,7 +140,7 @@ namespace WpfProject
             
             connection.Close();
         }
-        public List<string> ShowEmployee()
+        public static List<string> ShowEmployee()
         {
             // show all employee
             List<string> AllEmployee = new List<string>();
@@ -252,7 +252,7 @@ namespace WpfProject
                                 G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
             connection.Open();
 
-            string command = "update adminn SET Bank = '" + Money + "'  where name = '" + "admin" + "'";
+            string command = "update adminn SET Bank = '" + Money + "' ";
             SqlCommand sqlCommand = new SqlCommand(command, connection);
             sqlCommand.ExecuteNonQuery();
 
@@ -299,7 +299,7 @@ namespace WpfProject
         public void DeleteUser(string name)
         {
             SqlConnection connection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=
-                                    C:\Users\saba\Desktop\saba folder\project\sql.mdfIntegrated Security=True;Connect Timeout=30");
+                                    G:\c#\project\newSQL.mdf; Integrated Security=True;Connect Timeout=30");
             connection.Open();
 
             string command = "Delete from Userr where name = '" + name + "'";
@@ -413,6 +413,7 @@ namespace WpfProject
                         DateTime dateValue = new DateTime(int.Parse(temp[0]), int.Parse(temp[1]), int.Parse(temp[2]));
 
                         int delays = 7 - (today.Date - dateValue.Date).Days;
+
                         if (delays < 0)
                         {
                             LateReturnUser.Add(data.Rows[i][0].ToString());
@@ -440,6 +441,7 @@ namespace WpfProject
             DataTable data = new DataTable();
             adapter.Fill(data);
 
+            int delays = 0;
             for (int i = 0; i < data.Rows.Count; i++)
             {
                 if (data.Rows[i][17].ToString() == "")
@@ -447,11 +449,10 @@ namespace WpfProject
                     string[] temp = data.Rows[i][16].ToString().Split('/');
                     DateTime dateValue = new DateTime(int.Parse(temp[0]), int.Parse(temp[1]), int.Parse(temp[2]));
 
-                    int delays = 365 - (today.Date - dateValue.Date).Days;
-                    if (delays < 0)
+                    delays = (today.Date - dateValue.Date).Days;
+                    if (delays > 365)
                     {
                         LatePayUser.Add(data.Rows[i][0].ToString());
-                        break;
                     }
                 }
                 else
@@ -459,11 +460,10 @@ namespace WpfProject
                     string[] temp = data.Rows[i][17].ToString().Split('/');
                     DateTime dateValue = new DateTime(int.Parse(temp[0]), int.Parse(temp[1]), int.Parse(temp[2]));
 
-                    int delays = 365 - (today.Date - dateValue.Date).Days;
-                    if (delays < 0)
+                    delays = (today.Date - dateValue.Date).Days;
+                    if (delays > 365)
                     {
                         LatePayUser.Add(data.Rows[i][0].ToString());
-                        break;
                     }
                 }
             }
@@ -493,11 +493,13 @@ namespace WpfProject
                     InfoUniqueUser.Add(data.Rows[i][1].ToString());
                     InfoUniqueUser.Add(data.Rows[i][2].ToString());
                     InfoUniqueUser.Add(data.Rows[i][3].ToString());
+                    InfoUniqueUser.Add(data.Rows[i][4].ToString());
                     InfoUniqueUser.Add(data.Rows[i][5].ToString());
                     InfoUniqueUser.Add(data.Rows[i][6].ToString());
                     InfoUniqueUser.Add(data.Rows[i][7].ToString());
                     InfoUniqueUser.Add(data.Rows[i][8].ToString());
                     InfoUniqueUser.Add(data.Rows[i][9].ToString());
+                    InfoUniqueUser.Add(data.Rows[i][10].ToString());
                     InfoUniqueUser.Add(data.Rows[i][11].ToString());
                     InfoUniqueUser.Add(data.Rows[i][12].ToString());
                     InfoUniqueUser.Add(data.Rows[i][13].ToString());
@@ -1074,11 +1076,17 @@ namespace WpfProject
             DataTable data = new DataTable();
             adapter.Fill(data);
 
-            string command3 = "update Userr SET wallet = '" + (long.Parse(data.Columns[5].ToString()) + m) + "'" +
-                        "where name = '" + Name + "'";
+            for (int i = 0; i < data.Rows.Count; i++)
+            {
+                if (data.Rows[i][0].ToString() == Name)
+                {
+                    string command3 = "update Userr SET wallet = '" + (long.Parse(data.Rows[i][5].ToString()) + m) + "'" +
+                                  "where name = '" + Name + "'";
 
-            SqlCommand sqlCommand2 = new SqlCommand(command3, connection);
-            sqlCommand2.ExecuteNonQuery();
+                    SqlCommand sqlCommand2 = new SqlCommand(command3, connection);
+                    sqlCommand2.ExecuteNonQuery();
+                }
+            }
 
             connection.Close();
         }
