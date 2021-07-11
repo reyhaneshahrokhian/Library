@@ -29,84 +29,88 @@ namespace WpfProject
         {
             //if the infos are ok,go to payment page  
 
-            if (!Person.CheckName(NameBox.Text))
+            try
             {
-                NameBlock.Text = "The name is invalid";
-                NameBlock.Foreground = Brushes.Red;
-            }
-            else
-            {
-                NameBlock.Text = "Contain 8-32 English characters";
-                NameBlock.Foreground = new System.Windows.Media.SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF397F65"));
-            }
-
-            if (!Person.CheckEmail(EmailBox.Text))
-            {
-                EmailBlock.Text = "The email is invalid";
-                EmailBlock.Foreground = Brushes.Red;
-            }
-            else
-            {
-                EmailBlock.Text = "Characters or numbers or - or _";
-                EmailBlock.Foreground = new System.Windows.Media.SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF397F65"));
-            }
-
-            if (!Person.CheckPhoneNumber(PhoneNumberBox.Text))
-            {
-                PhoneNumberBlock.Text = "The phone number is invalid";
-                PhoneNumberBlock.Foreground = Brushes.Red;
-            }
-            else
-            {
-                PhoneNumberBlock.Text = "Contain 11number.start with 09";
-                PhoneNumberBlock.Foreground = new System.Windows.Media.SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF397F65"));
-            }
-
-            if (!Person.CheckPassword(PasswordBox.Password))
-            {
-                PasswordBlock.Text = "The Password is invalid";
-                PasswordBlock.Foreground = Brushes.Red;
-            }
-            else
-            {
-                PasswordBlock.Text = "At least 1 upper character(8-32)";
-                PasswordBlock.Foreground = new System.Windows.Media.SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF397F65"));
-            }
-
-            if (Person.CheckName(NameBox.Text) && Person.CheckEmail(EmailBox.Text) && Person.CheckPhoneNumber(PhoneNumberBox.Text) && Person.CheckPassword(PasswordBox.Password))
-            {
-                //cheking if the user is repeated or no then added
-
-                bool repeated = false;
-                SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
-                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
-                connection.Open();
-
-                string command = "select * from Userr";
-                SqlDataAdapter adapter = new SqlDataAdapter(command, connection);
-                DataTable data = new DataTable();
-                adapter.Fill(data);
-
-                for (int i = 0; i < data.Rows.Count; i++)
+                if (!Person.CheckName(NameBox.Text))
                 {
-                    if ((string)data.Rows[i][0] == NameBox.Text)
-                    {
-                        repeated = true;
-                    }
-                }
-
-                if (repeated == false)
-                {
-                    payment P = new payment(NameBox.Text, EmailBox.Text, PhoneNumberBox.Text, PasswordBox.Password, personImage.Source.ToString());
-                    P.Show();
-                    this.Close();
+                    NameBlock.Text = "The name is invalid";
+                    NameBlock.Foreground = Brushes.Red;
                 }
                 else
                 {
-                    RepeatBlock.Text = "There is already an employee with";
-                    Repeat2Block.Text = "this name!!";
+                    NameBlock.Text = "Contain 8-32 English characters";
+                    NameBlock.Foreground = new System.Windows.Media.SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF397F65"));
+                }
+
+                if (!Person.CheckEmail(EmailBox.Text))
+                {
+                    EmailBlock.Text = "The email is invalid";
+                    EmailBlock.Foreground = Brushes.Red;
+                }
+                else
+                {
+                    EmailBlock.Text = "Characters or numbers or - or _";
+                    EmailBlock.Foreground = new System.Windows.Media.SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF397F65"));
+                }
+
+                if (!Person.CheckPhoneNumber(PhoneNumberBox.Text))
+                {
+                    PhoneNumberBlock.Text = "The phone number is invalid";
+                    PhoneNumberBlock.Foreground = Brushes.Red;
+                }
+                else
+                {
+                    PhoneNumberBlock.Text = "Contain 11number.start with 09";
+                    PhoneNumberBlock.Foreground = new System.Windows.Media.SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF397F65"));
+                }
+
+                if (!Person.CheckPassword(PasswordBox.Password))
+                {
+                    PasswordBlock.Text = "The Password is invalid";
+                    PasswordBlock.Foreground = Brushes.Red;
+                }
+                else
+                {
+                    PasswordBlock.Text = "At least 1 upper character(8-32)";
+                    PasswordBlock.Foreground = new System.Windows.Media.SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF397F65"));
+                }
+
+                if (Person.CheckName(NameBox.Text) && Person.CheckEmail(EmailBox.Text) && Person.CheckPhoneNumber(PhoneNumberBox.Text) && Person.CheckPassword(PasswordBox.Password))
+                {
+                    //cheking if the user is repeated or no then added
+
+                    bool repeated = false;
+                    SqlConnection connection = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =
+                                G:\c#\project\newSQL.mdf; Integrated Security = True; Connect Timeout = 30");
+                    connection.Open();
+
+                    string command = "select * from Userr";
+                    SqlDataAdapter adapter = new SqlDataAdapter(command, connection);
+                    DataTable data = new DataTable();
+                    adapter.Fill(data);
+
+                    for (int i = 0; i < data.Rows.Count; i++)
+                    {
+                        if ((string)data.Rows[i][0] == NameBox.Text)
+                        {
+                            repeated = true;
+                        }
+                    }
+
+                    if (repeated == false)
+                    {
+                        payment P = new payment(NameBox.Text, EmailBox.Text, PhoneNumberBox.Text, PasswordBox.Password, personImage.Source.ToString());
+                        P.Show();
+                        this.Close();
+                    }
+                    else
+                    {
+                        RepeatBlock.Text = "There is already an employee with";
+                        Repeat2Block.Text = "this name!!";
+                    }
                 }
             }
+            catch { }
         }
         private void Back_Click(object sender, RoutedEventArgs e)
         {
@@ -115,19 +119,27 @@ namespace WpfProject
             m.Show();
             this.Close();
         }
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
         private void Choose_Click(object sender, RoutedEventArgs e)
         {
             //picture choosen from their labtop and added to sql
 
-            OpenFileDialog op = new OpenFileDialog();
-            op.Title = "Select a picture";
-            op.Filter = "All supported graphics|*.jpg;*.jpeg;*.png|" +
-              "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
-              "Portable Network Graphic (*.png)|*.png";
-            if (op.ShowDialog() == true)
+            try
             {
-                personImage.Source = new BitmapImage(new Uri(op.FileName));
+                OpenFileDialog op = new OpenFileDialog();
+                op.Title = "Select a picture";
+                op.Filter = "All supported graphics|*.jpg;*.jpeg;*.png|" +
+                  "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
+                  "Portable Network Graphic (*.png)|*.png";
+                if (op.ShowDialog() == true)
+                {
+                    personImage.Source = new BitmapImage(new Uri(op.FileName));
+                }
             }
+            catch { }
         }
     }
 }

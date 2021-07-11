@@ -60,7 +60,7 @@ Title="register" Height="550" Width="1200" WindowStyle="None" WindowStartupLocat
                     <RowDefinition Height="0.5*"/>
                     <RowDefinition Height="1.5*"/>
                 </Grid.RowDefinitions>
-                <TextBlock Margin="0,40" Text="Register" FontSize="55" FontFamily="Showcard Gothic" HorizontalAlignment="Center" Grid.Row="0" Foreground="#FFC29696"/>
+                <TextBlock Margin="64,170,76,0" Text="Register" FontSize="55" FontFamily="Showcard Gothic" HorizontalAlignment="Center" Foreground="#FFC29696" Grid.RowSpan="2"/>
                 <StackPanel Grid.Row="2">
                     <Grid Grid.Row="2">
                         <Grid.ColumnDefinitions>
@@ -75,5 +75,6 @@ Title="register" Height="550" Width="1200" WindowStyle="None" WindowStartupLocat
                 </StackPanel>
             </Grid>
         </Grid>
+        <Button Content="Exit" FontSize="20" FontFamily="Showcard Gothic" Background="#FF6C0303" HorizontalAlignment="Left" Margin="1120,5,0,0" VerticalAlignment="Top" Width="65" Height="30" RenderTransformOrigin="0.807,0.625" Click="Exit_Click"/>
     </Grid>
 </Window>
